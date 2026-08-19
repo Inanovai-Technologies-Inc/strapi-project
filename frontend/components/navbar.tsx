@@ -11,7 +11,7 @@ export default function Navbar() {
                     href="/"
                     className="text-2xl font-bold tracking-tight text-gray-900"
                 >
-                    MyStore
+                    Marsol Technologies
                 </Link>
 
                 {/* Navigation */}

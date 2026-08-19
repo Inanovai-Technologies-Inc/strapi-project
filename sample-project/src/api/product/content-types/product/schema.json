@@ -23,6 +23,25 @@
         "videos",
         "audios"
       ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "Name"
+    },
+    "Features": {
+      "type": "blocks"
+    },
+    "Applications": {
+      "type": "blocks"
+    },
+    "VideoURL": {
+      "type": "string"
+    },
+    "VideoTitle": {
+      "type": "string"
     }
   }
 }

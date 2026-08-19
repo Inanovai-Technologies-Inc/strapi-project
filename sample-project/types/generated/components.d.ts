@@ -73,6 +73,17 @@ export interface SharedSlider extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTechnicalSpecification extends Struct.ComponentSchema {
+  collectionName: 'components_shared_technical_specifications';
+  info: {
+    displayName: 'Technical Specification';
+  };
+  attributes: {
+    Label: Schema.Attribute.String;
+    Value: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
@@ -82,6 +93,7 @@ declare module '@strapi/strapi' {
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;
       'shared.slider': SharedSlider;
+      'shared.technical-specification': SharedTechnicalSpecification;
     }
   }
 }

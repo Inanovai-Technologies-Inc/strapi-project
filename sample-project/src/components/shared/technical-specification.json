@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_technical_specifications",
+  "info": {
+    "displayName": "Technical Specification"
+  },
+  "options": {},
+  "attributes": {
+    "Label": {
+      "type": "string"
+    },
+    "Value": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
