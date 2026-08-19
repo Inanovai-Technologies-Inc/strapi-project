@@ -77,7 +77,6 @@ function renderBlocks(blocks: any[]) {
     });
 }
 
-
 /* =====================================================
    YOUTUBE URL HELPER
 ===================================================== */
@@ -123,7 +122,6 @@ function getYouTubeEmbedUrl(url: string) {
     }
 }
 
-
 export default async function ProductDetailPage({
     params,
 }: ProductPageProps) {
@@ -150,7 +148,6 @@ export default async function ProductDetailPage({
         return (
             <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
                 <div className="text-center">
-
                     <h1 className="text-3xl font-bold text-gray-900">
                         Product Not Found
                     </h1>
@@ -165,17 +162,14 @@ export default async function ProductDetailPage({
                     >
                         Back to Products
                     </Link>
-
                 </div>
             </main>
         );
     }
 
-
     const imageUrl = product.Image?.url
         ? `${STRAPI_URL}${product.Image.url}`
         : null;
-
 
     /* =====================================================
        VIDEO
@@ -185,6 +179,12 @@ export default async function ProductDetailPage({
         ? getYouTubeEmbedUrl(product.VideoURL)
         : null;
 
+    /* =====================================================
+       TECHNICAL SPECIFICATIONS
+    ===================================================== */
+
+    const technicalSpecifications =
+        product.TechnicalSpecification || [];
 
     return (
         <main className="min-h-screen bg-white">
@@ -193,7 +193,6 @@ export default async function ProductDetailPage({
                 PRODUCT HERO
             ===================================================== */}
             <section className="bg-gray-50 px-6 py-14 lg:px-8 lg:py-20">
-
                 <div className="mx-auto max-w-7xl">
 
                     <Link
@@ -224,7 +223,6 @@ export default async function ProductDetailPage({
                             )}
 
                         </div>
-
 
                         {/* Product Name + Description */}
                         <div>
@@ -317,10 +315,98 @@ export default async function ProductDetailPage({
 
 
             {/* =====================================================
+    TECHNICAL SPECIFICATIONS
+===================================================== */}
+{technicalSpecifications.length > 0 && (
+    <section className="px-6 py-16 lg:px-8">
+
+        <div className="mx-auto max-w-7xl">
+
+            {/* Section Heading */}
+            <div className="mb-8">
+
+                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                    Product Information
+                </p>
+
+                <h2 className="mt-3 text-3xl font-bold text-gray-900">
+                    Technical Specifications
+                </h2>
+
+                <div className="mt-4 h-1 w-12 bg-orange-500" />
+
+                <p className="mt-4 max-w-2xl text-base leading-7 text-gray-500">
+                    Detailed technical information and specifications for
+                    this product.
+                </p>
+
+            </div>
+
+
+            {/* Specifications Table */}
+            <div className="mx-auto max-w-3xl overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+                {/* Table Header */}
+                <div className="grid grid-cols-1 border-b border-gray-200 bg-gray-900 text-white sm:grid-cols-[220px_1fr]">
+
+                    <div className="px-5 py-3 text-sm font-bold uppercase tracking-wider">
+                        Specification
+                    </div>
+
+                    <div className="px-5 py-3 text-sm font-bold uppercase tracking-wider">
+                        Value
+                    </div>
+
+                </div>
+
+
+                {/* Specification Rows */}
+                {technicalSpecifications.map(
+                    (spec: any, index: number) => {
+
+                        if (!spec.Label && !spec.Value) {
+                            return null;
+                        }
+
+                        return (
+                            <div
+                                key={index}
+                                className={`grid grid-cols-1 sm:grid-cols-[220px_1fr] ${
+                                    index !==
+                                    technicalSpecifications.length - 1
+                                        ? "border-b border-gray-200"
+                                        : ""
+                                } transition hover:bg-orange-50`}
+                            >
+
+                                {/* Label */}
+                                <div className="bg-gray-50 px-5 py-4 text-sm font-semibold text-gray-800 sm:border-r sm:border-gray-200">
+                                    {spec.Label || "—"}
+                                </div>
+
+                                {/* Value */}
+                                <div className="px-5 py-4 text-sm leading-6 text-gray-600">
+                                    {spec.Value || "—"}
+                                </div>
+
+                            </div>
+                        );
+                    }
+                )}
+
+            </div>
+
+        </div>
+
+    </section>
+)}
+
+
+            {/* =====================================================
                 PRODUCT VIDEO
             ===================================================== */}
             {videoEmbedUrl && (
-                <section className="px-6 py-20 lg:px-8">
+                <section className="bg-gray-50 px-6 py-20 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
 

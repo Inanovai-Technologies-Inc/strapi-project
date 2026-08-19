@@ -12,18 +12,6 @@ const marketSegments = [
     "ONSHORE",
 ];
 
-const news = [
-    {
-        title: "Up to What Battery Capacity Battery Fire Ionex-EA Can Be Used?",
-        description:
-            "The widespread adoption of lithium-ion batteries continues to accelerate, driven by the growing reliance on electric mobility and compact personal appliances.",
-    },
-    {
-        title: "Indiana Convention Centre, Stand 4858",
-        description:
-            "Come join us at FDIC International Expo and be part of the biggest fire, safety & security show in the United States.",
-    },
-];
 
 export default async function Home() {
 
@@ -41,6 +29,20 @@ export default async function Home() {
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
+    const news_response = await fetch(
+    `${STRAPI_URL}/api/news?sort=Date:desc`,
+    {
+        cache: "no-store",
+    }
+    );
+
+    if (!news_response.ok) {
+        throw new Error("Failed to fetch news");
+    }
+
+    const newsResult = await news_response.json();
+
+    const news = newsResult.data || [];
 
     const result = await response.json();
 
@@ -505,71 +507,71 @@ export default async function Home() {
                 </div>
             </section>
 
-
             {/* =====================================================
-                LATEST NEWS
-            ===================================================== */}
-            <section className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28">
+    LATEST NEWS
+===================================================== */}
+<section className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28">
 
-                <div className="mx-auto max-w-7xl">
+    <div className="mx-auto max-w-7xl">
 
-                    <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
 
-                        <div>
+            <div>
 
-                            <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
-                                Updates
-                            </p>
+                <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
+                    Updates
+                </p>
 
-                            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
-                                Latest News
-                            </h2>
+                <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
+                    Latest News
+                </h2>
 
-                        </div>
+            </div>
 
-                        <Link
-                            href="/news-events"
-                            className="text-sm font-bold uppercase tracking-wide text-orange-500"
-                        >
-                            More News →
-                        </Link>
+            <Link
+                href="/news-events"
+                className="text-sm font-bold uppercase tracking-wide text-orange-500"
+            >
+                More News →
+            </Link>
 
-                    </div>
+        </div>
 
 
-                    <div className="mt-12 grid gap-8 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 md:grid-cols-2">
 
-                        {news.map((item) => (
-                            <article
-                                key={item.title}
-                                className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:shadow-lg"
-                            >
+            {news.map((item: any) => (
+                <article
+                    key={item.id}
+                    className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:shadow-lg"
+                >
 
-                                <p className="text-xs font-bold uppercase tracking-widest text-orange-500">
-                                    News & Events
-                                </p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-orange-500">
+                        News & Events
+                    </p>
 
-                                <h3 className="mt-4 text-2xl font-bold leading-tight">
-                                    {item.title}
-                                </h3>
+                    <h3 className="mt-4 text-2xl font-bold leading-tight">
+                        {item.NewsTitle}
+                    </h3>
 
-                                <p className="mt-5 text-sm leading-7 text-gray-600">
-                                    {item.description}
-                                </p>
+                    <p className="mt-5 whitespace-pre-line text-sm leading-7 text-gray-600">
+                        {item.Description}
+                    </p>
 
-                                <Link
-                                    href="/news-events"
-                                    className="mt-6 inline-block text-sm font-bold uppercase tracking-wide text-gray-900 hover:text-orange-500"
-                                >
-                                    Read More →
-                                </Link>
+                    <Link
+                        href={`/news-events/${item.slug}`}
+                        className="mt-6 inline-block text-sm font-bold uppercase tracking-wide text-gray-900 hover:text-orange-500"
+                    >
+                        Read More →
+                    </Link>
 
-                            </article>
-                        ))}
+                </article>
+            ))}
 
-                    </div>
-                </div>
-            </section>
+        </div>
+    </div>
+</section>
+            
 
 
             {/* =====================================================

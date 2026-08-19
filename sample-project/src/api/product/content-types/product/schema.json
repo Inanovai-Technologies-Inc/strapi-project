@@ -42,6 +42,11 @@
     },
     "VideoTitle": {
       "type": "string"
+    },
+    "TechnicalSpecification": {
+      "type": "component",
+      "component": "shared.technical-specification",
+      "repeatable": true
     }
   }
 }

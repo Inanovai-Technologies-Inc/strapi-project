@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news",
+  "info": {
+    "singularName": "new",
+    "pluralName": "news",
+    "displayName": "News"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "NewsTitle": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    },
+    "MoreInformation": {
+      "type": "text"
+    },
+    "Date": {
+      "type": "date"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "NewsTitle"
+    }
+  }
+}
