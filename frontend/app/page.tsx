@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import ScrollProgress from "@/components/ScrollProgress";
+import SectionNavigation from "@/components/SectionNavigation";
+import SiteSearch from "@/components/SiteSearch";
+
 const STRAPI_URL = "http://localhost:1337";
 
 const marketSegments = [
@@ -12,9 +16,7 @@ const marketSegments = [
     "ONSHORE",
 ];
 
-
 export default async function Home() {
-
     // =====================================================
     // FETCH PRODUCTS FROM STRAPI
     // =====================================================
@@ -29,11 +31,16 @@ export default async function Home() {
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
+
+    // =====================================================
+    // FETCH NEWS FROM STRAPI
+    // =====================================================
+
     const news_response = await fetch(
-    `${STRAPI_URL}/api/news?sort=Date:desc`,
-    {
-        cache: "no-store",
-    }
+        `${STRAPI_URL}/api/news?sort=Date:desc`,
+        {
+            cache: "no-store",
+        }
     );
 
     if (!news_response.ok) {
@@ -48,78 +55,119 @@ export default async function Home() {
 
     const products = result.data || [];
 
-
     return (
         <main className="bg-white text-gray-900">
 
             {/* =====================================================
+                SCROLL PROGRESS
+            ===================================================== */}
+            <ScrollProgress />
+
+            {/* =====================================================
+                SEARCH BAR
+                Appears below navbar
+            ===================================================== */}
+            {/* <SiteSearch /> */}
+
+            {/* =====================================================
+                RIGHT SIDE SECTION NAVIGATION
+            ===================================================== */}
+            <SectionNavigation />
+
+
+            {/* =====================================================
                 HERO
             ===================================================== */}
-            <section className="relative min-h-[650px] overflow-hidden bg-gray-900">
+            <section
+                id="home"
+                className="relative min-h-[650px] overflow-hidden"
+            >
 
-                {/* Background Image */}
-                <Image
-                    src="/images/hero.jpg"
-                    alt="Marsol Technologies"
-                    fill
-                    priority
-                    className="object-cover"
-                />
+                {/* Background Video */}
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    className="absolute inset-0 h-full w-full object-cover"
+                >
+                    <source
+                        src="/videos/hero-video.mp4"
+                        type="video/mp4"
+                    />
+                </video>
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/55" />
+                {/* Subtle overlay */}
+                <div className="absolute inset-0 bg-black/20" />
 
-                <div className="relative mx-auto flex min-h-[650px] max-w-7xl items-center px-6 lg:px-8">
-                    <div className="max-w-3xl text-white">
+                {/* Left gradient for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#071a2f]/55 via-[#071a2f]/20 to-transparent" />
 
-                        <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-orange-400">
+                {/* Bottom gradient */}
+                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/30 to-transparent" />
+
+                {/* Hero Content */}
+                <div className="relative z-10 mx-auto flex min-h-[650px] max-w-7xl items-center px-6 lg:px-8">
+
+                    <div className="max-w-3xl">
+
+                        <p className="text-sm font-semibold uppercase tracking-[0.35em] text-orange-400/80">
                             Marsol Technologies
                         </p>
 
-                        <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl">
+                        <h1 className="mt-6 text-5xl font-semibold leading-[1.1] tracking-tight text-white/90 md:text-6xl lg:text-7xl">
                             Fire Protection
                             <br />
-                            <span className="text-orange-400">
+
+                            <span className="text-orange-400/85">
                                 Engineered for Excellence
                             </span>
                         </h1>
 
-                        <p className="mt-6 max-w-2xl text-base leading-8 text-gray-200 sm:text-lg">
+                        <p className="mt-8 max-w-2xl text-base leading-8 text-white/75 md:text-lg">
                             More than 30 years of experience serving the Oil & Gas
                             and Offshore industries with advanced fire suppression
                             and safety solutions.
                         </p>
 
-                        <div className="mt-8 flex flex-wrap gap-4">
+                        <div className="mt-10 flex flex-wrap gap-4">
 
                             <Link
                                 href="/about"
-                                className="rounded-md bg-orange-500 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-orange-600"
+                                className="rounded-lg bg-orange-500/90 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-orange-500 hover:shadow-lg hover:shadow-orange-500/20"
                             >
                                 Learn More
                             </Link>
 
                             <Link
                                 href="/product"
-                                className="rounded-md border border-white px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white hover:text-gray-900"
+                                className="rounded-lg border border-white/50 bg-white/5 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white/80 hover:bg-white/10"
                             >
                                 Our Products
                             </Link>
 
                         </div>
+
                     </div>
+
                 </div>
+
             </section>
 
 
             {/* =====================================================
-                INTRODUCTION
+                INTRODUCTION / ABOUT
             ===================================================== */}
-            <section className="px-6 py-20 lg:px-8 lg:py-28">
+            <section
+                id="about"
+                className="px-6 py-20 lg:px-8 lg:py-28"
+            >
 
                 <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
 
                     <div>
+
                         <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
                             Marsol Technologies
                         </p>
@@ -143,35 +191,44 @@ export default async function Home() {
                         >
                             Learn More
                         </Link>
+
                     </div>
 
                     <div className="relative h-[400px] overflow-hidden rounded-2xl">
+
                         <Image
                             src="/images/about.jpg"
                             alt="Marsol Technologies"
                             fill
                             className="object-cover"
                         />
+
                     </div>
 
                 </div>
+
             </section>
 
 
             {/* =====================================================
                 DIFFS
             ===================================================== */}
-            <section className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28">
+            <section
+                id="diffs"
+                className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28"
+            >
 
                 <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
 
                     <div className="relative order-2 h-[420px] overflow-hidden rounded-2xl lg:order-1">
+
                         <Image
                             src="/images/diffs.jpg"
                             alt="Marsol DiFFS"
                             fill
                             className="object-cover"
                         />
+
                     </div>
 
                     <div className="order-1 lg:order-2">
@@ -201,18 +258,24 @@ export default async function Home() {
                         </Link>
 
                     </div>
+
                 </div>
+
             </section>
 
 
             {/* =====================================================
                 MARKET SEGMENTS
             ===================================================== */}
-            <section className="bg-gray-900 px-6 py-20 lg:px-8 lg:py-24">
+            <section
+                id="industries"
+                className="bg-gray-900 px-6 py-20 lg:px-8 lg:py-24"
+            >
 
                 <div className="mx-auto max-w-7xl">
 
                     <div className="text-center">
+
                         <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-400">
                             Industries
                         </p>
@@ -220,6 +283,7 @@ export default async function Home() {
                         <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
                             Market Segments We Serve
                         </h2>
+
                     </div>
 
                     <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
@@ -229,21 +293,28 @@ export default async function Home() {
                                 key={segment}
                                 className="group flex h-36 items-center justify-center border border-gray-700 bg-gray-800 px-4 transition hover:border-orange-500 hover:bg-orange-500"
                             >
+
                                 <h3 className="text-center text-sm font-bold tracking-widest text-white">
                                     {segment}
                                 </h3>
+
                             </div>
                         ))}
 
                     </div>
+
                 </div>
+
             </section>
 
 
             {/* =====================================================
                 PRODUCTS
             ===================================================== */}
-            <section className="px-6 py-20 lg:px-8 lg:py-28">
+            <section
+                id="products"
+                className="px-6 py-20 lg:px-8 lg:py-28"
+            >
 
                 <div className="mx-auto max-w-7xl">
 
@@ -269,9 +340,11 @@ export default async function Home() {
                     {products.length === 0 ? (
 
                         <div className="mt-14 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+
                             <p className="text-gray-500">
                                 No products available.
                             </p>
+
                         </div>
 
                     ) : (
@@ -294,6 +367,7 @@ export default async function Home() {
                                         <div className="relative flex h-64 items-center justify-center overflow-hidden bg-gray-100 p-8">
 
                                             {imageUrl ? (
+
                                                 <img
                                                     src={imageUrl}
                                                     alt={
@@ -303,10 +377,13 @@ export default async function Home() {
                                                     }
                                                     className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
                                                 />
+
                                             ) : (
+
                                                 <div className="text-sm text-gray-400">
                                                     Product image unavailable
                                                 </div>
+
                                             )}
 
                                         </div>
@@ -382,13 +459,17 @@ export default async function Home() {
                     </div>
 
                 </div>
+
             </section>
 
 
             {/* =====================================================
                 CERTIFICATIONS
             ===================================================== */}
-            <section className="border-y border-gray-200 bg-gray-50 px-6 py-20 lg:px-8">
+            <section
+                id="certifications"
+                className="border-y border-gray-200 bg-gray-50 px-6 py-20 lg:px-8"
+            >
 
                 <div className="mx-auto max-w-7xl text-center">
 
@@ -410,23 +491,30 @@ export default async function Home() {
                             "ISO",
                             "DNV",
                         ].map((certification) => (
+
                             <div
                                 key={certification}
                                 className="flex h-28 items-center justify-center rounded-lg border border-gray-200 bg-white text-xl font-bold text-gray-500 shadow-sm"
                             >
                                 {certification}
                             </div>
+
                         ))}
 
                     </div>
+
                 </div>
+
             </section>
 
 
             {/* =====================================================
                 BRANDS / LOCATIONS
             ===================================================== */}
-            <section className="px-6 py-20 lg:px-8 lg:py-28">
+            <section
+                id="locations"
+                className="px-6 py-20 lg:px-8 lg:py-28"
+            >
 
                 <div className="mx-auto max-w-7xl">
 
@@ -504,80 +592,92 @@ export default async function Home() {
                         </div>
 
                     </div>
+
                 </div>
+
             </section>
 
+
             {/* =====================================================
-    LATEST NEWS
-===================================================== */}
-<section className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28">
-
-    <div className="mx-auto max-w-7xl">
-
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-
-            <div>
-
-                <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
-                    Updates
-                </p>
-
-                <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
-                    Latest News
-                </h2>
-
-            </div>
-
-            <Link
-                href="/news-events"
-                className="text-sm font-bold uppercase tracking-wide text-orange-500"
+                LATEST NEWS
+            ===================================================== */}
+            <section
+                id="news"
+                className="bg-gray-100 px-6 py-20 lg:px-8 lg:py-28"
             >
-                More News →
-            </Link>
 
-        </div>
+                <div className="mx-auto max-w-7xl">
+
+                    <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+
+                        <div>
+
+                            <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
+                                Updates
+                            </p>
+
+                            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
+                                Latest News
+                            </h2>
+
+                        </div>
+
+                        <Link
+                            href="/news-events"
+                            className="text-sm font-bold uppercase tracking-wide text-orange-500"
+                        >
+                            More News →
+                        </Link>
+
+                    </div>
 
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
+                    <div className="mt-12 grid gap-8 md:grid-cols-2">
 
-            {news.map((item: any) => (
-                <article
-                    key={item.id}
-                    className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:shadow-lg"
-                >
+                        {news.map((item: any) => (
 
-                    <p className="text-xs font-bold uppercase tracking-widest text-orange-500">
-                        News & Events
-                    </p>
+                            <article
+                                key={item.id}
+                                className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:shadow-lg"
+                            >
 
-                    <h3 className="mt-4 text-2xl font-bold leading-tight">
-                        {item.NewsTitle}
-                    </h3>
+                                <p className="text-xs font-bold uppercase tracking-widest text-orange-500">
+                                    News & Events
+                                </p>
 
-                    <p className="mt-5 whitespace-pre-line text-sm leading-7 text-gray-600">
-                        {item.Description}
-                    </p>
+                                <h3 className="mt-4 text-2xl font-bold leading-tight">
+                                    {item.NewsTitle}
+                                </h3>
 
-                    <Link
-                        href={`/news-events/${item.slug}`}
-                        className="mt-6 inline-block text-sm font-bold uppercase tracking-wide text-gray-900 hover:text-orange-500"
-                    >
-                        Read More →
-                    </Link>
+                                <p className="mt-5 whitespace-pre-line text-sm leading-7 text-gray-600">
+                                    {item.Description}
+                                </p>
 
-                </article>
-            ))}
+                                <Link
+                                    href={`/news-events/${item.slug}`}
+                                    className="mt-6 inline-block text-sm font-bold uppercase tracking-wide text-gray-900 hover:text-orange-500"
+                                >
+                                    Read More →
+                                </Link>
 
-        </div>
-    </div>
-</section>
-            
+                            </article>
+
+                        ))}
+
+                    </div>
+
+                </div>
+
+            </section>
 
 
             {/* =====================================================
                 FOOTER
             ===================================================== */}
-            <footer className="bg-gray-950 px-6 py-12 text-gray-400 lg:px-8">
+            <footer
+                id="contact"
+                className="bg-gray-950 px-6 py-12 text-gray-400 lg:px-8"
+            >
 
                 <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-center">
 
@@ -596,23 +696,38 @@ export default async function Home() {
 
                     <div className="flex flex-wrap gap-6 text-sm">
 
-                        <Link href="/" className="hover:text-white">
+                        <Link
+                            href="/"
+                            className="hover:text-white"
+                        >
                             Home
                         </Link>
 
-                        <Link href="/about" className="hover:text-white">
+                        <Link
+                            href="/about"
+                            className="hover:text-white"
+                        >
                             About
                         </Link>
 
-                        <Link href="/products" className="hover:text-white">
+                        <Link
+                            href="/product"
+                            className="hover:text-white"
+                        >
                             Products
                         </Link>
 
-                        <Link href="/services" className="hover:text-white">
+                        <Link
+                            href="/services"
+                            className="hover:text-white"
+                        >
                             Services
                         </Link>
 
-                        <Link href="/contact" className="hover:text-white">
+                        <Link
+                            href="/contact"
+                            className="hover:text-white"
+                        >
                             Contact
                         </Link>
 

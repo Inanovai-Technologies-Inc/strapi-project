@@ -701,6 +701,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     Name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    relatedProducts: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product.product'
+    >;
     slug: Schema.Attribute.UID<'Name'>;
     TechnicalSpecification: Schema.Attribute.Component<
       'shared.technical-specification',

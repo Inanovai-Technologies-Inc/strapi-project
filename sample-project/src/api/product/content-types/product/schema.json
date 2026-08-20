@@ -47,6 +47,11 @@
       "type": "component",
       "component": "shared.technical-specification",
       "repeatable": true
+    },
+    "relatedProducts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
     }
   }
 }
