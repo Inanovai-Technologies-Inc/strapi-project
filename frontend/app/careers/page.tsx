@@ -1,6 +1,7 @@
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 
-const STRAPI_URL = "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 interface Career {
     id: number;
@@ -24,7 +25,7 @@ interface StrapiResponse {
 async function getCareers(): Promise<Career[]> {
     try {
         const response = await fetch(
-            `${STRAPI_URL}/api/careers?sort=createdAt:desc`,
+            `${STRAPI_URL}/api/careers?populate=*`,
             {
                 cache: "no-store",
             }
