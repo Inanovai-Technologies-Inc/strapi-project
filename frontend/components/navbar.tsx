@@ -79,6 +79,32 @@ export default function Navbar() {
                             </Link>
                         </li>
 
+                        {/* Career */}
+                        <li>
+                            <Link
+                                href="/careers"
+                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                                    pathname.startsWith("/careers")
+                                        ? "bg-black text-white"
+                                        : "text-gray-600 hover:text-black"
+                                }`}
+                            >
+                                Careers
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="/contact"
+                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                                    pathname === "/contact"
+                                        ? "bg-black text-white"
+                                        : "text-gray-600 hover:text-black"
+                                }`}
+                            >
+                                Contact
+                            </Link>
+                        </li>
+
                     </ul>
                 </div>
             </div>

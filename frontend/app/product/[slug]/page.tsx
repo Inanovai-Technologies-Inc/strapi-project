@@ -313,25 +313,32 @@ export default async function ProductDetailPage({
 
 
     return (
-        <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
 
-            {/* =====================================================
-                PRODUCT HERO
-            ===================================================== */}
+        {/* =====================================================
+            PRODUCT HERO
+        ===================================================== */}
 
-            <section className="bg-gray-50 px-6 py-14 lg:px-8 lg:py-20">
+        <section className="bg-gray-50 px-6 py-14 lg:px-8 lg:py-20">
 
-                <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl">
 
-                    <Link
-                        href="/product"
-                        className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
-                    >
-                        ← Back to Products
-                    </Link>
+                <Link
+                    href="/product"
+                    className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
+                >
+                    ← Back to Products
+                </Link>
 
 
-                    <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:items-center">
+                <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:items-center">
+
+
+                    {/* =================================================
+                        PRODUCT IMAGE + CERTIFICATION LOGOS
+                    ================================================= */}
+
+                    <div>
 
                         {/* PRODUCT IMAGE */}
 
@@ -358,47 +365,110 @@ export default async function ProductDetailPage({
 
                         </div>
 
+                            {/* =================================================
+    CERTIFICATION LOGOS
+================================================= */}
 
-                        {/* PRODUCT INFORMATION */}
+{Array.isArray(product.certificationLogos) &&
+    product.certificationLogos.length > 0 && (
 
-                        <div>
+        <div className="mt-5 rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
 
-                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Product
-                            </p>
+            {/* TITLE */}
 
-
-                            <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
-                                {product.Name}
-                            </h1>
-
-
-                            <div className="mt-6 h-1 w-16 bg-orange-500" />
+            <p className="mb-5 text-center text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">
+                Certifications
+            </p>
 
 
-                            {product.description && (
+            {/* LOGOS */}
 
-                                <div className="mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-8">
 
-                                    <h2 className="text-xl font-bold text-gray-900">
-                                        Description
-                                    </h2>
+                {product.certificationLogos.map(
+                    (logo: any, index: number) => {
 
-                                    <p className="mt-4 text-base leading-8 text-gray-600">
-                                        {product.description}
-                                    </p>
+                        const logoUrl = getImageUrl(logo);
 
-                                </div>
+                        if (!logoUrl) {
+                            return null;
+                        }
 
-                            )}
+                        return (
+                            <div
+                                key={
+                                    logo.documentId ||
+                                    logo.id ||
+                                    index
+                                }
+                                className="flex h-24 w-32 items-center justify-center"
+                            >
 
-                        </div>
+                                <img
+                                    src={logoUrl}
+                                    alt={
+                                        logo.alternativeText ||
+                                        `${product.Name} certification`
+                                    }
+                                    className="h-auto max-h-24 w-auto max-w-32 object-contain"
+                                />
+
+                            </div>
+                        );
+                    }
+                )}
+
+            </div>
+
+        </div>
+    )}
+                        
+
+                    </div>
+
+
+                    {/* =================================================
+                        PRODUCT INFORMATION
+                    ================================================= */}
+
+                    <div>
+
+                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                            Product
+                        </p>
+
+
+                        <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
+                            {product.Name}
+                        </h1>
+
+
+                        <div className="mt-6 h-1 w-16 bg-orange-500" />
+
+
+                        {product.description && (
+
+                            <div className="mt-8">
+
+                                <h2 className="text-xl font-bold text-gray-900">
+                                    Description
+                                </h2>
+
+                                <p className="mt-4 text-base leading-8 text-gray-600">
+                                    {product.description}
+                                </p>
+
+                            </div>
+
+                        )}
 
                     </div>
 
                 </div>
 
-            </section>
+            </div>
+
+        </section>
 
 
             {/* =====================================================
