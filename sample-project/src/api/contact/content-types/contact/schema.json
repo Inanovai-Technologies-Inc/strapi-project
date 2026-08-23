@@ -27,7 +27,19 @@
       "type": "string"
     },
     "phoneNumber": {
-      "type": "integer"
+      "type": "string"
+    },
+    "yourLocation": {
+      "type": "string"
+    },
+    "howDidYouHearAboutUs": {
+      "type": "string"
+    },
+    "yourMessage": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
     }
   }
 }

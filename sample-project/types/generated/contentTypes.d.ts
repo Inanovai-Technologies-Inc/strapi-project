@@ -619,6 +619,40 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCarrerApplicationCarrerApplication
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'carrer_applications';
+  info: {
+    displayName: 'Carrer-Application';
+    pluralName: 'carrer-applications';
+    singularName: 'carrer-application';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    career: Schema.Attribute.Relation<'oneToOne', 'api::career.career'>;
+    CoverLetter: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Email: Schema.Attribute.Email;
+    FullName: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::carrer-application.carrer-application'
+    > &
+      Schema.Attribute.Private;
+    Phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    Resume: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -668,6 +702,7 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     emailAddress: Schema.Attribute.String;
+    howDidYouHearAboutUs: Schema.Attribute.String;
     linkedinProfileUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -676,11 +711,14 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
-    phoneNumber: Schema.Attribute.Integer;
+    phoneNumber: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    subject: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    yourLocation: Schema.Attribute.String;
+    yourMessage: Schema.Attribute.String;
   };
 }
 
@@ -1368,6 +1406,7 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
       'api::career.career': ApiCareerCareer;
+      'api::carrer-application.carrer-application': ApiCarrerApplicationCarrerApplication;
       'api::category.category': ApiCategoryCategory;
       'api::contact.contact': ApiContactContact;
       'api::global.global': ApiGlobalGlobal;

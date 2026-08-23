@@ -4,27 +4,49 @@ import React, { FormEvent, useState } from "react";
 
 const STRAPI_URL = "http://localhost:1337";
 
+interface ContactFormData {
+    name: string;
+    companyName: string;
+    companyWebsite: string;
+    linkedinProfileUrl: string;
+    emailAddress: string;
+    phoneNumber: string;
+    yourLocation: string;
+    subject: string;
+    howDidYouHearAboutUs: string;
+    yourMessage: string;
+}
+
+const initialFormData: ContactFormData = {
+    name: "",
+    companyName: "",
+    companyWebsite: "",
+    linkedinProfileUrl: "",
+    emailAddress: "",
+    phoneNumber: "",
+    yourLocation: "",
+    subject: "",
+    howDidYouHearAboutUs: "",
+    yourMessage: "",
+};
+
 export default function ContactPage() {
-    const [formData, setFormData] = useState({
-        name: "",
-        companyName: "",
-        companyWebsite: "",
-        linkedinProfileUrl: "",
-        emailAddress: "",
-        phoneNumber: "",
-        yourLocation: "",
-        subject: "",
-        howDidYouHearAboutUs: "",
-        yourMessage: "",
-    });
+    const [formData, setFormData] =
+        useState<ContactFormData>(initialFormData);
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
 
+    // =========================================================
+    // HANDLE INPUT CHANGE
+    // =========================================================
+
     const handleChange = (
         e: React.ChangeEvent<
-            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            HTMLInputElement |
+            HTMLTextAreaElement |
+            HTMLSelectElement
         >
     ) => {
         const { name, value } = e.target;
@@ -35,7 +57,13 @@ export default function ContactPage() {
         }));
     };
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    // =========================================================
+    // SUBMIT FORM
+    // =========================================================
+
+    const handleSubmit = async (
+        e: FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
 
         setLoading(true);
@@ -43,79 +71,262 @@ export default function ContactPage() {
         setError("");
 
         try {
-            const response = await fetch(`${STRAPI_URL}/api/contacts`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            // =====================================================
+            // VALIDATION
+            // =====================================================
+
+            if (!formData.name.trim()) {
+                throw new Error("Please enter your name.");
+            }
+
+            if (!formData.emailAddress.trim()) {
+                throw new Error(
+                    "Please enter your email address."
+                );
+            }
+
+            if (!formData.yourLocation) {
+                throw new Error(
+                    "Please select your location."
+                );
+            }
+
+            if (!formData.subject) {
+                throw new Error(
+                    "Please select a subject."
+                );
+            }
+
+            // =====================================================
+            // DATA FOR STRAPI
+            // =====================================================
+
+            const contactData = {
+                data: {
+                    name: formData.name.trim(),
+
+                    companyName:
+                        formData.companyName.trim(),
+
+                    companyWebsite:
+                        formData.companyWebsite.trim(),
+
+                    linkedinProfileUrl:
+                        formData.linkedinProfileUrl.trim(),
+
+                    emailAddress:
+                        formData.emailAddress.trim(),
+
+                    phoneNumber:
+                        formData.phoneNumber.trim(),
+
+                    yourLocation:
+                        formData.yourLocation,
+
+                    subject:
+                        formData.subject,
+
+                    howDidYouHearAboutUs:
+                        formData.howDidYouHearAboutUs,
+
+                    yourMessage:
+                        formData.yourMessage.trim(),
                 },
-                body: JSON.stringify({
-                    data: formData,
-                }),
-            });
+            };
+
+            console.log(
+                "Data being sent to Strapi:",
+                contactData
+            );
+
+            // =====================================================
+            // SEND TO STRAPI
+            // =====================================================
+
+            const response = await fetch(
+                `${STRAPI_URL}/api/contacts`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+
+                    body: JSON.stringify(
+                        contactData
+                    ),
+                }
+            );
+
+            // =====================================================
+            // READ RESPONSE
+            // =====================================================
+
+            const responseText =
+                await response.text();
+
+            console.log(
+                "Strapi status:",
+                response.status
+            );
+
+            console.log(
+                "Strapi response:",
+                responseText
+            );
+
+            // =====================================================
+            // ERROR
+            // =====================================================
 
             if (!response.ok) {
-                const errorData = await response.json();
+                let errorMessage =
+                    "Failed to submit contact form.";
 
-                console.error("Strapi error:", errorData);
+                try {
+                    const errorData =
+                        JSON.parse(responseText);
 
-                throw new Error("Failed to submit contact form");
+                    console.error(
+                        "Strapi error:",
+                        errorData
+                    );
+
+                    errorMessage =
+                        errorData?.error?.message ||
+                        errorMessage;
+
+                    // Show field-specific validation errors
+                    if (
+                        errorData?.error?.details
+                            ?.errors
+                    ) {
+                        const validationErrors =
+                            errorData.error.details.errors;
+
+                        const messages =
+                            validationErrors.map(
+                                (item: {
+                                    path?: string[];
+                                    message?: string;
+                                }) => {
+                                    const field =
+                                        item.path?.join(
+                                            "."
+                                        ) ||
+                                        "Field";
+
+                                    return `${field}: ${
+                                        item.message ||
+                                        "Invalid value"
+                                    }`;
+                                }
+                            );
+
+                        if (
+                            messages.length > 0
+                        ) {
+                            errorMessage =
+                                messages.join(
+                                    "\n"
+                                );
+                        }
+                    }
+                } catch {
+                    console.error(
+                        "Strapi returned:",
+                        responseText
+                    );
+
+                    if (responseText) {
+                        errorMessage =
+                            responseText;
+                    }
+                }
+
+                throw new Error(
+                    errorMessage
+                );
             }
+
+            // =====================================================
+            // SUCCESS
+            // =====================================================
+
+            console.log(
+                "Contact successfully saved in Strapi."
+            );
 
             setSuccess(
                 "Thank you for contacting us. We will get back to you soon."
             );
 
-            setFormData({
-                name: "",
-                companyName: "",
-                companyWebsite: "",
-                linkedinProfileUrl: "",
-                emailAddress: "",
-                phoneNumber: "",
-                yourLocation: "",
-                subject: "",
-                howDidYouHearAboutUs: "",
-                yourMessage: "",
-            });
+            setFormData(
+                initialFormData
+            );
+
         } catch (err) {
-            console.error(err);
+            console.error(
+                "Contact form error:",
+                err
+            );
 
             setError(
-                "Something went wrong while submitting the form. Please try again."
+                err instanceof Error
+                    ? err.message
+                    : "Something went wrong while submitting the form."
             );
         } finally {
             setLoading(false);
         }
     };
 
+    // =========================================================
+    // PAGE
+    // =========================================================
+
     return (
         <main className="min-h-screen bg-white">
-            {/* =========================================================
-                CONTACT HEADER
-            ========================================================= */}
+
+            {/* =================================================
+                HEADER
+            ================================================= */}
+
             <section className="bg-gray-50 py-16">
                 <div className="mx-auto max-w-7xl px-6 text-center">
+
                     <h1 className="text-4xl font-bold text-gray-900">
                         Contact Us
                     </h1>
 
                     <p className="mx-auto mt-4 max-w-2xl text-gray-600">
-                        Have a question or need technical assistance?
-                        Get in touch with our team.
+                        Have a question or need technical
+                        assistance? Get in touch with our team.
                     </p>
+
                 </div>
             </section>
 
-            {/* =========================================================
-                CONTACT FORM
-            ========================================================= */}
+            {/* =================================================
+                FORM
+            ================================================= */}
+
             <section className="py-14">
+
                 <div className="mx-auto max-w-6xl px-6">
-                    <form onSubmit={handleSubmit}>
+
+                    <form
+                        onSubmit={handleSubmit}
+                        className="space-y-8"
+                    >
+
                         {/* =================================================
-                            ROW 1
+                            NAME + COMPANY
                         ================================================= */}
+
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+
                             <div>
                                 <label
                                     htmlFor="name"
@@ -148,18 +359,23 @@ export default function ContactPage() {
                                     id="companyName"
                                     name="companyName"
                                     type="text"
-                                    value={formData.companyName}
+                                    value={
+                                        formData.companyName
+                                    }
                                     onChange={handleChange}
                                     placeholder="Company Name"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
+
                         </div>
 
                         {/* =================================================
-                            ROW 2
+                            WEBSITE + LINKEDIN
                         ================================================= */}
-                        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+
                             <div>
                                 <label
                                     htmlFor="companyWebsite"
@@ -172,7 +388,9 @@ export default function ContactPage() {
                                     id="companyWebsite"
                                     name="companyWebsite"
                                     type="text"
-                                    value={formData.companyWebsite}
+                                    value={
+                                        formData.companyWebsite
+                                    }
                                     onChange={handleChange}
                                     placeholder="Company Website"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
@@ -191,18 +409,23 @@ export default function ContactPage() {
                                     id="linkedinProfileUrl"
                                     name="linkedinProfileUrl"
                                     type="text"
-                                    value={formData.linkedinProfileUrl}
+                                    value={
+                                        formData.linkedinProfileUrl
+                                    }
                                     onChange={handleChange}
                                     placeholder="LinkedIn Profile URL"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
+
                         </div>
 
                         {/* =================================================
-                            ROW 3
+                            EMAIL + PHONE
                         ================================================= */}
-                        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+
                             <div>
                                 <label
                                     htmlFor="emailAddress"
@@ -216,7 +439,9 @@ export default function ContactPage() {
                                     name="emailAddress"
                                     type="email"
                                     required
-                                    value={formData.emailAddress}
+                                    value={
+                                        formData.emailAddress
+                                    }
                                     onChange={handleChange}
                                     placeholder="Email Address"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
@@ -235,18 +460,23 @@ export default function ContactPage() {
                                     id="phoneNumber"
                                     name="phoneNumber"
                                     type="tel"
-                                    value={formData.phoneNumber}
+                                    value={
+                                        formData.phoneNumber
+                                    }
                                     onChange={handleChange}
                                     placeholder="Phone Number"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
+
                         </div>
 
                         {/* =================================================
-                            YOUR LOCATION
+                            LOCATION
                         ================================================= */}
-                        <div className="mt-8">
+
+                        <div>
+
                             <label
                                 htmlFor="yourLocation"
                                 className="mb-2 block text-sm font-medium text-gray-700"
@@ -258,7 +488,9 @@ export default function ContactPage() {
                                 id="yourLocation"
                                 name="yourLocation"
                                 required
-                                value={formData.yourLocation}
+                                value={
+                                    formData.yourLocation
+                                }
                                 onChange={handleChange}
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
@@ -266,28 +498,44 @@ export default function ContactPage() {
                                     Select Your Location
                                 </option>
 
-                                <option value="Asia">Asia</option>
+                                <option value="Asia">
+                                    Asia
+                                </option>
+
                                 <option value="Australasia">
                                     Australasia
                                 </option>
-                                <option value="Europe">Europe</option>
-                                <option value="India">India</option>
+
+                                <option value="Europe">
+                                    Europe
+                                </option>
+
+                                <option value="India">
+                                    India
+                                </option>
+
                                 <option value="Middle East and Africa">
                                     Middle East and Africa
                                 </option>
+
                                 <option value="North America">
                                     North America
                                 </option>
+
                                 <option value="South America">
                                     South America
                                 </option>
+
                             </select>
+
                         </div>
 
                         {/* =================================================
                             SUBJECT
                         ================================================= */}
-                        <div className="mt-8">
+
+                        <div>
+
                             <label
                                 htmlFor="subject"
                                 className="mb-2 block text-sm font-medium text-gray-700"
@@ -299,7 +547,9 @@ export default function ContactPage() {
                                 id="subject"
                                 name="subject"
                                 required
-                                value={formData.subject}
+                                value={
+                                    formData.subject
+                                }
                                 onChange={handleChange}
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
@@ -315,14 +565,20 @@ export default function ContactPage() {
                                     Technical Request
                                 </option>
 
-                                <option value="Other">Other</option>
+                                <option value="Other">
+                                    Other
+                                </option>
+
                             </select>
+
                         </div>
 
                         {/* =================================================
-                            HOW DID YOU HEAR ABOUT US
+                            HOW DID YOU HEAR
                         ================================================= */}
-                        <div className="mt-8">
+
+                        <div>
+
                             <label
                                 htmlFor="howDidYouHearAboutUs"
                                 className="mb-2 block text-sm font-medium text-gray-700"
@@ -333,7 +589,9 @@ export default function ContactPage() {
                             <select
                                 id="howDidYouHearAboutUs"
                                 name="howDidYouHearAboutUs"
-                                value={formData.howDidYouHearAboutUs}
+                                value={
+                                    formData.howDidYouHearAboutUs
+                                }
                                 onChange={handleChange}
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
@@ -360,13 +618,17 @@ export default function ContactPage() {
                                 <option value="Other Channel">
                                     Other Channel
                                 </option>
+
                             </select>
+
                         </div>
 
                         {/* =================================================
                             MESSAGE
                         ================================================= */}
-                        <div className="mt-8">
+
+                        <div>
+
                             <label
                                 htmlFor="yourMessage"
                                 className="mb-2 block text-sm font-medium text-gray-700"
@@ -378,24 +640,32 @@ export default function ContactPage() {
                                 id="yourMessage"
                                 name="yourMessage"
                                 rows={6}
-                                value={formData.yourMessage}
+                                value={
+                                    formData.yourMessage
+                                }
                                 onChange={handleChange}
                                 placeholder="Your Message"
                                 className="w-full resize-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             />
+
                         </div>
 
                         {/* =================================================
-                            SUCCESS / ERROR
+                            SUCCESS
                         ================================================= */}
+
                         {success && (
-                            <div className="mt-6 border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+                            <div className="border border-green-200 bg-green-50 px-4 py-3 text-green-700">
                                 {success}
                             </div>
                         )}
 
+                        {/* =================================================
+                            ERROR
+                        ================================================= */}
+
                         {error && (
-                            <div className="mt-6 border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+                            <div className="whitespace-pre-line border border-red-200 bg-red-50 px-4 py-3 text-red-700">
                                 {error}
                             </div>
                         )}
@@ -403,7 +673,9 @@ export default function ContactPage() {
                         {/* =================================================
                             SUBMIT
                         ================================================= */}
-                        <div className="mt-8">
+
+                        <div>
+
                             <button
                                 type="submit"
                                 disabled={loading}
@@ -413,10 +685,15 @@ export default function ContactPage() {
                                     ? "Submitting..."
                                     : "Submit Request"}
                             </button>
+
                         </div>
+
                     </form>
+
                 </div>
+
             </section>
+
         </main>
     );
 }
