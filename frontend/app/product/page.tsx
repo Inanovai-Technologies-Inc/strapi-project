@@ -95,6 +95,14 @@ export default async function ProductPage() {
                                 across demanding applications.
                             </p>
 
+                             <Link
+                                        href="/product/compare"
+                                        className="inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+                                    >
+                                        Compare Products
+                                        <span className="ml-2">→</span>
+                                    </Link>
+
                         </div>
 
                         {/* Right */}

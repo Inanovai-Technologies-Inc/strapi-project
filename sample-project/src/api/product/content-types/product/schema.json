@@ -62,6 +62,12 @@
         "videos",
         "audios"
       ]
+    },
+    "availableStock": {
+      "type": "integer"
+    },
+    "erpnextItemCode": {
+      "type": "string"
     }
   }
 }

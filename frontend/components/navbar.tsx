@@ -4,108 +4,217 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+
 import SiteSearch from "./SiteSearch";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
     const pathname = usePathname();
 
-    return (
-        <nav className="border-b border-gray-200 bg-white shadow-sm">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1">
+    const navItems = [
+        {
+            name: "Home",
+            href: "/",
+            active: pathname === "/",
+        },
+        {
+            name: "About",
+            href: "/about",
+            active: pathname.startsWith("/about"),
+        },
+        {
+            name: "Products",
+            href: "/product",
+            active: pathname.startsWith("/product"),
+        },
+        {
+            name: "Careers",
+            href: "/careers",
+            active: pathname.startsWith("/careers"),
+        },
+        {
+            name: "Technical Documents",
+            href: "/technical-documents",
+            active: pathname.startsWith("/technical-documents"),
+        },
+        {
+            name: "Contact",
+            href: "/contact",
+            active: pathname.startsWith("/contact"),
+        },
+    ];
 
-                {/* Logo */}
+    return (
+        <nav
+            className="
+                sticky
+                top-0
+                z-50
+                w-full
+                border-b
+                border-gray-200/80
+                bg-white/95
+                shadow-sm
+                backdrop-blur-xl
+                transition-all
+                duration-500
+
+                dark:border-white/10
+                dark:bg-[#07111d]/95
+                dark:shadow-black/20
+            "
+        >
+            <div
+                className="
+                    mx-auto
+                    flex
+                    h-[68px]
+                    w-full
+                    max-w-[1500px]
+                    items-center
+                    px-5
+                    sm:px-7
+                    lg:px-10
+                    xl:px-12
+                "
+            >
+
+                {/* =====================================================
+                    LOGO
+                ===================================================== */}
+
                 <Link
                     href="/"
-                    className="flex items-center"
+                    className="
+                        flex
+                        shrink-0
+                        items-center
+                        transition-transform
+                        duration-300
+                        hover:scale-[1.02]
+                    "
                 >
                     <Image
                         src="/images/marsol-logo.jpg"
                         alt="Marsol Technologies"
                         width={160}
                         height={55}
-                        className="h-auto w-[180px] object-contain"
                         priority
+                        className="
+                            h-auto
+                            w-[150px]
+                            object-contain
+
+                            dark:brightness-110
+                        "
                     />
                 </Link>
 
-                {/* Search + Navigation */}
-                <div className="flex items-center gap-6">
 
-                    {/* Search */}
-                    <SiteSearch />
+                {/* =====================================================
+                    SEARCH + NAVIGATION
+                ===================================================== */}
 
-                    {/* Navigation */}
-                    <ul className="flex items-center gap-8">
+                <div
+                    className="
+                        ml-auto
+                        flex
+                        items-center
+                        gap-3
+                        lg:gap-5
+                        xl:gap-6
+                    "
+                >
 
-                        {/* Home */}
-                        <li>
-                            <Link
-                                href="/"
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                                    pathname === "/"
-                                        ? "bg-black text-white"
-                                        : "text-gray-600 hover:text-black"
-                                }`}
-                            >
-                                Home
-                            </Link>
-                        </li>
+                    {/* =================================================
+                        SEARCH
+                    ================================================= */}
 
-                        {/* About */}
-                        <li>
-                            <Link
-                                href="/about"
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                                    pathname.startsWith("/about")
-                                        ? "bg-black text-white"
-                                        : "text-gray-600 hover:text-black"
-                                }`}
-                            >
-                                About
-                            </Link>
-                        </li>
+                    <div className="hidden md:block">
+                        <SiteSearch />
+                    </div>
 
-                        {/* Products */}
-                        <li>
-                            <Link
-                                href="/product"
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                                    pathname.startsWith("/product")
-                                        ? "bg-black text-white"
-                                        : "text-gray-600 hover:text-black"
-                                }`}
-                            >
-                                Products
-                            </Link>
-                        </li>
 
-                        {/* Career */}
-                        <li>
-                            <Link
-                                href="/careers"
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                                    pathname.startsWith("/careers")
-                                        ? "bg-black text-white"
-                                        : "text-gray-600 hover:text-black"
-                                }`}
-                            >
-                                Careers
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="/contact"
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                                    pathname === "/contact"
-                                        ? "bg-black text-white"
-                                        : "text-gray-600 hover:text-black"
-                                }`}
-                            >
-                                Contact
-                            </Link>
-                        </li>
+                    {/* =================================================
+                        NAVIGATION
+                    ================================================= */}
 
+                    <ul
+                        className="
+                            hidden
+                            items-center
+                            gap-1
+                            lg:flex
+                            xl:gap-2
+                        "
+                    >
+                        {navItems.map((item) => (
+                            <li key={item.name}>
+                                <Link
+                                    href={item.href}
+                                    className={`
+                                        relative
+                                        inline-flex
+                                        items-center
+                                        whitespace-nowrap
+                                        rounded-lg
+                                        px-3
+                                        py-2.5
+                                        text-[13px]
+                                        font-medium
+                                        transition-all
+                                        duration-300
+
+                                        ${
+                                            item.active
+                                                ? `
+                                                    bg-black
+                                                    text-white
+                                                    shadow-sm
+
+                                                    dark:bg-white
+                                                    dark:text-black
+                                                `
+                                                : `
+                                                    text-gray-600
+
+                                                    hover:bg-gray-100
+                                                    hover:text-gray-950
+
+                                                    dark:text-gray-400
+                                                    dark:hover:bg-white/5
+                                                    dark:hover:text-white
+                                                `
+                                        }
+                                    `}
+                                >
+                                    {item.name}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
+
+
+                    {/* =================================================
+                        THEME TOGGLE
+                    ================================================= */}
+
+                    <div
+                        className="
+                            ml-1
+                            flex
+                            shrink-0
+                            border-l
+                            border-gray-200
+                            pl-3
+
+                            dark:border-white/10
+
+                            sm:pl-4
+                        "
+                    >
+                        <ThemeToggle />
+                    </div>
                 </div>
             </div>
         </nav>

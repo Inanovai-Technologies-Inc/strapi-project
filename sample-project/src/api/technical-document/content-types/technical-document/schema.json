@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "technical_documents",
+  "info": {
+    "singularName": "technical-document",
+    "pluralName": "technical-documents",
+    "displayName": "Technical-Document"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "documentType": {
+      "type": "enumeration",
+      "enum": [
+        "Datasheet",
+        "Brochure",
+        "Installation Manual",
+        "Operation Manual",
+        "Technical Manual",
+        "Certificate",
+        "User Manual",
+        "Other"
+      ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "documentNumber": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "language": {
+      "type": "enumeration",
+      "enum": [
+        "English",
+        "German",
+        "French",
+        "Spanish",
+        "Italian",
+        "Other"
+      ]
+    },
+    "file": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "featured": {
+      "type": "boolean"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
+    }
+  }
+}

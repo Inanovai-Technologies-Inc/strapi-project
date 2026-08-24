@@ -1,108 +1,89 @@
-import { NextResponse } from "next/server";
-import Groq from "groq-sdk";
-import { getWebsiteKnowledge } from "@/lib/websiteKnowledge";
+import { NextRequest, NextResponse } from "next/server";
+import { GoogleGenAI } from "@google/genai";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+export async function POST(req: NextRequest) {
+    try {
+        // Check API key first
+        if (!process.env.GEMINI_API_KEY) {
+            console.error("GEMINI_API_KEY is missing");
 
-export async function POST(request: Request) {
-  try {
-    const { message } = await request.json();
+            return NextResponse.json(
+                {
+                    error: "GEMINI_API_KEY is not configured",
+                },
+                { status: 500 }
+            );
+        }
 
-    if (!message || typeof message !== "string") {
-      return NextResponse.json(
-        { error: "Message is required" },
-        { status: 400 }
-      );
-    }
+        const body = await req.json();
+        const message = body?.message;
 
-    // Get website content from Strapi
-    const products = await getWebsiteKnowledge();
+        if (!message || typeof message !== "string") {
+            return NextResponse.json(
+                {
+                    error: "Message is required",
+                },
+                { status: 400 }
+            );
+        }
 
-    // Convert Strapi product data into text
-    const websiteContext = products
-      .map((product: any) => {
-        return `
-Product Name:
-${product.Name || "Not available"}
+        const ai = new GoogleGenAI({
+            apiKey: process.env.GEMINI_API_KEY,
+        });
 
-Description:
-${JSON.stringify(product.description || "Not available")}
+        const response = await ai.models.generateContent({
+            model: "gemini-3.6-flash",
+            contents: `
+You are the Marsol Technical Assistant.
 
-Features:
-${JSON.stringify(product.Features || "Not available")}
+Marsol provides fire protection and fire safety solutions.
 
-Applications:
-${JSON.stringify(product.Applications || "Not available")}
+Your job is to help website visitors understand Marsol's products,
+applications, and technical information.
 
-Video Title:
-${product.VideoTitle || "Not available"}
-
-Video URL:
-${product.VideoURL || "Not available"}
-
-Slug:
-${product.slug || "Not available"}
-        `;
-      })
-      .join("\n-----------------------------\n");
-
-    const completion = await groq.chat.completions.create({
-      model: "openai/gpt-oss-20b",
-
-      messages: [
-        {
-          role: "system",
-          content: `
-You are the official website assistant.
-
-Your job is to answer questions about this website.
+Answer clearly, professionally, and concisely.
 
 IMPORTANT RULES:
+- Do not invent Marsol product names.
+- Do not invent Marsol product specifications.
+- Do not invent certifications, pressure ratings, dimensions,
+  flow rates, materials, or other technical specifications.
+- If the user asks for Marsol-specific information that you do not
+  have, clearly say that the information is not currently available.
+- You may answer general fire-safety questions using your general
+  knowledge.
+- Product information from Strapi will be connected later.
 
-1. Answer ONLY using the website information provided below.
-2. Do not invent information.
-3. Do not make up product specifications.
-4. Do not make up prices.
-5. Do not make up applications.
-6. Do not make up company information.
-7. If the answer cannot be found in the website information, say:
-   "I couldn't find that information on our website."
-8. Keep answers concise and professional.
-9. If the user asks about a product, provide the relevant product information available.
-10. Do not answer unrelated general knowledge questions as if they are website information.
+User question:
+${message}
+            `,
+        });
 
-WEBSITE INFORMATION:
+        const answer = response.text;
 
-${websiteContext}
-          `,
-        },
+        if (!answer) {
+            return NextResponse.json(
+                {
+                    error: "Gemini returned an empty response",
+                },
+                { status: 500 }
+            );
+        }
 
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    });
+        return NextResponse.json({
+            answer: answer,
+        });
+    } catch (error) {
+        console.error("Gemini API error:", error);
 
-    const answer =
-      completion.choices[0]?.message?.content ||
-      "Sorry, I could not generate an answer.";
-
-    return NextResponse.json({
-      answer,
-    });
-  } catch (error) {
-    console.error("Chatbot error:", error);
-
-    return NextResponse.json(
-      {
-        error: "Failed to process chatbot request",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+        return NextResponse.json(
+            {
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : "Failed to generate response",
+            },
+            { status: 500 }
+        );
+    }
 }

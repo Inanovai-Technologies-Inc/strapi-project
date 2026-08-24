@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
 @custom-variant dark (&:is(.dark *));
 
 html,
@@ -148,4 +147,77 @@ label {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.dark main .bg-white {
+  background-color: #0b1622 !important;
+}
+
+.dark main .bg-gray-50 {
+  background-color: #0f1c29 !important;
+}
+
+.dark main .bg-gray-100 {
+  background-color: #142433 !important;
+}
+
+.dark main .bg-gray-200 {
+  background-color: #263746 !important;
+}
+
+.dark main .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+.dark main .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark main .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.dark main .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+.dark main .border-gray-200 {
+  border-color: #263746 !important;
+}
+
+.dark main .border-gray-300 {
+  border-color: #3b4d5e !important;
+}
+
+.dark main [class~="text-[#0b1f3a]"] {
+  color: #f8fafc !important;
+}
+
+.dark main [class~="text-[#111827]"] {
+  color: #f8fafc !important;
+}
+
+.dark main [class~="bg-[#f7f7f5]"] {
+  background-color: #0b1622 !important;
+}
+
+.dark main [class~="bg-[#f5f6f7]"] {
+  background-color: #f5f6f7 !important;
+}
+
+.dark main [class~="bg-[#0b1f3a]"] {
+  background-color: #162536 !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    scroll-margin-top: 80px;
+}
+
+::selection {
+    background: #f97316;
+    color: white;
 }
