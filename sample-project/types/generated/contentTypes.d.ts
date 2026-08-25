@@ -845,6 +845,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     description: Schema.Attribute.Text;
     erpnextItemCode: Schema.Attribute.String;
     Features: Schema.Attribute.Blocks;
+    FoamSkidSeries: Schema.Attribute.Component<
+      'product.foam-skid-series',
+      true
+    >;
     Image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -897,6 +901,38 @@ export interface ApiResponseResponse extends Struct.CollectionTypeSchema {
     Name: Schema.Attribute.String & Schema.Attribute.Required;
     Phone: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSiteSettingSiteSetting extends Struct.SingleTypeSchema {
+  collectionName: 'site_settings';
+  info: {
+    displayName: 'SiteSettings';
+    pluralName: 'site-settings';
+    singularName: 'site-setting';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CompanyDescription: Schema.Attribute.Text;
+    CopyrightText: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::site-setting.site-setting'
+    > &
+      Schema.Attribute.Private;
+    Logo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    Offices: Schema.Attribute.Component<'footer.office', true>;
+    publishedAt: Schema.Attribute.DateTime;
+    SocialLinks: Schema.Attribute.Component<'footer.social-links', false>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1510,6 +1546,7 @@ declare module '@strapi/strapi' {
       'api::office.office': ApiOfficeOffice;
       'api::product.product': ApiProductProduct;
       'api::response.response': ApiResponseResponse;
+      'api::site-setting.site-setting': ApiSiteSettingSiteSetting;
       'api::sitetext.sitetext': ApiSitetextSitetext;
       'api::technical-document.technical-document': ApiTechnicalDocumentTechnicalDocument;
       'plugin::content-releases.release': PluginContentReleasesRelease;

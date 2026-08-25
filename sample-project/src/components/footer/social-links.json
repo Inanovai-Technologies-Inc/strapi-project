@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_footer_social_links",
+  "info": {
+    "displayName": "Social Links"
+  },
+  "options": {},
+  "attributes": {
+    "LinkedIn": {
+      "type": "string"
+    },
+    "YouTube": {
+      "type": "string"
+    },
+    "Facebook": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

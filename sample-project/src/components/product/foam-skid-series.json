@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_product_foam_skid_series",
+  "info": {
+    "displayName": "Foam Skid Series"
+  },
+  "options": {},
+  "attributes": {
+    "SeriesName": {
+      "type": "string"
+    },
+    "SeriesImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "SeriesDescription": {
+      "type": "blocks"
+    },
+    "SeriesCertificationLogos": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  },
+  "config": {}
+}

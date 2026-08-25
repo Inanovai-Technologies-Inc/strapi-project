@@ -1,11 +1,47 @@
+
 import Link from "next/link";
 
-const STRAPI_URL = "http://localhost:1337";
+const STRAPI_URL =
+    process.env.STRAPI_URL ||
+    process.env.NEXT_PUBLIC_STRAPI_URL ||
+    "http://localhost:1337";
+
+/* =========================================================
+   IMAGE URL HELPER
+========================================================= */
+
+function getImageUrl(image: any) {
+    if (!image) {
+        return null;
+    }
+
+    const imageData =
+        image?.data?.attributes ||
+        image?.data ||
+        image?.attributes ||
+        image;
+
+    const url = imageData?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    if (url.startsWith("http")) {
+        return url;
+    }
+
+    return `${STRAPI_URL}${url}`;
+}
+
+/* =========================================================
+   PRODUCT PAGE
+========================================================= */
 
 export default async function ProductPage() {
-    // =========================================================
-    // FETCH PRODUCTS FROM STRAPI
-    // =========================================================
+    /* =========================================================
+       FETCH PRODUCTS FROM STRAPI
+    ========================================================= */
 
     const response = await fetch(
         `${STRAPI_URL}/api/products?populate=*`,
@@ -26,35 +62,40 @@ export default async function ProductPage() {
 
     const allProducts = result.data || [];
 
-    // =========================================================
-    // FIND PRODUCTS THAT ARE USED AS RELATED PRODUCTS
-    // =========================================================
+    /* =========================================================
+       FIND PRODUCTS THAT ARE USED AS RELATED PRODUCTS
+    ========================================================= */
 
     const relatedProductIds = new Set<string>();
 
     allProducts.forEach((product: any) => {
-        product.relatedProducts?.forEach((related: any) => {
-            if (related.documentId) {
+        if (!Array.isArray(product.relatedProducts)) {
+            return;
+        }
+
+        product.relatedProducts.forEach((related: any) => {
+            if (related?.documentId) {
                 relatedProductIds.add(related.documentId);
             }
         });
     });
 
-    // =========================================================
-    // ONLY SHOW MAIN / PARENT PRODUCTS
-    //
-    // Example:
-    //
-    // DIFF SYSTEM
-    //   ├── FOAM TANK SKID
-    //   ├── SELF-CONTAINED SKID
-    //   └── DIFF NOZZLES
-    //
-    // Only DIFF SYSTEM appears on /product.
-    // =========================================================
+    /* =========================================================
+       ONLY SHOW MAIN / PARENT PRODUCTS
+
+       Example:
+
+       DIFF SYSTEM
+          ├── FOAM TANK SKID
+          ├── SELF-CONTAINED SKID
+          └── DIFF NOZZLES
+
+       Only DIFF SYSTEM appears on /product.
+    ========================================================= */
 
     const products = allProducts.filter(
-        (product: any) => !relatedProductIds.has(product.documentId)
+        (product: any) =>
+            !relatedProductIds.has(product.documentId)
     );
 
     return (
@@ -67,6 +108,7 @@ export default async function ProductPage() {
             <section className="relative overflow-hidden border-b border-gray-200 bg-white">
 
                 {/* Decorative background */}
+
                 <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-orange-100 opacity-50 blur-3xl" />
 
                 <div className="absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-gray-100 opacity-70 blur-3xl" />
@@ -75,7 +117,8 @@ export default async function ProductPage() {
 
                     <div className="grid items-center gap-12 lg:grid-cols-[1fr_360px]">
 
-                        {/* Left */}
+                        {/* LEFT */}
+
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
@@ -95,17 +138,21 @@ export default async function ProductPage() {
                                 across demanding applications.
                             </p>
 
-                             <Link
-                                        href="/product/compare"
-                                        className="inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-                                    >
-                                        Compare Products
-                                        <span className="ml-2">→</span>
-                                    </Link>
+                            <Link
+                                href="/product/compare"
+                                className="mt-7 inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+                            >
+                                Compare Products
+
+                                <span className="ml-2">
+                                    →
+                                </span>
+                            </Link>
 
                         </div>
 
-                        {/* Right */}
+                        {/* RIGHT */}
+
                         <div className="relative">
 
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-8">
@@ -133,7 +180,6 @@ export default async function ProductPage() {
 
             </section>
 
-
             {/* =========================================================
                 PRODUCTS
             ========================================================= */}
@@ -142,7 +188,7 @@ export default async function ProductPage() {
 
                 <div className="mx-auto max-w-7xl">
 
-                    {/* Section Heading */}
+                    {/* SECTION HEADING */}
 
                     <div className="mb-12">
 
@@ -164,7 +210,6 @@ export default async function ProductPage() {
 
                     </div>
 
-
                     {/* =====================================================
                         PRODUCT GRID
                     ===================================================== */}
@@ -185,17 +230,23 @@ export default async function ProductPage() {
 
                             {products.map((product: any) => {
 
-                                const imageUrl = product.Image?.url
-                                    ? `${STRAPI_URL}${product.Image.url}`
-                                    : null;
+                                const imageUrl = getImageUrl(
+                                    product.Image
+                                );
 
                                 const hasRelatedProducts =
-                                    product.relatedProducts?.length > 0;
+                                    Array.isArray(
+                                        product.relatedProducts
+                                    ) &&
+                                    product.relatedProducts.length > 0;
 
                                 return (
 
                                     <article
-                                        key={product.documentId}
+                                        key={
+                                            product.documentId ||
+                                            product.id
+                                        }
                                         className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-xl"
                                     >
 
@@ -231,7 +282,6 @@ export default async function ProductPage() {
 
                                         </div>
 
-
                                         {/* =====================================================
                                             CONTENT
                                         ===================================================== */}
@@ -242,20 +292,16 @@ export default async function ProductPage() {
                                                 Fire Protection
                                             </p>
 
-
                                             <h2 className="mt-3 min-h-[58px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
                                                 {product.Name}
                                             </h2>
 
-
                                             <div className="mt-4 h-px w-full bg-gray-100" />
-
 
                                             <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
                                                 {product.description ||
                                                     "Engineered fire protection equipment designed for reliable performance and demanding safety applications."}
                                             </p>
-
 
                                             {/* =================================================
                                                 VIEW PRODUCT / VIEW PRODUCTS
@@ -293,7 +339,6 @@ export default async function ProductPage() {
 
             </section>
 
-
             {/* =========================================================
                 WHY CHOOSE US
             ========================================================= */}
@@ -325,7 +370,6 @@ export default async function ProductPage() {
 
                         </div>
 
-
                         <div className="grid gap-5 sm:grid-cols-2">
 
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
@@ -341,7 +385,6 @@ export default async function ProductPage() {
 
                             </div>
 
-
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
@@ -355,7 +398,6 @@ export default async function ProductPage() {
 
                             </div>
 
-
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
@@ -368,7 +410,6 @@ export default async function ProductPage() {
                                 </p>
 
                             </div>
-
 
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
@@ -390,7 +431,6 @@ export default async function ProductPage() {
                 </div>
 
             </section>
-
 
             {/* =========================================================
                 CONTACT
@@ -417,7 +457,6 @@ export default async function ProductPage() {
 
                     </div>
 
-
                     <Link
                         href="/contact"
                         className="shrink-0 rounded-lg bg-orange-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-orange-600"
@@ -432,3 +471,4 @@ export default async function ProductPage() {
         </main>
     );
 }
+

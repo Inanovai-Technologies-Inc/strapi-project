@@ -149,64 +149,132 @@ label {
   }
 }
 
-.dark main .bg-white {
-  background-color: #0b1622 !important;
+/*
+  Shared dark palette. Most screens use Tailwind's neutral utilities, so these
+  overrides keep pages and shared components visually consistent without
+  changing the light theme. The contrast pairs meet or exceed normal-text
+  readability on the surfaces below.
+*/
+.dark {
+  color-scheme: dark;
+  --background: #080d10;
+  --foreground: #f1f5f9;
 }
 
-.dark main .bg-gray-50 {
-  background-color: #0f1c29 !important;
+.dark body {
+  background-color: #080d10;
+  color: #f1f5f9;
 }
 
-.dark main .bg-gray-100 {
-  background-color: #142433 !important;
+/* Page and card surfaces */
+.dark [class~="bg-white"] {
+  background-color: #11191e !important;
 }
 
-.dark main .bg-gray-200 {
-  background-color: #263746 !important;
+.dark [class~="bg-gray-50"],
+.dark [class~="bg-[#f7f7f5]"] {
+  background-color: #0b1115 !important;
 }
 
-.dark main .text-gray-900 {
+.dark [class~="bg-gray-100"],
+.dark [class~="bg-[#f5f6f7]"] {
+  background-color: #151f25 !important;
+}
+
+.dark [class~="bg-gray-200"] {
+  background-color: #202d35 !important;
+}
+
+.dark [class~="bg-gray-50/50"] {
+  background-color: #10191f !important;
+}
+
+.dark [class~="bg-[#0b1f3a]"] {
+  background-color: #142431 !important;
+}
+
+/* Text hierarchy */
+.dark [class~="text-gray-900"],
+.dark [class~="text-gray-800"],
+.dark [class~="text-gray-950"],
+.dark [class~="text-[#0b1f3a]"],
+.dark [class~="text-[#111827]"] {
   color: #f8fafc !important;
 }
 
-.dark main .text-gray-600 {
+.dark [class~="text-gray-700"] {
+  color: #e2e8f0 !important;
+}
+
+.dark [class~="text-gray-600"] {
   color: #cbd5e1 !important;
 }
 
-.dark main .text-gray-500 {
-  color: #94a3b8 !important;
+.dark [class~="text-gray-500"] {
+  color: #b6c5d2 !important;
 }
 
-.dark main .text-gray-400 {
-  color: #94a3b8 !important;
+.dark [class~="text-gray-400"] {
+  color: #9fb0c0 !important;
 }
 
-.dark main .border-gray-200 {
-  border-color: #263746 !important;
+.dark [class~="text-gray-300"] {
+  color: #d8e2eb !important;
 }
 
-.dark main .border-gray-300 {
-  border-color: #3b4d5e !important;
+/* Dividers, cards, controls, and data tables */
+.dark [class~="border-gray-100"],
+.dark [class~="border-gray-200"] {
+  border-color: #263640 !important;
 }
 
-.dark main [class~="text-[#0b1f3a]"] {
+.dark [class~="border-gray-300"] {
+  border-color: #3a4d59 !important;
+}
+
+.dark [class~="border-gray-900"] {
+  border-color: #526572 !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark textarea,
+.dark select {
+  background-color: #111b21 !important;
+  border-color: #3a4d59 !important;
   color: #f8fafc !important;
 }
 
-.dark main [class~="text-[#111827]"] {
-  color: #f8fafc !important;
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #9fb0c0 !important;
+  opacity: 1;
 }
 
-.dark main [class~="bg-[#f7f7f5]"] {
-  background-color: #0b1622 !important;
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #fb923c !important;
+  outline-color: #fb923c;
 }
 
-.dark main [class~="bg-[#f5f6f7]"] {
-  background-color: #f5f6f7 !important;
+.dark input[type="checkbox"],
+.dark input[type="radio"] {
+  accent-color: #f97316;
 }
 
-.dark main [class~="bg-[#0b1f3a]"] {
-  background-color: #162536 !important;
+.dark option {
+  background-color: #111b21;
+  color: #f8fafc;
+}
+
+.dark [class~="hover:bg-white"]:hover,
+.dark [class~="hover:bg-gray-50"]:hover {
+  background-color: #1a2730 !important;
+}
+
+.dark table [class~="bg-gray-50"],
+.dark table [class~="bg-white"] {
+  background-color: #151f25 !important;
 }
 
 html {
@@ -220,4 +288,212 @@ html {
 ::selection {
     background: #f97316;
     color: white;
+}
+
+/* Applied by PageReveal to top-level page sections on every route. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-reveal {
+    opacity: 0;
+    transform: translateY(3.5rem);
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .page-reveal--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Homepage motion: decorative, transform-only effects with no layout work. */
+.home-motion,
+.flowing-lines {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.home-motion__particles {
+  position: absolute;
+  inset: 0;
+}
+
+.home-motion__particle {
+  position: absolute;
+  left: var(--particle-x);
+  top: var(--particle-y);
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 999px;
+  background: #fed7aa;
+  box-shadow: 0 0 12px rgb(251 146 60 / 80%);
+  opacity: 0.6;
+  animation: home-twinkle 4.8s ease-in-out var(--particle-delay) infinite;
+}
+
+.home-motion__paths {
+  position: absolute;
+  right: -2%;
+  top: 0;
+  width: min(68vw, 840px);
+  height: 100%;
+  opacity: 0.8;
+}
+
+.home-motion__paths path {
+  stroke: rgb(251 146 60 / 55%);
+  stroke-dasharray: 8 13;
+  stroke-width: 1.2;
+  animation: home-path-flow 13s linear infinite;
+}
+
+.home-motion__paths circle {
+  fill: #fb923c;
+  filter: drop-shadow(0 0 7px rgb(251 146 60 / 90%));
+  animation: home-beacon 2.4s ease-in-out infinite;
+}
+
+
+.flowing-lines {
+  z-index: 0;
+  height: 100%;
+  opacity: 0.45;
+}
+
+.flowing-lines path {
+  stroke: rgb(249 115 22 / 25%);
+  stroke-dasharray: 5 15;
+  stroke-width: 1.25;
+  animation: home-path-flow 17s linear infinite;
+}
+
+/* A denser blueprint layer reserved for the DiFFS feature section. */
+.diffs-motion {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgb(249 115 22 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(249 115 22 / 7%) 1px, transparent 1px);
+  background-position: center;
+  background-size: 72px 72px;
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  opacity: 0.52;
+}
+
+.homepage-motion #diffs > :not(.flowing-lines):not(.diffs-motion) {
+  position: relative;
+  z-index: 1;
+}
+
+.diffs-motion svg {
+  width: 100%;
+  height: 100%;
+}
+
+.diffs-motion path {
+  stroke: rgb(234 88 12 / 42%);
+  stroke-dasharray: 5 16;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+  animation: home-path-flow 20s linear infinite;
+}
+
+.diffs-motion path:nth-child(2) {
+  animation-duration: 27s;
+  animation-direction: reverse;
+}
+
+.diffs-motion path:nth-child(3) {
+  animation-duration: 24s;
+}
+
+.diffs-motion path:nth-child(n + 4) {
+  stroke-dasharray: 2 12;
+  animation-duration: 16s;
+}
+
+.diffs-motion circle {
+  fill: #f97316;
+  filter: drop-shadow(0 0 5px rgb(249 115 22 / 65%));
+  animation: home-beacon 3.2s ease-in-out infinite;
+}
+
+.diffs-motion circle:nth-of-type(2) { animation-delay: -0.8s; }
+.diffs-motion circle:nth-of-type(3) { animation-delay: -1.6s; }
+.diffs-motion circle:nth-of-type(4) { animation-delay: -2.4s; }
+
+.dark .diffs-motion {
+  background-image:
+    linear-gradient(rgb(251 146 60 / 10%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(251 146 60 / 10%) 1px, transparent 1px);
+  opacity: 0.38;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .homepage-motion a:not([class~="group/link"]),
+  .homepage-motion button {
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+
+  .homepage-motion a:not([class~="group/link"]):hover,
+  .homepage-motion button:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  .homepage-motion .home-media-float {
+    will-change: transform;
+  }
+
+  .homepage-motion .home-media-float {
+    animation: home-media-float 8s ease-in-out infinite;
+  }
+
+  .homepage-motion #diffs .home-media-float {
+    animation-delay: -3s;
+    animation-direction: reverse;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-motion__paths {
+    display: none;
+  }
+
+  .home-motion__particle:nth-child(n + 11) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-motion,
+  .flowing-lines,
+  .diffs-motion {
+    display: none;
+  }
+}
+
+@keyframes home-path-flow {
+  to { stroke-dashoffset: -180; }
+}
+
+@keyframes home-twinkle {
+  0%, 100% { opacity: 0.16; transform: scale(0.75); }
+  50% { opacity: 0.85; transform: scale(1.25); }
+}
+
+@keyframes home-beacon {
+  0%, 100% { opacity: 0.35; transform: scale(0.75); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes home-media-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -8px, 0) scale(1.015); }
 }

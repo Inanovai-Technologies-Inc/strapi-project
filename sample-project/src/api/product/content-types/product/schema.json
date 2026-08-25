@@ -68,6 +68,11 @@
     },
     "erpnextItemCode": {
       "type": "string"
+    },
+    "FoamSkidSeries": {
+      "type": "component",
+      "component": "product.foam-skid-series",
+      "repeatable": true
     }
   }
 }

@@ -1,5 +1,47 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface FooterOffice extends Struct.ComponentSchema {
+  collectionName: 'components_footer_offices';
+  info: {
+    displayName: 'Office';
+  };
+  attributes: {
+    City: Schema.Attribute.String;
+    Country: Schema.Attribute.String;
+    OfficeType: Schema.Attribute.String;
+  };
+}
+
+export interface FooterSocialLinks extends Struct.ComponentSchema {
+  collectionName: 'components_footer_social_links';
+  info: {
+    displayName: 'Social Links';
+  };
+  attributes: {
+    Facebook: Schema.Attribute.String;
+    LinkedIn: Schema.Attribute.String;
+    YouTube: Schema.Attribute.String;
+  };
+}
+
+export interface ProductFoamSkidSeries extends Struct.ComponentSchema {
+  collectionName: 'components_product_foam_skid_series';
+  info: {
+    displayName: 'Foam Skid Series';
+  };
+  attributes: {
+    SeriesCertificationLogos: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    SeriesDescription: Schema.Attribute.Blocks;
+    SeriesImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    SeriesName: Schema.Attribute.String;
+  };
+}
+
 export interface SharedImage extends Struct.ComponentSchema {
   collectionName: 'components_shared_images';
   info: {
@@ -87,6 +129,9 @@ export interface SharedTechnicalSpecification extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
+      'footer.office': FooterOffice;
+      'footer.social-links': FooterSocialLinks;
+      'product.foam-skid-series': ProductFoamSkidSeries;
       'shared.image': SharedImage;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;

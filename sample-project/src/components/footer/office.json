@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_footer_offices",
+  "info": {
+    "displayName": "Office"
+  },
+  "options": {},
+  "attributes": {
+    "City": {
+      "type": "string"
+    },
+    "Country": {
+      "type": "string"
+    },
+    "OfficeType": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

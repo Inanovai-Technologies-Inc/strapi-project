@@ -1,6 +1,13 @@
 import Link from "next/link";
 
-const STRAPI_URL = "http://localhost:1337";
+const STRAPI_URL =
+    process.env.NEXT_PUBLIC_STRAPI_URL ||
+    process.env.STRAPI_URL ||
+    "http://localhost:1337";
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 type ProductPageProps = {
     params: Promise<{
@@ -9,7 +16,103 @@ type ProductPageProps = {
 };
 
 /* =========================================================
-   RENDER STRAPI RICH TEXT
+   MEDIA HELPERS
+========================================================= */
+
+function normalizeMedia(media: any): any[] {
+    if (!media) {
+        return [];
+    }
+
+    if (Array.isArray(media)) {
+        return media.flatMap((item) =>
+            normalizeMedia(item)
+        );
+    }
+
+    if (media?.data) {
+        return normalizeMedia(media.data);
+    }
+
+    if (media?.attributes) {
+        return normalizeMedia(media.attributes);
+    }
+
+    if (media?.url) {
+        return [media];
+    }
+
+    return [];
+}
+
+/* =========================================================
+   SINGLE IMAGE URL
+========================================================= */
+
+function getImageUrl(image: any): string | null {
+    const mediaItems = normalizeMedia(image);
+
+    if (mediaItems.length === 0) {
+        return null;
+    }
+
+    const url = mediaItems[0]?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    if (
+        url.startsWith("http://") ||
+        url.startsWith("https://")
+    ) {
+        return url;
+    }
+
+    return `${STRAPI_URL}${url}`;
+}
+
+/* =========================================================
+   MULTIPLE MEDIA URLS
+========================================================= */
+
+function getMediaUrls(media: any): string[] {
+    const mediaItems = normalizeMedia(media);
+
+    return mediaItems
+        .map((item) => item?.url)
+        .filter(Boolean)
+        .map((url: string) => {
+            if (
+                url.startsWith("http://") ||
+                url.startsWith("https://")
+            ) {
+                return url;
+            }
+
+            return `${STRAPI_URL}${url}`;
+        });
+}
+
+/* =========================================================
+   MEDIA ALT TEXT
+========================================================= */
+
+function getMediaAlt(
+    media: any,
+    fallback: string
+): string {
+    const mediaItems = normalizeMedia(media);
+
+    return (
+        mediaItems[0]?.alternativeText ||
+        mediaItems[0]?.name ||
+        fallback
+    );
+}
+
+/* =========================================================
+   RICH TEXT RENDERER
 ========================================================= */
 
 function renderBlocks(blocks: any[]) {
@@ -22,7 +125,9 @@ function renderBlocks(blocks: any[]) {
             return null;
         }
 
-        const children = block.children || [];
+        const children = Array.isArray(block.children)
+            ? block.children
+            : [];
 
         const text = children
             .map((child: any) => child?.text || "")
@@ -49,13 +154,22 @@ function renderBlocks(blocks: any[]) {
                         key={index}
                         className="mb-4 list-disc space-y-2 pl-6 text-base leading-8 text-gray-600"
                     >
-                        {children.map((item: any, itemIndex: number) => (
-                            <li key={itemIndex}>
-                                {item?.children
-                                    ?.map((child: any) => child?.text || "")
-                                    .join("") || ""}
-                            </li>
-                        ))}
+                        {children.map(
+                            (
+                                item: any,
+                                itemIndex: number
+                            ) => (
+                                <li key={itemIndex}>
+                                    {item?.children
+                                        ?.map(
+                                            (child: any) =>
+                                                child?.text ||
+                                                ""
+                                        )
+                                        .join("") || ""}
+                                </li>
+                            )
+                        )}
                     </ul>
                 );
 
@@ -82,9 +196,8 @@ function renderBlocks(blocks: any[]) {
     });
 }
 
-
 /* =========================================================
-   YOUTUBE EMBED URL
+   YOUTUBE
 ========================================================= */
 
 function getYouTubeEmbedUrl(url: string) {
@@ -92,7 +205,8 @@ function getYouTubeEmbedUrl(url: string) {
         const parsedUrl = new URL(url);
 
         if (parsedUrl.hostname.includes("youtu.be")) {
-            const videoId = parsedUrl.pathname.substring(1);
+            const videoId =
+                parsedUrl.pathname.substring(1);
 
             if (videoId) {
                 return `https://www.youtube.com/embed/${videoId}`;
@@ -100,13 +214,16 @@ function getYouTubeEmbedUrl(url: string) {
         }
 
         if (parsedUrl.hostname.includes("youtube.com")) {
-            const videoId = parsedUrl.searchParams.get("v");
+            const videoId =
+                parsedUrl.searchParams.get("v");
 
             if (videoId) {
                 return `https://www.youtube.com/embed/${videoId}`;
             }
 
-            if (parsedUrl.pathname.startsWith("/embed/")) {
+            if (
+                parsedUrl.pathname.startsWith("/embed/")
+            ) {
                 return url;
             }
         }
@@ -117,32 +234,124 @@ function getYouTubeEmbedUrl(url: string) {
     }
 }
 
-
 /* =========================================================
-   IMAGE URL HELPER
+   PRODUCT LOAD ERROR
 ========================================================= */
 
-function getImageUrl(image: any) {
-    if (!image) {
-        return null;
-    }
+function ProductLoadError() {
+    return (
+        <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
+            <div className="max-w-lg text-center">
+                <h1 className="text-3xl font-bold text-gray-900">
+                    Products are temporarily unavailable
+                </h1>
 
-    const imageData =
-        image?.data?.attributes ||
-        image?.data ||
-        image;
+                <p className="mt-3 text-gray-500">
+                    We could not connect to the product
+                    catalogue. Please try again shortly.
+                </p>
 
-    if (!imageData?.url) {
-        return null;
-    }
-
-    if (imageData.url.startsWith("http")) {
-        return imageData.url;
-    }
-
-    return `${STRAPI_URL}${imageData.url}`;
+                <Link
+                    href="/product"
+                    className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
+                >
+                    Back to Products
+                </Link>
+            </div>
+        </main>
+    );
 }
 
+/* =========================================================
+   FETCH PRODUCT
+========================================================= */
+
+async function fetchProduct(slug: string) {
+    const url =
+        `${STRAPI_URL}/api/products` +
+        `?filters[slug][$eq]=${encodeURIComponent(slug)}` +
+        `&populate[Image]=true` +
+        `&populate[certificationLogos]=true` +
+        `&populate[relatedProducts][populate][Image]=true` +
+        `&populate[FoamSkidSeries][populate][SeriesImage]=true` +
+        `&populate[FoamSkidSeries][populate][SeriesCertificationLogos]=true` +
+        `&populate[TechnicalSpecification]=true`;
+
+    console.log("Fetching product:", url);
+
+    try {
+        const response = await fetch(url, {
+            cache: "no-store",
+        });
+
+        if (!response.ok) {
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Strapi Product Error:",
+                errorText
+            );
+
+            return null;
+        }
+
+        const result = await response.json();
+
+        console.log(
+            "STRAPI PRODUCT RESPONSE:",
+            JSON.stringify(result, null, 2)
+        );
+
+        return result?.data?.[0] || null;
+    } catch (error) {
+        console.error(
+            "Failed to fetch product:",
+            error
+        );
+
+        return null;
+    }
+}
+
+/* =========================================================
+   FETCH RELATED PRODUCT
+========================================================= */
+
+async function fetchRelatedProduct(
+    slug: string
+) {
+    const url =
+        `${STRAPI_URL}/api/products` +
+        `?filters[slug][$eq]=${encodeURIComponent(slug)}` +
+        `&populate[Image]=true`;
+
+    try {
+        const response = await fetch(url, {
+            cache: "no-store",
+        });
+
+        if (!response.ok) {
+            console.error(
+                `Failed to fetch related product ${slug}:`,
+                await response.text()
+            );
+
+            return null;
+        }
+
+        const result = await response.json();
+
+        return result?.data?.[0] || null;
+    } catch (error) {
+        console.error(
+            `Failed to fetch related product ${slug}:`,
+            error
+        );
+
+        return null;
+    }
+}
 
 /* =========================================================
    PRODUCT DETAIL PAGE
@@ -151,333 +360,479 @@ function getImageUrl(image: any) {
 export default async function ProductDetailPage({
     params,
 }: ProductPageProps) {
-
     const { slug } = await params;
 
+    /* =====================================================
+       FETCH PRODUCT
+    ===================================================== */
 
-    /* =========================================================
-       FETCH MAIN PRODUCT
-
-       IMPORTANT:
-       Keep populate=*.
-       Do NOT use:
-       populate[relatedProducts][populate]=*
-    ========================================================= */
-
-    const response = await fetch(
-        `${STRAPI_URL}/api/products?filters[slug][$eq]=${encodeURIComponent(
-            slug
-        )}&populate=*`,
-        {
-            cache: "no-store",
-        }
-    );
-
-
-    /* =========================================================
-       API ERROR
-    ========================================================= */
-
-    if (!response.ok) {
-        const errorText = await response.text();
-
-        throw new Error(
-            `Failed to fetch product: ${response.status} ${errorText}`
-        );
-    }
-
-
-    const result = await response.json();
-
-    const product = result.data?.[0];
-
-
-    /* =========================================================
-       PRODUCT NOT FOUND
-    ========================================================= */
+    const product = await fetchProduct(slug);
 
     if (!product) {
-        return (
-            <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
+        return <ProductLoadError />;
+    }
 
-                <div className="text-center">
+    /* =====================================================
+       MAIN PRODUCT IMAGE
+    ===================================================== */
 
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Product Not Found
-                    </h1>
+    const imageUrl =
+        getImageUrl(product.Image);
 
-                    <p className="mt-3 text-gray-500">
-                        The product you are looking for does not exist.
-                    </p>
+    /* =====================================================
+       MAIN PRODUCT CERTIFICATION LOGOS
+    ===================================================== */
+
+    const certificationLogoUrls =
+        getMediaUrls(
+            product.certificationLogos
+        );
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    const videoEmbedUrl =
+        product.VideoURL
+            ? getYouTubeEmbedUrl(
+                  product.VideoURL
+              )
+            : null;
+
+    /* =====================================================
+       TECHNICAL SPECIFICATIONS
+    ===================================================== */
+
+    const technicalSpecifications =
+        Array.isArray(
+            product.TechnicalSpecification
+        )
+            ? product.TechnicalSpecification.filter(
+                  (spec: any) =>
+                      spec &&
+                      (
+                          spec.Label
+                              ?.toString()
+                              .trim() ||
+                          spec.Value
+                              ?.toString()
+                              .trim()
+                      )
+              )
+            : [];
+
+    /* =====================================================
+       FOAM SKID SERIES
+    ===================================================== */
+
+    const foamSkidSeries =
+        Array.isArray(
+            product.FoamSkidSeries
+        )
+            ? product.FoamSkidSeries
+            : [];
+
+    /* =====================================================
+       RELATED PRODUCTS
+    ===================================================== */
+
+    const relatedProducts =
+        Array.isArray(
+            product.relatedProducts
+        )
+            ? product.relatedProducts
+            : [];
+
+    const relatedProductsWithImages =
+        await Promise.all(
+            relatedProducts.map(
+                async (related: any) => {
+                    if (!related?.slug) {
+                        return related;
+                    }
+
+                    const fullRelatedProduct =
+                        await fetchRelatedProduct(
+                            related.slug
+                        );
+
+                    return (
+                        fullRelatedProduct ||
+                        related
+                    );
+                }
+            )
+        );
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
+
+    return (
+        <main className="min-h-screen bg-white">
+
+            {/* =================================================
+                HERO / MAIN PRODUCT
+            ================================================= */}
+
+            <section className="bg-white px-6 py-14 lg:px-8 lg:py-20">
+
+                <div className="mx-auto max-w-7xl">
+
+                    {/* BACK */}
 
                     <Link
                         href="/product"
-                        className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
+                        className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                     >
-                        Back to Products
+                        ← Back to Products
                     </Link>
 
-                </div>
+                    <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:items-center">
 
-            </main>
-        );
-    }
+                        {/* =================================================
+                            LEFT - PRODUCT IMAGE
+                            
+                            COMPLETELY BORDERLESS
+                        ================================================= */}
 
+                        <div className="bg-white">
 
-    /* =========================================================
-       MAIN PRODUCT IMAGE
-    ========================================================= */
+                            <div className="flex min-h-[450px] items-center justify-center bg-white p-6 lg:p-10">
 
-    const imageUrl = getImageUrl(product.Image);
+                                {imageUrl ? (
+                                    <img
+                                        src={imageUrl}
+                                        alt={getMediaAlt(
+                                            product.Image,
+                                            product.Name
+                                        )}
+                                        className="max-h-[450px] w-full object-contain"
+                                    />
+                                ) : (
+                                    <p className="text-gray-400">
+                                        No image available
+                                    </p>
+                                )}
 
+                            </div>
 
-    /* =========================================================
-       VIDEO
-    ========================================================= */
+                            {/* =================================================
+                                MAIN CERTIFICATIONS
 
-    const videoEmbedUrl = product.VideoURL
-        ? getYouTubeEmbedUrl(product.VideoURL)
-        : null;
+                                NO BORDER
+                                NO CARD
+                                NO SHADOW
+                            ================================================= */}
 
+                            {certificationLogoUrls.length >
+                                0 && (
+                                <div className="bg-white px-6 py-6">
 
-    /* =========================================================
-       TECHNICAL SPECIFICATIONS
+                                    <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+                                        Certifications
+                                    </p>
 
-       Only keep rows that actually contain data.
-    ========================================================= */
+                                    <div className="mt-5 flex flex-wrap items-center justify-center gap-5">
 
-    const technicalSpecifications = Array.isArray(
-        product.TechnicalSpecification
-    )
-        ? product.TechnicalSpecification.filter(
-              (spec: any) =>
-                  spec &&
-                  (
-                      spec.Label?.toString().trim() ||
-                      spec.Value?.toString().trim()
-                  )
-          )
-        : [];
+                                        {certificationLogoUrls.map(
+                                            (
+                                                logoUrl,
+                                                index
+                                            ) => (
+                                                <div
+                                                    key={`${logoUrl}-${index}`}
+                                                    className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                >
+                                                    <img
+                                                        src={
+                                                            logoUrl
+                                                        }
+                                                        alt={`Certification logo ${
+                                                            index +
+                                                            1
+                                                        }`}
+                                                        className="max-h-full max-w-full object-contain"
+                                                    />
+                                                </div>
+                                            )
+                                        )}
 
+                                    </div>
 
-    /* =========================================================
-       RELATED PRODUCTS
-
-       Strapi's populate=* on the main product gives us the
-       related product information, but their Image relation
-       may not be populated.
-
-       Therefore, fetch each related product separately.
-    ========================================================= */
-
-    const relatedProducts = Array.isArray(product.relatedProducts)
-        ? product.relatedProducts
-        : [];
-
-
-    const relatedProductsWithImages = await Promise.all(
-        relatedProducts.map(async (related: any) => {
-
-            if (!related?.slug) {
-                return related;
-            }
-
-            try {
-
-                const relatedResponse = await fetch(
-                    `${STRAPI_URL}/api/products?filters[slug][$eq]=${encodeURIComponent(
-                        related.slug
-                    )}&populate=*`,
-                    {
-                        cache: "no-store",
-                    }
-                );
-
-
-                if (!relatedResponse.ok) {
-                    return related;
-                }
-
-
-                const relatedResult =
-                    await relatedResponse.json();
-
-
-                return relatedResult.data?.[0] || related;
-
-            } catch {
-                return related;
-            }
-        })
-    );
-
-
-    return (
-    <main className="min-h-screen bg-white">
-
-        {/* =====================================================
-            PRODUCT HERO
-        ===================================================== */}
-
-        <section className="bg-gray-50 px-6 py-14 lg:px-8 lg:py-20">
-
-            <div className="mx-auto max-w-7xl">
-
-                <Link
-                    href="/product"
-                    className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
-                >
-                    ← Back to Products
-                </Link>
-
-
-                <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:items-center">
-
-
-                    {/* =================================================
-                        PRODUCT IMAGE + CERTIFICATION LOGOS
-                    ================================================= */}
-
-                    <div>
-
-                        {/* PRODUCT IMAGE */}
-
-                        <div className="flex min-h-[450px] items-center justify-center rounded-2xl border border-gray-200 bg-white p-10 shadow-sm">
-
-                            {imageUrl ? (
-
-                                <img
-                                    src={imageUrl}
-                                    alt={
-                                        product.Image?.alternativeText ||
-                                        product.Name
-                                    }
-                                    className="max-h-[420px] w-full object-contain"
-                                />
-
-                            ) : (
-
-                                <p className="text-gray-400">
-                                    No image available
-                                </p>
-
+                                </div>
                             )}
 
                         </div>
 
-                            {/* =================================================
-    CERTIFICATION LOGOS
-================================================= */}
+                        {/* =================================================
+                            RIGHT - PRODUCT INFORMATION
+                        ================================================= */}
 
-{Array.isArray(product.certificationLogos) &&
-    product.certificationLogos.length > 0 && (
+                        <div>
 
-        <div className="mt-5 rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                                Product
+                            </p>
 
-            {/* TITLE */}
+                            <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
+                                {product.Name}
+                            </h1>
 
-            <p className="mb-5 text-center text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">
-                Certifications
-            </p>
+                            <div className="mt-6 h-1 w-16 bg-orange-500" />
 
+                            {product.description && (
+                                <div className="mt-8">
 
-            {/* LOGOS */}
+                                    <h2 className="text-xl font-bold text-gray-900">
+                                        Description
+                                    </h2>
 
-            <div className="flex flex-wrap items-center justify-center gap-8">
+                                    <p className="mt-4 whitespace-pre-line text-base leading-8 text-gray-600">
+                                        {
+                                            product.description
+                                        }
+                                    </p>
 
-                {product.certificationLogos.map(
-                    (logo: any, index: number) => {
+                                </div>
+                            )}
 
-                        const logoUrl = getImageUrl(logo);
+                            {/* REQUEST MORE INFO */}
 
-                        if (!logoUrl) {
-                            return null;
-                        }
+                            <div className="mt-9">
 
-                        return (
-                            <div
-                                key={
-                                    logo.documentId ||
-                                    logo.id ||
-                                    index
-                                }
-                                className="flex h-24 w-32 items-center justify-center"
-                            >
+                                <Link
+                                    href="/contact"
+                                    className="inline-flex items-center gap-3 rounded-lg bg-orange-500 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-600 hover:shadow-lg"
+                                >
+                                    <span>
+                                        Request More Info
+                                    </span>
 
-                                <img
-                                    src={logoUrl}
-                                    alt={
-                                        logo.alternativeText ||
-                                        `${product.Name} certification`
-                                    }
-                                    className="h-auto max-h-24 w-auto max-w-32 object-contain"
-                                />
-
-                            </div>
-                        );
-                    }
-                )}
-
-            </div>
-
-        </div>
-    )}
-                        
-
-                    </div>
-
-
-                    {/* =================================================
-                        PRODUCT INFORMATION
-                    ================================================= */}
-
-                    <div>
-
-                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            Product
-                        </p>
-
-
-                        <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
-                            {product.Name}
-                        </h1>
-
-
-                        <div className="mt-6 h-1 w-16 bg-orange-500" />
-
-
-                        {product.description && (
-
-                            <div className="mt-8">
-
-                                <h2 className="text-xl font-bold text-gray-900">
-                                    Description
-                                </h2>
-
-                                <p className="mt-4 text-base leading-8 text-gray-600">
-                                    {product.description}
-                                </p>
+                                    <span className="text-lg">
+                                        →
+                                    </span>
+                                </Link>
 
                             </div>
 
-                        )}
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
-        </section>
+            {/* =========================================================
+                FOAM SKID SERIES
+            ========================================================= */}
 
+            {foamSkidSeries.length > 0 && (
+                <section className="bg-white px-6 py-20 lg:px-8">
 
-            {/* =====================================================
+                    <div className="mx-auto max-w-7xl">
+
+                        {/* SECTION HEADER */}
+
+                        <div className="mb-14">
+
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                                Foam Tank Skid
+                            </p>
+
+                            <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
+                                Foam Skid Series
+                            </h2>
+
+                            <div className="mt-4 h-1 w-12 bg-orange-500" />
+
+                            <p className="mt-5 max-w-3xl text-base leading-8 text-gray-500">
+                                Marsol has developed different
+                                foam skid series to meet various
+                                project and installation
+                                requirements.
+                            </p>
+
+                        </div>
+
+                        {/* SERIES */}
+
+                        <div className="space-y-24">
+
+                            {foamSkidSeries.map(
+                                (
+                                    series: any,
+                                    index: number
+                                ) => {
+
+                                    const seriesName =
+                                        series.SeriesName ||
+                                        `Series ${
+                                            index + 1
+                                        }`;
+
+                                    const seriesImageUrl =
+                                        getImageUrl(
+                                            series.SeriesImage
+                                        );
+
+                                    const seriesCertificationLogoUrls =
+                                        getMediaUrls(
+                                            series.SeriesCertificationLogos
+                                        );
+
+                                    const isReversed =
+                                        index % 2 === 1;
+
+                                    return (
+                                        <article
+                                            key={
+                                                series.id ||
+                                                index
+                                            }
+                                            className="bg-white"
+                                        >
+
+                                            <div
+                                                className={`grid items-center gap-12 lg:grid-cols-2 ${
+                                                    isReversed
+                                                        ? "lg:[&>div:first-child]:order-2"
+                                                        : ""
+                                                }`}
+                                            >
+
+                                                {/* =================================================
+                                                    SERIES IMAGE
+                                                    COMPLETELY BORDERLESS
+                                                ================================================= */}
+
+                                                <div className="bg-white">
+
+                                                    <div className="flex min-h-[380px] items-center justify-center bg-white p-6 lg:p-10">
+
+                                                        {seriesImageUrl ? (
+                                                            <img
+                                                                src={
+                                                                    seriesImageUrl
+                                                                }
+                                                                alt={
+                                                                    seriesName
+                                                                }
+                                                                className="max-h-[390px] w-full object-contain transition duration-500 hover:scale-[1.02]"
+                                                            />
+                                                        ) : (
+                                                            <div className="text-center">
+                                                                <p className="text-sm text-gray-400">
+                                                                    No series image available
+                                                                </p>
+                                                            </div>
+                                                        )}
+
+                                                    </div>
+
+                                                    {/* SERIES CERTIFICATIONS */}
+
+                                                    {seriesCertificationLogoUrls.length >
+                                                        0 && (
+                                                        <div className="bg-white px-4 py-4">
+
+                                                            <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                                                                Certifications
+                                                            </p>
+
+                                                            <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
+
+                                                                {seriesCertificationLogoUrls.map(
+                                                                    (
+                                                                        logoUrl,
+                                                                        logoIndex
+                                                                    ) => (
+                                                                        <div
+                                                                            key={`${logoUrl}-${logoIndex}`}
+                                                                            className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                                        >
+                                                                            <img
+                                                                                src={
+                                                                                    logoUrl
+                                                                                }
+                                                                                alt={`${seriesName} certification logo ${
+                                                                                    logoIndex +
+                                                                                    1
+                                                                                }`}
+                                                                                className="max-h-full max-w-full object-contain"
+                                                                            />
+                                                                        </div>
+                                                                    )
+                                                                )}
+
+                                                            </div>
+
+                                                        </div>
+                                                    )}
+
+                                                </div>
+
+                                                {/* =================================================
+                                                    SERIES DESCRIPTION
+                                                ================================================= */}
+
+                                                <div className="flex flex-col justify-center px-2 py-8 lg:px-8 lg:py-12">
+
+                                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
+                                                        Foam Skid Series
+                                                    </p>
+
+                                                    <h3 className="mt-3 text-2xl font-bold uppercase leading-tight text-[#0b1f3a] sm:text-3xl">
+                                                        {
+                                                            seriesName
+                                                        }
+                                                    </h3>
+
+                                                    <div className="mt-5 h-1 w-12 bg-orange-500" />
+
+                                                    {Array.isArray(
+                                                        series.SeriesDescription
+                                                    ) ? (
+                                                        <div className="mt-7">
+                                                            {renderBlocks(
+                                                                series.SeriesDescription
+                                                            )}
+                                                        </div>
+                                                    ) : series.SeriesDescription ? (
+                                                        <p className="mt-7 whitespace-pre-line text-base leading-8 text-gray-600">
+                                                            {
+                                                                series.SeriesDescription
+                                                            }
+                                                        </p>
+                                                    ) : (
+                                                        <p className="mt-7 text-base text-gray-400">
+                                                            No description available.
+                                                        </p>
+                                                    )}
+
+                                                </div>
+
+                                            </div>
+
+                                        </article>
+                                    );
+                                }
+                            )}
+
+                        </div>
+
+                    </div>
+
+                </section>
+            )}
+
+            {/* =========================================================
                 FEATURES
-            ===================================================== */}
+            ========================================================= */}
 
             {Array.isArray(product.Features) &&
                 product.Features.length > 0 && (
-
                     <section className="px-6 py-16 lg:px-8">
 
                         <div className="mx-auto max-w-7xl">
@@ -492,27 +847,23 @@ export default async function ProductDetailPage({
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-
                             <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-
-                                {renderBlocks(product.Features)}
-
+                                {renderBlocks(
+                                    product.Features
+                                )}
                             </div>
 
                         </div>
 
                     </section>
-
                 )}
 
-
-            {/* =====================================================
+            {/* =========================================================
                 APPLICATIONS
-            ===================================================== */}
+            ========================================================= */}
 
             {Array.isArray(product.Applications) &&
                 product.Applications.length > 0 && (
-
                     <section className="bg-gray-50 px-6 py-16 lg:px-8">
 
                         <div className="mx-auto max-w-7xl">
@@ -527,28 +878,22 @@ export default async function ProductDetailPage({
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-
                             <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-
-                                {renderBlocks(product.Applications)}
-
+                                {renderBlocks(
+                                    product.Applications
+                                )}
                             </div>
 
                         </div>
 
                     </section>
-
                 )}
 
-
-            {/* =====================================================
+            {/* =========================================================
                 TECHNICAL SPECIFICATIONS
-
-                ENTIRE SECTION IS HIDDEN WHEN EMPTY
-            ===================================================== */}
+            ========================================================= */}
 
             {technicalSpecifications.length > 0 && (
-
                 <section className="px-6 py-16 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
@@ -565,13 +910,7 @@ export default async function ProductDetailPage({
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <p className="mt-4 max-w-2xl text-base leading-7 text-gray-500">
-                                Detailed technical information and
-                                specifications for this product.
-                            </p>
-
                         </div>
-
 
                         <div className="mx-auto max-w-3xl overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
@@ -587,25 +926,29 @@ export default async function ProductDetailPage({
 
                             </div>
 
-
                             {technicalSpecifications.map(
-                                (spec: any, index: number) => (
-
+                                (
+                                    spec: any,
+                                    index: number
+                                ) => (
                                     <div
                                         key={index}
                                         className="grid grid-cols-1 border-b border-gray-200 last:border-b-0 sm:grid-cols-[220px_1fr]"
                                     >
 
                                         <div className="bg-gray-50 px-5 py-4 text-sm font-semibold text-gray-800 sm:border-r sm:border-gray-200">
-                                            {spec.Label}
+                                            {
+                                                spec.Label
+                                            }
                                         </div>
 
                                         <div className="px-5 py-4 text-sm leading-6 text-gray-600">
-                                            {spec.Value}
+                                            {
+                                                spec.Value
+                                            }
                                         </div>
 
                                     </div>
-
                                 )
                             )}
 
@@ -614,21 +957,16 @@ export default async function ProductDetailPage({
                     </div>
 
                 </section>
-
             )}
 
-
-            {/* =====================================================
+            {/* =========================================================
                 RELATED PRODUCTS
-            ===================================================== */}
+            ========================================================= */}
 
             {relatedProductsWithImages.length > 0 && (
-
                 <section className="bg-gray-50 px-6 py-20 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
-
-                        {/* HEADING */}
 
                         <div className="mb-10">
 
@@ -652,96 +990,99 @@ export default async function ProductDetailPage({
 
                         </div>
 
-
-                        {/* RELATED PRODUCT GRID */}
-
-                        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
 
                             {relatedProductsWithImages.map(
-                                (related: any) => {
+                                (
+                                    related: any
+                                ) => {
 
                                     const relatedImageUrl =
-                                        getImageUrl(related.Image);
-
+                                        getImageUrl(
+                                            related.Image
+                                        );
 
                                     return (
-
                                         <article
-                                            key={related.documentId}
-                                            className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-xl"
+                                            key={
+                                                related.documentId ||
+                                                related.id
+                                            }
+                                            className="group bg-white"
                                         >
 
-                                            {/* IMAGE */}
+                                            {/* =================================================
+                                                RELATED PRODUCT IMAGE
 
-                                            <div className="relative flex h-60 items-center justify-center overflow-hidden bg-[#f5f6f7] p-8">
+                                                NO BORDER
+                                                NO SHADOW
+                                                NO CARD
+                                                NO GRAY BACKGROUND
+                                                NO ORANGE TOP BAR
+                                            ================================================= */}
 
-                                                <div className="absolute left-0 top-0 h-1 w-16 bg-orange-500 transition-all duration-300 group-hover:w-24" />
+                                            <div className="flex h-64 items-center justify-center bg-white p-8">
 
                                                 {relatedImageUrl ? (
-
                                                     <img
-                                                        src={relatedImageUrl}
-                                                        alt={
-                                                            related.Image
-                                                                ?.alternativeText ||
-                                                            related.Name
+                                                        src={
+                                                            relatedImageUrl
                                                         }
-                                                        className="h-full w-full object-contain transition duration-500 group-hover:scale-110"
+                                                        alt={getMediaAlt(
+                                                            related.Image,
+                                                            related.Name
+                                                        )}
+                                                        className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
                                                     />
-
                                                 ) : (
-
                                                     <div className="text-sm text-gray-400">
                                                         Product image unavailable
                                                     </div>
-
                                                 )}
 
                                             </div>
 
+                                            {/* =================================================
+                                                RELATED PRODUCT CONTENT
+                                            ================================================= */}
 
-                                            {/* CONTENT */}
-
-                                            <div className="p-6">
+                                            <div className="px-2 pb-4 pt-4">
 
                                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
                                                     Related Product
                                                 </p>
 
-
                                                 <h3 className="mt-3 min-h-[56px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
-                                                    {related.Name}
+                                                    {
+                                                        related.Name
+                                                    }
                                                 </h3>
 
-
-                                                <div className="mt-4 h-px w-full bg-gray-100" />
-
-
                                                 <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
-                                                    {related.description ||
-                                                        "Explore this related fire protection solution."}
+                                                    {
+                                                        related.description ||
+                                                        "Explore this related fire protection solution."
+                                                    }
                                                 </p>
 
+                                                {related.slug && (
+                                                    <Link
+                                                        href={`/product/${related.slug}`}
+                                                        className="mt-6 flex items-center justify-between border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 hover:border-orange-500 hover:bg-orange-500 hover:text-white"
+                                                    >
+                                                        <span>
+                                                            View Product
+                                                        </span>
 
-                                                <Link
-                                                    href={`/product/${related.slug}`}
-                                                    className="mt-6 flex items-center justify-between rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white"
-                                                >
-
-                                                    <span>
-                                                        View Product
-                                                    </span>
-
-                                                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
-                                                        →
-                                                    </span>
-
-                                                </Link>
+                                                        <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
+                                                            →
+                                                        </span>
+                                                    </Link>
+                                                )}
 
                                             </div>
 
                                         </article>
-
                                     );
                                 }
                             )}
@@ -751,16 +1092,13 @@ export default async function ProductDetailPage({
                     </div>
 
                 </section>
-
             )}
 
-
-            {/* =====================================================
-                PRODUCT VIDEO
-            ===================================================== */}
+            {/* =========================================================
+                VIDEO
+            ========================================================= */}
 
             {videoEmbedUrl && (
-
                 <section className="bg-gray-50 px-6 py-20 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
@@ -772,25 +1110,31 @@ export default async function ProductDetailPage({
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                {product.VideoTitle || "Product Video"}
+                                {
+                                    product.VideoTitle ||
+                                    "Product Video"
+                                }
                             </h2>
 
                             <div className="mx-auto mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-gray-500">
-                                Watch the product demonstration to learn more
-                                about its features, operation and capabilities.
+                                Watch the product demonstration
+                                to learn more about its
+                                features, operation and
+                                capabilities.
                             </p>
 
                         </div>
-
 
                         <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-xl">
 
                             <div className="relative aspect-video">
 
                                 <iframe
-                                    src={videoEmbedUrl}
+                                    src={
+                                        videoEmbedUrl
+                                    }
                                     title={
                                         product.VideoTitle ||
                                         `${product.Name} Product Video`
@@ -807,13 +1151,11 @@ export default async function ProductDetailPage({
                     </div>
 
                 </section>
-
             )}
 
-
-            {/* =====================================================
+            {/* =========================================================
                 CONTACT
-            ===================================================== */}
+            ========================================================= */}
 
             <section className="bg-gray-900 px-6 py-16 lg:px-8">
 
@@ -830,12 +1172,13 @@ export default async function ProductDetailPage({
                         </h2>
 
                         <p className="mt-3 text-gray-400">
-                            Get in touch with us for product specifications,
-                            pricing and technical information.
+                            Get in touch with us for
+                            product specifications,
+                            pricing and technical
+                            information.
                         </p>
 
                     </div>
-
 
                     <Link
                         href="/contact"

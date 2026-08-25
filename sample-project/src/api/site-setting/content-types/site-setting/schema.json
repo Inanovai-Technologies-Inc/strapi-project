@@ -1,0 +1,41 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "SiteSettings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CompanyDescription": {
+      "type": "text"
+    },
+    "CopyrightText": {
+      "type": "string"
+    },
+    "Offices": {
+      "type": "component",
+      "component": "footer.office",
+      "repeatable": true
+    },
+    "SocialLinks": {
+      "type": "component",
+      "component": "footer.social-links",
+      "repeatable": false
+    },
+    "Logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

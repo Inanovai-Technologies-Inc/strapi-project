@@ -5,6 +5,7 @@ import OfficeMap from "@/components/OfficeMap";
 import ScrollProgress from "@/components/ScrollProgress";
 import SectionNavigation from "@/components/SectionNavigation";
 import Reveal from "@/components/Reveal";
+import HomeMotion, { DiffsMotion, FlowingLines } from "@/components/HomeMotion";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -98,7 +99,7 @@ export default async function Home() {
     ===================================================== */
 
     return (
-        <main className="overflow-hidden bg-white text-gray-900 dark:bg-[#050b12] dark:text-white">
+        <main className="homepage-motion overflow-hidden bg-white text-gray-900 dark:bg-[#050b12] dark:text-white">
 
             {/* =====================================================
                 SCROLL PROGRESS
@@ -144,7 +145,7 @@ export default async function Home() {
                     "
                 >
                     <source
-                        src="/videos/hero-video.mp4"
+                        src="/videos/hero.mp4"
                         type="video/mp4"
                     />
                 </video>
@@ -159,6 +160,8 @@ export default async function Home() {
                         bg-black/15
                     "
                 />
+
+                <HomeMotion />
 
 
                 {/* LEFT DARK GRADIENT */}
@@ -483,6 +486,7 @@ export default async function Home() {
                     lg:py-28
                 "
             >
+                <FlowingLines />
                 {/* Ambient decoration */}
 
                 <div
@@ -598,6 +602,7 @@ export default async function Home() {
                         <div
                             className="
                                 group
+                                home-media-float
                                 relative
                                 h-[360px]
                                 overflow-hidden
@@ -653,6 +658,8 @@ export default async function Home() {
                     lg:py-28
                 "
             >
+                <FlowingLines />
+                <DiffsMotion />
                 <div
                     className="
                         pointer-events-none
@@ -684,6 +691,7 @@ export default async function Home() {
                         <div
                             className="
                                 group
+                                home-media-float
                                 relative
                                 order-2
                                 h-[360px]
@@ -822,6 +830,7 @@ export default async function Home() {
                     lg:py-28
                 "
             >
+                <FlowingLines />
                 {/* Background decoration */}
 
                 <div
@@ -980,6 +989,7 @@ export default async function Home() {
                     lg:py-28
                 "
             >
+                <FlowingLines />
                 <div
                     className="
                         pointer-events-none
@@ -1348,6 +1358,7 @@ export default async function Home() {
                     lg:py-24
                 "
             >
+                <FlowingLines />
                 <div className="mx-auto max-w-[1400px]">
                     <Reveal direction="up">
                         <div className="text-center">
@@ -1540,6 +1551,7 @@ export default async function Home() {
                     lg:py-28
                 "
             >
+                <FlowingLines />
                 <div
                     className="
                         pointer-events-none
@@ -1729,109 +1741,7 @@ export default async function Home() {
                 FOOTER
             ===================================================== */}
 
-            <footer
-                id="contact"
-                className="
-                    bg-[#050b12]
-                    px-6
-                    py-14
-                    text-gray-400
-                    sm:px-8
-                    lg:px-12
-                "
-            >
-                <div className="mx-auto max-w-[1400px]">
-                    <Reveal direction="up">
-                        <div
-                            className="
-                                flex
-                                flex-col
-                                justify-between
-                                gap-8
-                                md:flex-row
-                                md:items-center
-                            "
-                        >
-                            <div>
-                                <h2
-                                    className="
-                                        text-xl
-                                        font-bold
-                                        tracking-tight
-                                        text-white
-                                    "
-                                >
-                                    MARSOL TECHNOLOGIES
-                                </h2>
-
-                                <p className="mt-2 text-sm text-gray-500">
-                                    Advanced Fire Protection & Safety Solutions
-                                </p>
-                            </div>
-
-                            <div
-                                className="
-                                    flex
-                                    flex-wrap
-                                    gap-x-7
-                                    gap-y-3
-                                    text-sm
-                                "
-                            >
-                                <Link
-                                    href="/"
-                                    className="transition-colors hover:text-orange-400"
-                                >
-                                    Home
-                                </Link>
-
-                                <Link
-                                    href="/about"
-                                    className="transition-colors hover:text-orange-400"
-                                >
-                                    About
-                                </Link>
-
-                                <Link
-                                    href="/product"
-                                    className="transition-colors hover:text-orange-400"
-                                >
-                                    Products
-                                </Link>
-
-                                <Link
-                                    href="/services"
-                                    className="transition-colors hover:text-orange-400"
-                                >
-                                    Services
-                                </Link>
-
-                                <Link
-                                    href="/contact"
-                                    className="transition-colors hover:text-orange-400"
-                                >
-                                    Contact
-                                </Link>
-                            </div>
-                        </div>
-                    </Reveal>
-
-                    <div
-                        className="
-                            mx-auto
-                            mt-12
-                            border-t
-                            border-white/10
-                            pt-6
-                            text-center
-                            text-xs
-                            text-gray-600
-                        "
-                    >
-                        © 2026 Marsol Technologies. All rights reserved.
-                    </div>
-                </div>
-            </footer>
+           
         </main>
     );
 }

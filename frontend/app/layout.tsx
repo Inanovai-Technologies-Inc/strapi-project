@@ -11,7 +11,9 @@ import "./globals.css";
 
 import Navbar from "@/components/navbar";
 import Chatbot from "@/components/Chatbot";
+import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import PageReveal from "@/components/PageReveal";
 
 
 /* =========================================================
@@ -82,7 +84,7 @@ export default function RootLayout({
                         PAGE CONTENT
                     ============================== */}
 
-                    {children}
+                    <PageReveal>{children}</PageReveal>
 
 
                     {/* ==============================
@@ -90,7 +92,7 @@ export default function RootLayout({
                     ============================== */}
 
                     <Chatbot />
-
+                     <Footer />
                 </ThemeProvider>
             </body>
         </html>
