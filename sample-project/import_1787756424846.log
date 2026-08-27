@@ -1,0 +1,49 @@
+[2026-08-26 20:30:24.904] info: [import] Diagnostic log file: C:\Users\ThrishaShetty\Desktop\Strapi\strapi-project\sample-project\import_1787756424846.log (info-level messages are written here even without --verbose)
+[2026-08-26 20:30:24.905] info: [local-destination-provider] validating options
+
+[2026-08-26 20:30:25.103] info: [file-source-provider] getting metadata
+
+[2026-08-26 20:30:25.104] info: [local-destination-provider] getting metadata
+
+[2026-08-26 20:30:25.104] info: [file-source-provider] getting metadata
+
+[2026-08-26 20:30:25.105] info: [local-destination-provider] getting metadata
+
+[2026-08-26 20:30:25.105] info: [file-source-provider] getting schemas
+
+[2026-08-26 20:30:25.106] info: [file-source-provider] creating schemas read stream
+
+[2026-08-26 20:30:25.409] info: [local-destination-provider] getting schema
+
+[2026-08-26 20:30:25.429] info: [local-destination-provider] creating assets backup directory
+
+[2026-08-26 20:30:25.445] info: [local-destination-provider] created assets backup directory C:\Users\ThrishaShetty\Desktop\Strapi\strapi-project\sample-project\public\uploads_backup_1787756424679
+
+[2026-08-26 20:30:25.446] info: [local-destination-provider] deleting all assets
+
+[2026-08-26 20:30:25.475] info: [local-destination-provider] deleted all assets
+
+[2026-08-26 20:30:25.476] info: [local-destination-provider] deleting record 
+
+[2026-08-26 20:30:25.507] info: [file-source-provider] creating schemas read stream
+
+[2026-08-26 20:30:25.667] info: [file-source-provider] creating entities read stream
+
+[2026-08-26 20:30:25.814] info: [local-destination-provider] creating entities stream
+
+[2026-08-26 20:30:27.139] info: [file-source-provider] creating assets read stream
+
+[2026-08-26 20:30:27.140] info: [local-destination-provider] creating assets write stream
+
+[2026-08-26 20:31:01.767] info: [local-destination-provider] removing assets backup
+
+[2026-08-26 20:31:01.818] info: [local-destination-provider] successfully removed assets backup
+
+[2026-08-26 20:31:01.820] info: [file-source-provider] creating links read stream
+
+[2026-08-26 20:31:01.975] info: [local-destination-provider] creating links write stream
+
+[2026-08-26 20:31:02.434] info: [file-source-provider] creating configuration read stream
+
+[2026-08-26 20:31:02.578] info: [local-destination-provider] creating configuration write stream
+

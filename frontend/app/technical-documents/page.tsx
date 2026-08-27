@@ -2,6 +2,8 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useI18n } from "@/components/I18nProvider";
+
 const STRAPI_URL = "http://localhost:1337";
 
 interface TechnicalDocument {
@@ -34,6 +36,7 @@ interface TechnicalDocument {
 }
 
 export default function TechnicalDocumentsPage() {
+    const { t } = useI18n();
     const [documents, setDocuments] = useState<TechnicalDocument[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -65,7 +68,7 @@ export default function TechnicalDocumentsPage() {
                 setDocuments(result.data || []);
             } catch (err) {
                 console.error("Technical documents error:", err);
-                setError("Unable to load technical documents.");
+                setError(t("techDocs.error"));
             } finally {
                 setLoading(false);
             }
@@ -196,18 +199,15 @@ export default function TechnicalDocumentsPage() {
                 <div className="mx-auto max-w-7xl px-6 py-16">
 
                     <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">
-                        Resources
+                        {t("techDocs.heroEyebrow")}
                     </p>
 
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-                        Technical Document Center
+                        {t("techDocs.heroTitle")}
                     </h1>
 
                     <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
-                        Access technical documentation,
-                        datasheets, manuals, brochures,
-                        certificates, and other product
-                        resources.
+                        {t("techDocs.heroDescription")}
                     </p>
 
                 </div>
@@ -230,7 +230,7 @@ export default function TechnicalDocumentsPage() {
                         htmlFor="document-search"
                         className="mb-2 block text-sm font-semibold text-gray-700"
                     >
-                        Search Documents
+                        {t("techDocs.searchLabel")}
                     </label>
 
                     <input
@@ -240,7 +240,7 @@ export default function TechnicalDocumentsPage() {
                         onChange={(e) =>
                             setSearch(e.target.value)
                         }
-                        placeholder="Search by document, product or document number..."
+                        placeholder={t("techDocs.searchPlaceholder")}
                         className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
                     />
 
@@ -261,7 +261,7 @@ export default function TechnicalDocumentsPage() {
                             htmlFor="document-type"
                             className="mb-2 block text-sm font-semibold text-gray-700"
                         >
-                            Document Type
+                            {t("techDocs.filterType")}
                         </label>
 
                         <select
@@ -277,7 +277,9 @@ export default function TechnicalDocumentsPage() {
                                     key={type}
                                     value={type}
                                 >
-                                    {type}
+                                    {type === "All"
+                                        ? t("techDocs.filterAll")
+                                        : type}
                                 </option>
                             ))}
                         </select>
@@ -293,7 +295,7 @@ export default function TechnicalDocumentsPage() {
                             htmlFor="document-language"
                             className="mb-2 block text-sm font-semibold text-gray-700"
                         >
-                            Language
+                            {t("techDocs.filterLanguage")}
                         </label>
 
                         <select
@@ -309,7 +311,9 @@ export default function TechnicalDocumentsPage() {
                                     key={item}
                                     value={item}
                                 >
-                                    {item}
+                                    {item === "All"
+                                        ? t("techDocs.filterAll")
+                                        : item}
                                 </option>
                             ))}
                         </select>
@@ -325,7 +329,7 @@ export default function TechnicalDocumentsPage() {
 
                 {loading && (
                     <div className="py-20 text-center text-gray-500">
-                        Loading technical documents...
+                        {t("techDocs.loading")}
                     </div>
                 )}
 
@@ -351,12 +355,11 @@ export default function TechnicalDocumentsPage() {
                         <div className="rounded-xl border border-gray-200 bg-gray-50 p-12 text-center">
 
                             <h2 className="text-xl font-semibold text-gray-900">
-                                No documents found
+                                {t("techDocs.emptyTitle")}
                             </h2>
 
                             <p className="mt-2 text-gray-500">
-                                Try changing your search
-                                or filters.
+                                {t("techDocs.emptyDescription")}
                             </p>
 
                         </div>
@@ -380,27 +383,27 @@ export default function TechnicalDocumentsPage() {
                             <div className="hidden grid-cols-12 gap-4 border-b bg-gray-50 px-6 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500 md:grid">
 
                                 <div className="col-span-4">
-                                    Document
+                                    {t("techDocs.tableDocument")}
                                 </div>
 
                                 <div className="col-span-2">
-                                    Type
+                                    {t("techDocs.tableType")}
                                 </div>
 
                                 <div className="col-span-2">
-                                    Product
+                                    {t("techDocs.tableProduct")}
                                 </div>
 
                                 <div className="col-span-1">
-                                    Version
+                                    {t("techDocs.tableVersion")}
                                 </div>
 
                                 <div className="col-span-1">
-                                    Date
+                                    {t("techDocs.tableDate")}
                                 </div>
 
                                 <div className="col-span-2">
-                                    Action
+                                    {t("techDocs.tableAction")}
                                 </div>
 
                             </div>
@@ -417,7 +420,7 @@ export default function TechnicalDocumentsPage() {
 
                                 const fileName =
                                     doc.file?.[0]?.name ||
-                                    "Technical Document";
+                                    t("techDocs.fileNameFallback");
 
                                 const productName =
                                     doc.product?.Name ||
@@ -451,7 +454,7 @@ export default function TechnicalDocumentsPage() {
 
                                             {doc.documentNumber && (
                                                 <p className="mt-2 text-xs text-gray-400">
-                                                    Document No:{" "}
+                                                    {t("techDocs.documentNo")}{" "}
                                                     {doc.documentNumber}
                                                 </p>
                                             )}
@@ -467,7 +470,7 @@ export default function TechnicalDocumentsPage() {
 
                                             <span className="inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
                                                 {doc.documentType ||
-                                                    "Document"}
+                                                    t("techDocs.typeFallback")}
                                             </span>
 
                                         </div>
@@ -513,24 +516,24 @@ export default function TechnicalDocumentsPage() {
                                                         href={fileUrl}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        title={`View ${fileName}`}
+                                                        title={`${t("techDocs.view")} ${fileName}`}
                                                         className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                                                     >
-                                                        View
+                                                        {t("techDocs.view")}
                                                     </a>
 
                                                     <a
                                                         href={fileUrl}
                                                         download
-                                                        title={`Download ${fileName}`}
+                                                        title={`${t("techDocs.download")} ${fileName}`}
                                                         className="rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
                                                     >
-                                                        Download
+                                                        {t("techDocs.download")}
                                                     </a>
                                                 </>
                                             ) : (
                                                 <span className="text-sm text-gray-400">
-                                                    No file
+                                                    {t("techDocs.noFile")}
                                                 </span>
                                             )}
 
@@ -553,11 +556,11 @@ export default function TechnicalDocumentsPage() {
                     documents.length > 0 && (
 
                         <p className="mt-5 text-sm text-gray-500">
-                            Showing{" "}
+                            {t("techDocs.showing")}{" "}
                             {filteredDocuments.length}{" "}
-                            of{" "}
+                            {t("techDocs.of")}{" "}
                             {documents.length}{" "}
-                            documents
+                            {t("techDocs.documents")}
                         </p>
                     )}
 

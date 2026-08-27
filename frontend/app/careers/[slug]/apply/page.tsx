@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CareerApplicationForm from "@/components/CareerApplicationForm";
+import { T } from "@/components/T";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -92,7 +93,7 @@ export default async function ApplyPage({
                     href={`/careers/${career.slug}`}
                     className="text-sm font-medium text-gray-600 hover:text-black"
                 >
-                    ← Back to Job Details
+                    ← <T k="careerApply.back" />
                 </Link>
 
                 {/* Header */}
@@ -100,17 +101,16 @@ export default async function ApplyPage({
                 <div className="mt-8 rounded-2xl bg-white p-8 shadow-sm">
 
                     <h1 className="text-3xl font-bold text-gray-900">
-                        Apply for this Position
+                        <T k="careerApply.title" />
                     </h1>
 
                     <p className="mt-3 text-gray-600">
-                        Please complete the form below to
-                        apply for the position.
+                        <T k="careerApply.description" />
                     </p>
 
                     <div className="mt-6 rounded-lg bg-gray-50 p-4">
                         <p className="text-sm text-gray-500">
-                            Position
+                            <T k="careerApply.positionLabel" />
                         </p>
 
                         <p className="mt-1 font-semibold text-gray-900">

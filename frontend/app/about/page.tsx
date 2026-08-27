@@ -1,6 +1,12 @@
+"use client";
+
 import React from "react";
 
+import { useI18n } from "@/components/I18nProvider";
+
 export default function About() {
+    const { t } = useI18n();
+
     return (
         <main className="min-h-screen bg-gray-50 text-gray-800">
 
@@ -9,17 +15,15 @@ export default function About() {
                 <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                        About Us
+                        {t("about.hero.eyebrow")}
                     </p>
 
                     <h1 className="mt-3 text-4xl font-bold text-[#0b1f3a] md:text-5xl">
-                        Why Work With Us
+                        {t("about.hero.title")}
                     </h1>
 
                     <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
-                        MARSOL Technologies is focused on delivering advanced
-                        fire protection and safety solutions for demanding
-                        industries around the world.
+                        {t("about.hero.description")}
                     </p>
 
                 </div>
@@ -35,15 +39,11 @@ export default function About() {
                         <div className="mb-5 h-1 w-10 bg-orange-500" />
 
                         <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            Industry Experience
+                            {t("about.why.card1Title")}
                         </h2>
 
                         <p className="mt-4 text-sm leading-7 text-gray-600">
-                            The team of people behind, in the midst and in
-                            front of the company, have a wealth of knowledge
-                            and experience garnered from over 30 years of
-                            working within the Oil & Gas and Off-shore
-                            industries.
+                            {t("about.why.card1Body")}
                         </p>
                     </div>
 
@@ -52,15 +52,11 @@ export default function About() {
                         <div className="mb-5 h-1 w-10 bg-orange-500" />
 
                         <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            Comprehensive Certifications
+                            {t("about.why.card2Title")}
                         </h2>
 
                         <p className="mt-4 text-sm leading-7 text-gray-600">
-                            All of our products and systems are subjected to
-                            rigorous testing and certification processes that
-                            ensure industry compliance to the highest level
-                            possible, giving you unprecedented assurance as to
-                            what MARSOL is all about.
+                            {t("about.why.card2Body")}
                         </p>
                     </div>
 
@@ -69,15 +65,11 @@ export default function About() {
                         <div className="mb-5 h-1 w-10 bg-orange-500" />
 
                         <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            Customer Service
+                            {t("about.why.card3Title")}
                         </h2>
 
                         <p className="mt-4 text-sm leading-7 text-gray-600">
-                            Our leadership team passionately believe in the
-                            key principle that our customer always comes
-                            first. We have an uncompromising commitment to
-                            our clients and view customer satisfaction as
-                            our highest priority.
+                            {t("about.why.card3Body")}
                         </p>
                     </div>
 
@@ -94,7 +86,7 @@ export default function About() {
 
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-400">
-                                Since
+                                {t("about.since.label")}
                             </p>
 
                             <p className="mt-2 text-6xl font-bold text-white">
@@ -105,28 +97,18 @@ export default function About() {
                         <div className="space-y-5 text-gray-300">
 
                             <p className="leading-8">
-                                Our particular specialisms primarily relate to
-                                the aspects of foam fire suppression –
-                                designing and deploying next-gen products and
-                                systems that ensure the best practice and the
-                                safest possible environment is achieved.
+                                {t("about.since.p1")}
                             </p>
 
                             <p className="leading-8">
-                                MARSOL products and systems are unique – not
-                                just for the sake of it – but because in being
-                                so, they provide enhanced performance and
-                                ultimately – <strong className="text-white">
-                                    SAFETY.
+                                {t("about.since.p2Prefix")}
+                                <strong className="text-white">
+                                    {t("about.since.p2Safety")}
                                 </strong>
                             </p>
 
                             <p className="leading-8">
-                                With our Head Office located in USA and offices
-                                in UAE and Singapore, we are well positioned
-                                to coordinate and react to the demands and
-                                requirements of this great global industry we
-                                are proud to be a part of.
+                                {t("about.since.p3")}
                             </p>
 
                         </div>
@@ -145,18 +127,15 @@ export default function About() {
                     {/* Associations */}
                     <div>
                         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                            Associations
+                            {t("about.associations.eyebrow")}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                            Industry Connected
+                            {t("about.associations.title")}
                         </h2>
 
                         <p className="mt-4 leading-7 text-gray-600">
-                            MARSOL is proud to be part of the global fire
-                            protection and safety industry, working alongside
-                            professionals and organizations committed to
-                            improving safety standards.
+                            {t("about.associations.body")}
                         </p>
                     </div>
 
@@ -165,31 +144,26 @@ export default function About() {
                     <div className="rounded-xl border border-gray-200 bg-white p-7">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                            QHSE
+                            {t("about.qhse.eyebrow")}
                         </p>
 
                         <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a]">
-                            Quality, Health, Safety & Environment
+                            {t("about.qhse.title")}
                         </h2>
 
                         <p className="mt-4 leading-7 text-gray-600">
-                            Marsol operates under the philosophy:
+                            {t("about.qhse.philosophyIntro")}
                             <span className="font-semibold text-gray-800">
-                                {" "}“To get it right the first time, every
-                                time and strive to exceed customer
-                                expectation”.
+                                {" "}{t("about.qhse.philosophyQuote")}
                             </span>
                         </p>
 
                         <p className="mt-4 leading-7 text-gray-600">
-                            Marsol regards the promotion of Health, Safety and
-                            Environment measures as a mutual objective for
-                            management and employees at all levels.
+                            {t("about.qhse.body2")}
                         </p>
 
                         <p className="mt-4 leading-7 text-gray-600">
-                            Marsol has an integrated management system
-                            accredited by TUV Rheinland.
+                            {t("about.qhse.body3")}
                         </p>
 
                     </div>
@@ -205,39 +179,39 @@ export default function About() {
                 <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                        Policies
+                        {t("about.policies.eyebrow")}
                     </p>
 
                     <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                        Our Commitment
+                        {t("about.policies.title")}
                     </h2>
 
                     <div className="mt-8 grid gap-4 sm:grid-cols-3">
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                HSE Policy
+                                {t("about.policies.hseTitle")}
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                Health, Safety & Environment
+                                {t("about.policies.hseDesc")}
                             </p>
                         </div>
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                Quality Policy
+                                {t("about.policies.qualityTitle")}
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                Quality and continuous improvement
+                                {t("about.policies.qualityDesc")}
                             </p>
                         </div>
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                ADC Policy
+                                {t("about.policies.adcTitle")}
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                Alcohol & Drug Policy
+                                {t("about.policies.adcDesc")}
                             </p>
                         </div>
 
@@ -252,11 +226,11 @@ export default function About() {
             <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                    Our Locations
+                    {t("about.locations.eyebrow")}
                 </p>
 
                 <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                    Global Presence
+                    {t("about.locations.title")}
                 </h2>
 
                 <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -313,7 +287,7 @@ export default function About() {
 
                 <div className="mt-8 rounded-xl bg-[#0b1f3a] p-7 text-center">
                     <p className="text-sm uppercase tracking-[0.2em] text-gray-400">
-                        Email
+                        {t("about.locations.email")}
                     </p>
 
                     <p className="mt-2 text-xl font-semibold text-white">
@@ -332,11 +306,11 @@ export default function About() {
                     <div className="flex items-end justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                Latest News
+                                {t("about.news.eyebrow")}
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                                News & Updates
+                                {t("about.news.title")}
                             </h2>
                         </div>
                     </div>
@@ -347,26 +321,22 @@ export default function About() {
                         <article className="rounded-xl bg-white p-7 shadow-sm">
 
                             <p className="text-xs font-semibold uppercase tracking-wider text-orange-500">
-                                Technology
+                                {t("about.news.card1Badge")}
                             </p>
 
                             <h3 className="mt-3 text-xl font-bold text-[#0b1f3a]">
-                                Up to What Battery Capacity Battery Fire
-                                Ionex-EA Can Be Used?
+                                {t("about.news.card1Title")}
                             </h3>
 
                             <p className="mt-4 text-sm leading-7 text-gray-600">
-                                The widespread adoption of lithium-ion
-                                batteries continues to accelerate, driven by
-                                the growing reliance on electric mobility and
-                                compact personal appliances.
+                                {t("about.news.card1Body")}
                             </p>
 
                             <a
                                 href="/news"
                                 className="mt-5 inline-block text-sm font-bold text-orange-500 hover:text-orange-600"
                             >
-                                Read More →
+                                {t("about.news.readMore")} →
                             </a>
 
                         </article>
@@ -375,24 +345,22 @@ export default function About() {
                         <article className="rounded-xl bg-white p-7 shadow-sm">
 
                             <p className="text-xs font-semibold uppercase tracking-wider text-orange-500">
-                                Events
+                                {t("about.news.card2Badge")}
                             </p>
 
                             <h3 className="mt-3 text-xl font-bold text-[#0b1f3a]">
-                                Indiana Convention Centre, Stand 4858
+                                {t("about.news.card2Title")}
                             </h3>
 
                             <p className="mt-4 text-sm leading-7 text-gray-600">
-                                Come join us at FDIC International Expo and be
-                                part of one of the biggest fire, safety and
-                                security shows in the United States.
+                                {t("about.news.card2Body")}
                             </p>
 
                             <a
                                 href="/news"
                                 className="mt-5 inline-block text-sm font-bold text-orange-500 hover:text-orange-600"
                             >
-                                Read More →
+                                {t("about.news.readMore")} →
                             </a>
 
                         </article>

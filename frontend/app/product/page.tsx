@@ -1,5 +1,6 @@
 
 import Link from "next/link";
+import { T } from "@/components/T";
 
 const STRAPI_URL =
     process.env.STRAPI_URL ||
@@ -122,27 +123,24 @@ export default async function ProductPage() {
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
-                                Our Products
+                                <T k="productsPage.heroEyebrow" />
                             </p>
 
                             <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight text-[#0b1f3a] sm:text-5xl lg:text-6xl">
-                                Engineered Fire Protection Solutions
+                                <T k="productsPage.heroTitle" />
                             </h1>
 
                             <div className="mt-6 h-1 w-16 bg-orange-500" />
 
                             <p className="mt-7 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
-                                Explore our range of engineered fire protection
-                                systems and equipment designed to provide
-                                reliable performance, safety and protection
-                                across demanding applications.
+                                <T k="productsPage.heroDescription" />
                             </p>
 
                             <Link
                                 href="/product/compare"
                                 className="mt-7 inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
                             >
-                                Compare Products
+                                <T k="productsPage.compareProducts" />
 
                                 <span className="ml-2">
                                     →
@@ -162,12 +160,11 @@ export default async function ProductPage() {
                                 </p>
 
                                 <h2 className="mt-4 text-2xl font-bold leading-tight text-[#0b1f3a]">
-                                    Advanced Fire Protection Technology
+                                    <T k="productsPage.heroCardTitle" />
                                 </h2>
 
                                 <p className="mt-4 text-sm leading-7 text-gray-500">
-                                    Innovative systems and equipment engineered
-                                    for demanding fire protection applications.
+                                    <T k="productsPage.heroCardDescription" />
                                 </p>
 
                             </div>
@@ -193,19 +190,17 @@ export default async function ProductPage() {
                     <div className="mb-12">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            Product Range
+                            <T k="productsPage.rangeEyebrow" />
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                            Our Products
+                            <T k="productsPage.rangeTitle" />
                         </h2>
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                         <p className="mt-5 max-w-3xl text-base leading-7 text-gray-500">
-                            Discover our range of fire protection systems and
-                            engineered equipment developed to meet demanding
-                            industry requirements.
+                            <T k="productsPage.rangeDescription" />
                         </p>
 
                     </div>
@@ -219,7 +214,7 @@ export default async function ProductPage() {
                         <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
 
                             <p className="text-gray-500">
-                                No products available.
+                                <T k="productsPage.noProducts" />
                             </p>
 
                         </div>
@@ -275,7 +270,7 @@ export default async function ProductPage() {
                                             ) : (
 
                                                 <div className="text-sm text-gray-400">
-                                                    Product image unavailable
+                                                    <T k="productsPage.imageUnavailable" />
                                                 </div>
 
                                             )}
@@ -289,7 +284,7 @@ export default async function ProductPage() {
                                         <div className="p-6">
 
                                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
-                                                Fire Protection
+                                                <T k="productsPage.cardCategory" />
                                             </p>
 
                                             <h2 className="mt-3 min-h-[58px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
@@ -299,8 +294,9 @@ export default async function ProductPage() {
                                             <div className="mt-4 h-px w-full bg-gray-100" />
 
                                             <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
-                                                {product.description ||
-                                                    "Engineered fire protection equipment designed for reliable performance and demanding safety applications."}
+                                                {product.description || (
+                                                    <T k="productsPage.cardDefaultDescription" />
+                                                )}
                                             </p>
 
                                             {/* =================================================
@@ -313,9 +309,11 @@ export default async function ProductPage() {
                                             >
 
                                                 <span>
-                                                    {hasRelatedProducts
-                                                        ? "View Products"
-                                                        : "View Product"}
+                                                    {hasRelatedProducts ? (
+                                                        <T k="productsPage.viewProducts" />
+                                                    ) : (
+                                                        <T k="productsPage.viewProduct" />
+                                                    )}
                                                 </span>
 
                                                 <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
@@ -352,20 +350,17 @@ export default async function ProductPage() {
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Why Choose Us
+                                <T k="productsPage.whyEyebrow" />
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                                Reliable Fire Protection Engineering
+                                <T k="productsPage.whyTitle" />
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-6 text-base leading-8 text-gray-600">
-                                Our fire protection solutions are engineered to
-                                meet demanding operational requirements while
-                                delivering dependable performance and long-term
-                                reliability.
+                                <T k="productsPage.whyDescription" />
                             </p>
 
                         </div>
@@ -375,12 +370,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Engineered Solutions
+                                    <T k="productsPage.whyCard1Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Systems designed around specific project
-                                    and application requirements.
+                                    <T k="productsPage.whyCard1Body" />
                                 </p>
 
                             </div>
@@ -388,12 +382,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Proven Performance
+                                    <T k="productsPage.whyCard2Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Reliable equipment designed for demanding
-                                    fire protection applications.
+                                    <T k="productsPage.whyCard2Body" />
                                 </p>
 
                             </div>
@@ -401,12 +394,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Industry Standards
+                                    <T k="productsPage.whyCard3Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Solutions developed to meet applicable
-                                    industry standards and requirements.
+                                    <T k="productsPage.whyCard3Body" />
                                 </p>
 
                             </div>
@@ -414,12 +406,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Technical Support
+                                    <T k="productsPage.whyCard4Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Technical expertise and support throughout
-                                    the project lifecycle.
+                                    <T k="productsPage.whyCard4Body" />
                                 </p>
 
                             </div>
@@ -443,16 +434,15 @@ export default async function ProductPage() {
                     <div>
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-400">
-                            Need More Information?
+                            <T k="cta.needMoreInfo" />
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-white">
-                            Contact our team
+                            <T k="cta.contactOurTeam" />
                         </h2>
 
                         <p className="mt-3 text-gray-400">
-                            Get in touch with us for product specifications,
-                            pricing and technical information.
+                            <T k="cta.productInfo" />
                         </p>
 
                     </div>
@@ -461,7 +451,7 @@ export default async function ProductPage() {
                         href="/contact"
                         className="shrink-0 rounded-lg bg-orange-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-orange-600"
                     >
-                        Contact Us
+                        <T k="cta.contactUs" />
                     </Link>
 
                 </div>

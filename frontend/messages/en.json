@@ -1,0 +1,418 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "products": "Products",
+        "careers": "Careers",
+        "technicalDocuments": "Technical Documents",
+        "contact": "Contact"
+    },
+    "footer": {
+        "company": "Company",
+        "aboutUs": "About Us",
+        "products": "Products",
+        "environmentalServices": "Environmental Services",
+        "newsEvents": "News & Events",
+        "careers": "Careers",
+        "contact": "Contact",
+        "offices": "Offices",
+        "headOffice": "Head Office",
+        "regionalOffice": "Regional Office",
+        "manufacturingEngineering": "Manufacturing & Engineering",
+        "follow": "Follow",
+        "companyDescription": "30+ years of combined experience engineering fire suppression systems for offshore, marine, aviation and industrial environments.",
+        "copyright": "© 2026 Marsol Technologies. All rights reserved."
+    },
+    "search": {
+        "placeholder": "Search products...",
+        "noResults": "No products found"
+    },
+    "sectionNav": {
+        "home": "Home",
+        "about": "About",
+        "products": "Products",
+        "industries": "Industries",
+        "contact": "Contact",
+        "goTo": "Go to"
+    },
+    "theme": {
+        "toggle": "Toggle theme",
+        "switchToLight": "Switch to light theme",
+        "switchToDark": "Switch to dark theme",
+        "toggleLabel": "Toggle light and dark theme"
+    },
+    "cta": {
+        "needMoreInfo": "Need More Information?",
+        "contactOurTeam": "Contact our team",
+        "productInfo": "Get in touch with us for product specifications, pricing and technical information.",
+        "moreInfo": "Get in touch with us for more information.",
+        "contactUs": "Contact Us"
+    },
+    "home": {
+        "hero": {
+            "titleLine1": "Fire Protection",
+            "titleLine2": "Engineered for",
+            "titleLine3": "Excellence",
+            "description": "More than 30 years of experience serving the Oil & Gas and Offshore industries with advanced fire suppression and safety solutions.",
+            "learnMore": "Learn More",
+            "ourProducts": "Our Products",
+            "scroll": "Scroll"
+        },
+        "about": {
+            "title": "Welcome to Marsol Technologies",
+            "description": "Comes with more than 30 years of experience working with Oil & Gas and Offshore Industries. Specialized in helideck fire suppression, we are expanding our reach across industries and regions.",
+            "learnMore": "Learn More"
+        },
+        "diffs": {
+            "eyebrow": "Innovation",
+            "description": "Our DiFFS (Deck Integrated Fire Fighting Systems) removes the issues and concerns of mechanical failure. Fully certified and recognized by the likes of UL, ABS, CAA and USCG.",
+            "learnMore": "Learn More"
+        },
+        "industries": {
+            "eyebrow": "Industries",
+            "title": "Market Segments We Serve",
+            "description": "Advanced fire protection and safety solutions designed for demanding environments.",
+            "offshore": "OFFSHORE",
+            "maritime": "MARITIME",
+            "aviation": "AVIATION",
+            "yacht": "YACHT",
+            "renewable": "RENEWABLE",
+            "onshore": "ONSHORE"
+        },
+        "products": {
+            "eyebrow": "Our Products",
+            "title": "Product Portfolio",
+            "description": "Here is a sneak peek of our top-notch products that are widely used across the industry.",
+            "noProducts": "No products available.",
+            "category": "Fire Protection",
+            "defaultDescription": "Engineered fire protection equipment designed for reliable performance and demanding safety applications.",
+            "imageUnavailable": "Product image unavailable",
+            "viewProduct": "View Product",
+            "viewAll": "View All Products",
+            "playVideo": "Play Product Video"
+        },
+        "certifications": {
+            "eyebrow": "Quality & Compliance",
+            "title": "Certifications"
+        },
+        "globalPresence": {
+            "title": "Global Presence",
+            "description": "Our operations across the USA, UAE and India provide customers with local sales, engineering and support.",
+            "noOffices": "No office locations available."
+        },
+        "news": {
+            "eyebrow": "Updates",
+            "title": "Latest News",
+            "moreNews": "More News",
+            "badge": "News & Events",
+            "readMore": "Read More"
+        }
+    },
+    "about": {
+        "hero": {
+            "eyebrow": "About Us",
+            "title": "Why Work With Us",
+            "description": "MARSOL Technologies is focused on delivering advanced fire protection and safety solutions for demanding industries around the world."
+        },
+        "why": {
+            "card1Title": "Industry Experience",
+            "card1Body": "The team of people behind, in the midst and in front of the company, have a wealth of knowledge and experience garnered from over 30 years of working within the Oil & Gas and Off-shore industries.",
+            "card2Title": "Comprehensive Certifications",
+            "card2Body": "All of our products and systems are subjected to rigorous testing and certification processes that ensure industry compliance to the highest level possible, giving you unprecedented assurance as to what MARSOL is all about.",
+            "card3Title": "Customer Service",
+            "card3Body": "Our leadership team passionately believe in the key principle that our customer always comes first. We have an uncompromising commitment to our clients and view customer satisfaction as our highest priority."
+        },
+        "since": {
+            "label": "Since",
+            "p1": "Our particular specialisms primarily relate to the aspects of foam fire suppression – designing and deploying next-gen products and systems that ensure the best practice and the safest possible environment is achieved.",
+            "p2Prefix": "MARSOL products and systems are unique – not just for the sake of it – but because in being so, they provide enhanced performance and ultimately – ",
+            "p2Safety": "SAFETY.",
+            "p3": "With our Head Office located in USA and offices in UAE and Singapore, we are well positioned to coordinate and react to the demands and requirements of this great global industry we are proud to be a part of."
+        },
+        "associations": {
+            "eyebrow": "Associations",
+            "title": "Industry Connected",
+            "body": "MARSOL is proud to be part of the global fire protection and safety industry, working alongside professionals and organizations committed to improving safety standards."
+        },
+        "qhse": {
+            "eyebrow": "QHSE",
+            "title": "Quality, Health, Safety & Environment",
+            "philosophyIntro": "Marsol operates under the philosophy:",
+            "philosophyQuote": "“To get it right the first time, every time and strive to exceed customer expectation”.",
+            "body2": "Marsol regards the promotion of Health, Safety and Environment measures as a mutual objective for management and employees at all levels.",
+            "body3": "Marsol has an integrated management system accredited by TUV Rheinland."
+        },
+        "policies": {
+            "eyebrow": "Policies",
+            "title": "Our Commitment",
+            "hseTitle": "HSE Policy",
+            "hseDesc": "Health, Safety & Environment",
+            "qualityTitle": "Quality Policy",
+            "qualityDesc": "Quality and continuous improvement",
+            "adcTitle": "ADC Policy",
+            "adcDesc": "Alcohol & Drug Policy"
+        },
+        "locations": {
+            "eyebrow": "Our Locations",
+            "title": "Global Presence",
+            "email": "Email"
+        },
+        "news": {
+            "eyebrow": "Latest News",
+            "title": "News & Updates",
+            "card1Badge": "Technology",
+            "card1Title": "Up to What Battery Capacity Battery Fire Ionex-EA Can Be Used?",
+            "card1Body": "The widespread adoption of lithium-ion batteries continues to accelerate, driven by the growing reliance on electric mobility and compact personal appliances.",
+            "card2Badge": "Events",
+            "card2Title": "Indiana Convention Centre, Stand 4858",
+            "card2Body": "Come join us at FDIC International Expo and be part of one of the biggest fire, safety and security shows in the United States.",
+            "readMore": "Read More"
+        }
+    },
+    "contact": {
+        "title": "Contact Us",
+        "description": "Have a question or need technical assistance? Get in touch with our team.",
+        "form": {
+            "name": "Name",
+            "companyName": "Company Name",
+            "companyWebsite": "Company Website",
+            "linkedinUrl": "LinkedIn Profile URL",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "location": "Your Location",
+            "subject": "Subject",
+            "howHeard": "How did you hear about us?",
+            "message": "Your Message",
+            "submit": "Submit Request",
+            "submitting": "Submitting..."
+        },
+        "placeholders": {
+            "name": "Your Name",
+            "companyName": "Company Name",
+            "companyWebsite": "Company Website",
+            "linkedinUrl": "LinkedIn Profile URL",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "message": "Your Message"
+        },
+        "select": {
+            "location": "Select Your Location",
+            "subject": "Select Subject",
+            "option": "Select an option"
+        },
+        "locations": {
+            "asia": "Asia",
+            "australasia": "Australasia",
+            "europe": "Europe",
+            "india": "India",
+            "mea": "Middle East and Africa",
+            "northAmerica": "North America",
+            "southAmerica": "South America"
+        },
+        "subjects": {
+            "general": "General Request",
+            "technical": "Technical Request",
+            "other": "Other"
+        },
+        "howHeardOptions": {
+            "friend": "Friend, Colleague",
+            "searchEngine": "Search Engine (Bing etc.)",
+            "print": "Print",
+            "exhibition": "Exhibition",
+            "otherChannel": "Other Channel"
+        },
+        "validation": {
+            "name": "Please enter your name.",
+            "email": "Please enter your email address.",
+            "location": "Please select your location.",
+            "subject": "Please select a subject.",
+            "generic": "Failed to submit contact form.",
+            "unknown": "Something went wrong while submitting the form."
+        },
+        "success": "Thank you for contacting us. We will get back to you soon."
+    },
+    "productsPage": {
+        "heroEyebrow": "Our Products",
+        "heroTitle": "Engineered Fire Protection Solutions",
+        "heroDescription": "Explore our range of engineered fire protection systems and equipment designed to provide reliable performance, safety and protection across demanding applications.",
+        "compareProducts": "Compare Products",
+        "heroCardTitle": "Advanced Fire Protection Technology",
+        "heroCardDescription": "Innovative systems and equipment engineered for demanding fire protection applications.",
+        "rangeEyebrow": "Product Range",
+        "rangeTitle": "Our Products",
+        "rangeDescription": "Discover our range of fire protection systems and engineered equipment developed to meet demanding industry requirements.",
+        "noProducts": "No products available.",
+        "cardCategory": "Fire Protection",
+        "cardDefaultDescription": "Engineered fire protection equipment designed for reliable performance and demanding safety applications.",
+        "viewProduct": "View Product",
+        "viewProducts": "View Products",
+        "imageUnavailable": "Product image unavailable",
+        "whyEyebrow": "Why Choose Us",
+        "whyTitle": "Reliable Fire Protection Engineering",
+        "whyDescription": "Our fire protection solutions are engineered to meet demanding operational requirements while delivering dependable performance and long-term reliability.",
+        "whyCard1Title": "Engineered Solutions",
+        "whyCard1Body": "Systems designed around specific project and application requirements.",
+        "whyCard2Title": "Proven Performance",
+        "whyCard2Body": "Reliable equipment designed for demanding fire protection applications.",
+        "whyCard3Title": "Industry Standards",
+        "whyCard3Body": "Solutions developed to meet applicable industry standards and requirements.",
+        "whyCard4Title": "Technical Support",
+        "whyCard4Body": "Technical expertise and support throughout the project lifecycle."
+    },
+    "productDetail": {
+        "backToProducts": "Back to Products",
+        "errorTitle": "Products are temporarily unavailable",
+        "errorDescription": "We could not connect to the product catalogue. Please try again shortly.",
+        "certifications": "Certifications",
+        "noImage": "No image available",
+        "eyebrow": "Product",
+        "descriptionHeading": "Description",
+        "requestMoreInfo": "Request More Info",
+        "foamSkidEyebrow": "Foam Tank Skid",
+        "foamSkidTitle": "Foam Skid Series",
+        "foamSkidDescription": "Marsol has developed different foam skid series to meet various project and installation requirements.",
+        "foamSkidSeriesEyebrow": "Foam Skid Series",
+        "noSeriesImage": "No series image available",
+        "noSeriesDescription": "No description available.",
+        "featuresEyebrow": "Product Details",
+        "featuresTitle": "Features",
+        "applicationsEyebrow": "Industries",
+        "applicationsTitle": "Applications",
+        "specsEyebrow": "Product Information",
+        "specsTitle": "Technical Specifications",
+        "specsSpecification": "Specification",
+        "specsValue": "Value",
+        "relatedEyebrow": "Explore More",
+        "relatedTitle": "Related Products",
+        "relatedDescriptionPrefix": "Explore products related to ",
+        "relatedBadge": "Related Product",
+        "relatedDefaultDescription": "Explore this related fire protection solution.",
+        "relatedViewProduct": "View Product",
+        "relatedImageUnavailable": "Product image unavailable",
+        "videoEyebrow": "Product Demonstration",
+        "videoDefaultTitle": "Product Video",
+        "videoDescription": "Watch the product demonstration to learn more about its features, operation and capabilities."
+    },
+    "compare": {
+        "loading": "Loading products...",
+        "errorTitle": "Unable to load products",
+        "errorFetch": "Unable to load products. Please try again.",
+        "back": "Back to Products",
+        "heroEyebrow": "Product Comparison",
+        "heroTitle": "Compare Our Products",
+        "heroDescription": "Compare Marsol fire protection solutions side by side and review their technical specifications.",
+        "selectTitle": "Select Products",
+        "selectSubtitle": "Select 2 or 3 products to compare.",
+        "productSlot": "Product",
+        "selectProduct": "Select a product",
+        "noImage": "No image",
+        "maxAlert": "You can compare a maximum of 3 products.",
+        "comparisonTitle": "Technical Comparison",
+        "comparisonSubtitle": "Technical specifications compared side by side.",
+        "showDifferences": "Show only differences",
+        "noSpecsDetected": "No technical specifications were detected.",
+        "checkConsole": "Please check the browser console for the Product API response.",
+        "tableSpecification": "Specification",
+        "tableViewProduct": "View Product",
+        "tableNoSpecs": "No technical specifications found for the selected products.",
+        "emptyTitle": "Select at least two products",
+        "emptyDescription": "Choose two or three Marsol products above to compare their technical specifications side by side.",
+        "helpTitle": "Need help choosing the right solution?",
+        "helpDescription": "Contact the Marsol team to discuss your requirements and find the most suitable fire protection solution.",
+        "helpCta": "Contact Marsol"
+    },
+    "techDocs": {
+        "heroEyebrow": "Resources",
+        "heroTitle": "Technical Document Center",
+        "heroDescription": "Access technical documentation, datasheets, manuals, brochures, certificates, and other product resources.",
+        "searchLabel": "Search Documents",
+        "searchPlaceholder": "Search by document, product or document number...",
+        "filterType": "Document Type",
+        "filterLanguage": "Language",
+        "filterAll": "All",
+        "loading": "Loading technical documents...",
+        "error": "Unable to load technical documents.",
+        "emptyTitle": "No documents found",
+        "emptyDescription": "Try changing your search or filters.",
+        "tableDocument": "Document",
+        "tableType": "Type",
+        "tableProduct": "Product",
+        "tableVersion": "Version",
+        "tableDate": "Date",
+        "tableAction": "Action",
+        "documentNo": "Document No:",
+        "typeFallback": "Document",
+        "view": "View",
+        "download": "Download",
+        "noFile": "No file",
+        "fileNameFallback": "Technical Document",
+        "showing": "Showing",
+        "of": "of",
+        "documents": "documents"
+    },
+    "careersPage": {
+        "heroTitle": "Career",
+        "heroDescription": "Join Marsol Technologies and be part of a team working towards solutions that help save lives.",
+        "jobOpenings": "JOB OPENINGS",
+        "noOpenings": "We currently do not have any job openings.",
+        "department": "Department:",
+        "location": "Location:",
+        "employmentType": "Employment Type:",
+        "closingDate": "Closing Date:",
+        "viewPosition": "View Position"
+    },
+    "careerDetail": {
+        "back": "Back to Careers",
+        "defaultTitle": "Job Opening",
+        "department": "Department:",
+        "location": "Location:",
+        "jobDescription": "Job Description",
+        "requirements": "Requirements",
+        "interestedTitle": "Interested in this position?",
+        "interestedDescription": "If you are interested in joining our team, submit your application for this position.",
+        "applicationCloses": "Application closes",
+        "applyCta": "Apply for this Position"
+    },
+    "careerApply": {
+        "back": "Back to Job Details",
+        "title": "Apply for this Position",
+        "description": "Please complete the form below to apply for the position.",
+        "positionLabel": "Position",
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "resume": "Resume",
+        "coverLetter": "Cover Letter",
+        "position": "Position",
+        "placeholderFullName": "Enter your full name",
+        "placeholderEmail": "Enter your email",
+        "placeholderPhone": "Enter your phone number",
+        "placeholderCoverLetter": "Tell us why you are interested in this position...",
+        "acceptedFormats": "Accepted formats: PDF, DOC, DOCX",
+        "submit": "Submit Application",
+        "submitting": "Submitting...",
+        "validationFullName": "Please enter your full name.",
+        "validationEmail": "Please enter your email.",
+        "validationPhone": "Please enter your phone number.",
+        "validationResume": "Please upload your resume.",
+        "errorGeneric": "Failed to submit application.",
+        "errorUnknown": "Something went wrong while submitting your application.",
+        "success": "Your application has been submitted successfully."
+    },
+    "newsDetail": {
+        "notFoundTitle": "News Not Found",
+        "notFoundDescription": "The news article you are looking for does not exist.",
+        "back": "Back to News",
+        "eyebrow": "News & Events",
+        "descriptionHeading": "Description",
+        "moreInfoEyebrow": "More Information",
+        "moreInfoTitle": "Additional Information"
+    },
+    "officeMap": {
+        "noLocations": "No office locations available.",
+        "services": "Services",
+        "phone": "Phone:",
+        "fax": "Fax:",
+        "email": "Email:"
+    }
+}

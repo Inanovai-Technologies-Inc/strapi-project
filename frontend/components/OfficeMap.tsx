@@ -11,6 +11,8 @@ import {
 
 import "leaflet/dist/leaflet.css";
 
+import { useI18n } from "@/components/I18nProvider";
+
 interface Office {
     id: number;
     name?: string;
@@ -70,6 +72,7 @@ function MapController({ offices }: OfficeMapProps) {
 export default function OfficeMap({
     offices,
 }: OfficeMapProps) {
+    const { t } = useI18n();
     const [selectedOffice, setSelectedOffice] =
         useState<Office | null>(offices[0] || null);
 
@@ -83,7 +86,7 @@ export default function OfficeMap({
         return (
             <div className="flex h-[500px] items-center justify-center rounded-2xl bg-gray-100">
                 <p className="text-gray-500">
-                    No office locations available.
+                    {t("officeMap.noLocations")}
                 </p>
             </div>
         );
@@ -162,7 +165,7 @@ export default function OfficeMap({
                             selectedOffice.services.length > 0 && (
                                 <div className="mt-6">
                                     <p className="mb-3 font-semibold text-gray-900">
-                                        Services
+                                        {t("officeMap.services")}
                                     </p>
 
                                     <div className="flex flex-wrap gap-2">
@@ -183,21 +186,21 @@ export default function OfficeMap({
                         <div className="mt-6 space-y-2 text-sm text-gray-700">
                             {selectedOffice.phone && (
                                 <p>
-                                    <strong>Phone:</strong>{" "}
+                                    <strong>{t("officeMap.phone")}</strong>{" "}
                                     {selectedOffice.phone}
                                 </p>
                             )}
 
                             {selectedOffice.fax && (
                                 <p>
-                                    <strong>Fax:</strong>{" "}
+                                    <strong>{t("officeMap.fax")}</strong>{" "}
                                     {selectedOffice.fax}
                                 </p>
                             )}
 
                             {selectedOffice.email && (
                                 <p>
-                                    <strong>Email:</strong>{" "}
+                                    <strong>{t("officeMap.email")}</strong>{" "}
                                     {selectedOffice.email}
                                 </p>
                             )}

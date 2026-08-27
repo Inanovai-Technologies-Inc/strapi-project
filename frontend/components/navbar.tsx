@@ -7,38 +7,41 @@ import { usePathname } from "next/navigation";
 
 import SiteSearch from "./SiteSearch";
 import ThemeToggle from "./ThemeToggle";
+import LanguageSelector from "./LanguageSelector";
+import { useI18n } from "@/components/I18nProvider";
 
 export default function Navbar() {
     const pathname = usePathname();
+    const { t } = useI18n();
 
     const navItems = [
         {
-            name: "Home",
+            name: t("nav.home"),
             href: "/",
             active: pathname === "/",
         },
         {
-            name: "About",
+            name: t("nav.about"),
             href: "/about",
             active: pathname.startsWith("/about"),
         },
         {
-            name: "Products",
+            name: t("nav.products"),
             href: "/product",
             active: pathname.startsWith("/product"),
         },
         {
-            name: "Careers",
+            name: t("nav.careers"),
             href: "/careers",
             active: pathname.startsWith("/careers"),
         },
         {
-            name: "Technical Documents",
+            name: t("nav.technicalDocuments"),
             href: "/technical-documents",
             active: pathname.startsWith("/technical-documents"),
         },
         {
-            name: "Contact",
+            name: t("nav.contact"),
             href: "/contact",
             active: pathname.startsWith("/contact"),
         },
@@ -149,7 +152,7 @@ export default function Navbar() {
                         "
                     >
                         {navItems.map((item) => (
-                            <li key={item.name}>
+                            <li key={item.href}>
                                 <Link
                                     href={item.href}
                                     className={`
@@ -160,7 +163,7 @@ export default function Navbar() {
                                         rounded-lg
                                         px-3
                                         py-2.5
-                                        text-[13px]
+                                        text-[15px]
                                         font-medium
                                         transition-all
                                         duration-300
@@ -204,6 +207,8 @@ export default function Navbar() {
                             ml-1
                             flex
                             shrink-0
+                            items-center
+                            gap-2
                             border-l
                             border-gray-200
                             pl-3
@@ -213,6 +218,7 @@ export default function Navbar() {
                             sm:pl-4
                         "
                     >
+                        <LanguageSelector />
                         <ThemeToggle />
                     </div>
                 </div>

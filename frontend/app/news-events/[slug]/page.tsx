@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { T } from "@/components/T";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -38,18 +39,18 @@ export default async function NewsDetailPage({
                 <div className="text-center">
 
                     <h1 className="text-3xl font-bold text-gray-900">
-                        News Not Found
+                        <T k="newsDetail.notFoundTitle" />
                     </h1>
 
                     <p className="mt-3 text-gray-500">
-                        The news article you are looking for does not exist.
+                        <T k="newsDetail.notFoundDescription" />
                     </p>
 
                     <Link
                         href="/news-events"
                         className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
                     >
-                        Back to News
+                        <T k="newsDetail.back" />
                     </Link>
 
                 </div>
@@ -73,14 +74,14 @@ export default async function NewsDetailPage({
                         href="/news-events"
                         className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                     >
-                        ← Back to News
+                        ← <T k="newsDetail.back" />
                     </Link>
 
 
                     <div className="mt-10">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            News & Events
+                            <T k="newsDetail.eyebrow" />
                         </p>
 
                         <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
@@ -119,7 +120,7 @@ export default async function NewsDetailPage({
                     <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm sm:p-10">
 
                         <h2 className="text-2xl font-bold text-gray-900">
-                            Description
+                            <T k="newsDetail.descriptionHeading" />
                         </h2>
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -144,11 +145,11 @@ export default async function NewsDetailPage({
                     <div className="mx-auto max-w-5xl">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            More Information
+                            <T k="newsDetail.moreInfoEyebrow" />
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                            Additional Information
+                            <T k="newsDetail.moreInfoTitle" />
                         </h2>
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -178,15 +179,15 @@ export default async function NewsDetailPage({
                     <div>
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-400">
-                            Need More Information?
+                            <T k="cta.needMoreInfo" />
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-white">
-                            Contact our team
+                            <T k="cta.contactOurTeam" />
                         </h2>
 
                         <p className="mt-3 text-gray-400">
-                            Get in touch with us for more information.
+                            <T k="cta.moreInfo" />
                         </p>
 
                     </div>
@@ -195,7 +196,7 @@ export default async function NewsDetailPage({
                         href="/contact"
                         className="shrink-0 rounded-lg bg-orange-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-orange-600"
                     >
-                        Contact Us
+                        <T k="cta.contactUs" />
                     </Link>
 
                 </div>

@@ -360,14 +360,64 @@ html {
 .flowing-lines {
   z-index: 0;
   height: 100%;
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
-.flowing-lines path {
-  stroke: rgb(249 115 22 / 25%);
+/* Curved dotted routes. */
+.flowing-lines .fl-path {
+  stroke: rgb(249 115 22 / 22%);
   stroke-dasharray: 5 15;
   stroke-width: 1.25;
-  animation: home-path-flow 17s linear infinite;
+  animation: home-path-flow 22s linear infinite;
+}
+
+.flowing-lines .fl-path:nth-of-type(2) {
+  animation-duration: 30s;
+  animation-direction: reverse;
+}
+
+.flowing-lines .fl-path:nth-of-type(3) {
+  animation-duration: 26s;
+}
+
+/* Junction beacons. */
+.flowing-lines .fl-node {
+  fill: rgb(251 146 60 / 85%);
+  filter: drop-shadow(0 0 6px rgb(251 146 60 / 55%));
+  animation: home-beacon 3.6s ease-in-out infinite;
+}
+
+.flowing-lines .fl-node:nth-of-type(2) { animation-delay: -1.2s; }
+.flowing-lines .fl-node:nth-of-type(3) { animation-delay: -2.4s; }
+
+/* Expanding energy pulse. */
+.flowing-lines .fl-pulse {
+  fill: none;
+  stroke: rgb(249 115 22 / 35%);
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fl-pulse 6.5s ease-out infinite;
+}
+
+/* Travelling elements. */
+.flowing-lines .fl-traveler { will-change: transform; }
+
+.flowing-lines .fl-marker {
+  fill: #fb923c;
+  filter: drop-shadow(0 0 5px rgb(251 146 60 / 70%));
+}
+
+.flowing-lines .fl-vessel {
+  fill: rgb(100 116 139 / 20%);
+  stroke: rgb(249 115 22 / 38%);
+  stroke-width: 1;
+}
+
+.flowing-lines .fl-streak {
+  stroke: url(#fl-streak-grad);
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 /* A denser blueprint layer reserved for the DiFFS feature section. */
@@ -387,7 +437,10 @@ html {
   opacity: 0.52;
 }
 
-.homepage-motion #diffs > :not(.flowing-lines):not(.diffs-motion) {
+/* Lift real section content above the network so routes and travellers
+   pass BEHIND the opaque cards and re-emerge on the far side. Hero (#home)
+   manages its own layered stack and is left alone. */
+.homepage-motion section:not(#home) > div:not(.pointer-events-none):not(.diffs-motion) {
   position: relative;
   z-index: 1;
 }
@@ -397,43 +450,91 @@ html {
   height: 100%;
 }
 
-.diffs-motion path {
+.diffs-motion .dm-path {
   stroke: rgb(234 88 12 / 42%);
   stroke-dasharray: 5 16;
   stroke-linecap: round;
   stroke-width: 1.2;
-  animation: home-path-flow 20s linear infinite;
+  animation: home-path-flow 22s linear infinite;
 }
 
-.diffs-motion path:nth-child(2) {
-  animation-duration: 27s;
+.diffs-motion .dm-path:nth-of-type(2) {
+  animation-duration: 29s;
   animation-direction: reverse;
 }
 
-.diffs-motion path:nth-child(3) {
-  animation-duration: 24s;
+.diffs-motion .dm-path:nth-of-type(3) {
+  animation-duration: 25s;
 }
 
-.diffs-motion path:nth-child(n + 4) {
+.diffs-motion .dm-line {
+  stroke: rgb(234 88 12 / 42%);
   stroke-dasharray: 2 12;
-  animation-duration: 16s;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+  animation: home-path-flow 16s linear infinite;
 }
 
-.diffs-motion circle {
+.diffs-motion .dm-node {
   fill: #f97316;
   filter: drop-shadow(0 0 5px rgb(249 115 22 / 65%));
   animation: home-beacon 3.2s ease-in-out infinite;
 }
 
-.diffs-motion circle:nth-of-type(2) { animation-delay: -0.8s; }
-.diffs-motion circle:nth-of-type(3) { animation-delay: -1.6s; }
-.diffs-motion circle:nth-of-type(4) { animation-delay: -2.4s; }
+.diffs-motion .dm-node:nth-of-type(2) { animation-delay: -0.8s; }
+.diffs-motion .dm-node:nth-of-type(3) { animation-delay: -1.6s; }
+.diffs-motion .dm-node:nth-of-type(4) { animation-delay: -2.4s; }
+
+.diffs-motion .dm-pulse {
+  fill: none;
+  stroke: rgb(234 88 12 / 38%);
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fl-pulse 7s ease-out infinite;
+}
+
+.diffs-motion .dm-pulse--2 { animation-delay: -3.5s; }
+
+.diffs-motion .dm-traveler { will-change: transform; }
+
+.diffs-motion .dm-marker {
+  fill: #f97316;
+  filter: drop-shadow(0 0 5px rgb(249 115 22 / 60%));
+}
+
+.diffs-motion .dm-vessel {
+  fill: rgb(100 116 139 / 18%);
+  stroke: rgb(234 88 12 / 40%);
+  stroke-width: 1;
+}
+
+.diffs-motion .dm-streak {
+  stroke: url(#dm-streak-grad);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
 
 .dark .diffs-motion {
   background-image:
     linear-gradient(rgb(251 146 60 / 10%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(251 146 60 / 10%) 1px, transparent 1px);
   opacity: 0.38;
+}
+
+/* Keep the network low-contrast on the dark theme. */
+.dark .flowing-lines {
+  opacity: 0.34;
+}
+
+.dark .flowing-lines .fl-path {
+  stroke: rgb(251 146 60 / 20%);
+}
+
+.dark .flowing-lines .fl-vessel,
+.dark .diffs-motion .dm-vessel {
+  fill: rgb(148 163 184 / 16%);
+  stroke: rgb(251 146 60 / 32%);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -469,6 +570,14 @@ html {
   .home-motion__particle:nth-child(n + 11) {
     display: none;
   }
+
+  /* Keep only the faint static routes on small screens. */
+  .flowing-lines .fl-traveler,
+  .flowing-lines .fl-pulse,
+  .diffs-motion .dm-traveler,
+  .diffs-motion .dm-pulse {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -496,4 +605,11 @@ html {
 @keyframes home-media-float {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(0, -8px, 0) scale(1.015); }
+}
+
+@keyframes fl-pulse {
+  0%   { transform: scale(0.2); opacity: 0; }
+  18%  { opacity: 0.55; }
+  70%  { opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
 }

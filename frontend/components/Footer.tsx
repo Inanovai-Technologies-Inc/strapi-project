@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { useI18n } from "@/components/I18nProvider";
+
 const STRAPI_URL = "http://localhost:1337";
 
 /* =========================================================
@@ -54,6 +56,7 @@ interface StrapiResponse {
 ========================================================= */
 
 export default function Footer() {
+    const { t } = useI18n();
     const [settings, setSettings] = useState<SiteSettings | null>(null);
 
     useEffect(() => {
@@ -93,11 +96,11 @@ export default function Footer() {
 
     const description =
         settings?.CompanyDescription ||
-        "30+ years of combined experience engineering fire suppression systems for offshore, marine, aviation and industrial environments.";
+        t("footer.companyDescription");
 
     const copyright =
         settings?.CopyrightText ||
-        "© 2026 Marsol Technologies. All rights reserved.";
+        t("footer.copyright");
 
     const offices = settings?.Offices || [];
 
@@ -164,7 +167,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            Company
+                            {t("footer.company")}
                         </h3>
 
                         <ul className="mt-5 space-y-3">
@@ -174,7 +177,7 @@ export default function Footer() {
                                     href="/about"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    About Us
+                                    {t("footer.aboutUs")}
                                 </Link>
                             </li>
 
@@ -183,7 +186,7 @@ export default function Footer() {
                                     href="/product"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    Products
+                                    {t("footer.products")}
                                 </Link>
                             </li>
 
@@ -192,7 +195,7 @@ export default function Footer() {
                                     href="/environmental-services"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    Environmental Services
+                                    {t("footer.environmentalServices")}
                                 </Link>
                             </li>
 
@@ -201,7 +204,7 @@ export default function Footer() {
                                     href="/news"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    News & Events
+                                    {t("footer.newsEvents")}
                                 </Link>
                             </li>
 
@@ -210,7 +213,7 @@ export default function Footer() {
                                     href="/careers"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    Careers
+                                    {t("footer.careers")}
                                 </Link>
                             </li>
 
@@ -219,7 +222,7 @@ export default function Footer() {
                                     href="/contact"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    Contact
+                                    {t("footer.contact")}
                                 </Link>
                             </li>
 
@@ -234,7 +237,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            Offices
+                            {t("footer.offices")}
                         </h3>
 
                         <div className="mt-5 space-y-6">
@@ -277,7 +280,7 @@ export default function Footer() {
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            Head Office
+                                            {t("footer.headOffice")}
                                         </p>
 
                                     </div>
@@ -289,7 +292,7 @@ export default function Footer() {
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            Regional Office
+                                            {t("footer.regionalOffice")}
                                         </p>
 
                                     </div>
@@ -301,7 +304,7 @@ export default function Footer() {
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            Manufacturing & Engineering
+                                            {t("footer.manufacturingEngineering")}
                                         </p>
 
                                     </div>
@@ -320,7 +323,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            Follow
+                            {t("footer.follow")}
                         </h3>
 
                         <div className="mt-5 flex flex-col gap-3">
