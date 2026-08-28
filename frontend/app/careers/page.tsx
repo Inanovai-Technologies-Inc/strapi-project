@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { T } from "@/components/T";
+import AmbientBackground from "@/components/AmbientBackground";
 export const dynamic = "force-dynamic";
 
 const STRAPI_URL =
@@ -60,17 +62,18 @@ export default async function CareerPage() {
             {/* =====================================================
                 HERO
             ===================================================== */}
-            <section className="bg-gray-50 py-20">
+            <section className="has-ambient relative overflow-hidden bg-gray-50 py-20">
+
+                <AmbientBackground density="soft" />
 
                 <div className="mx-auto max-w-7xl px-6 text-center">
 
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-                        Career
+                        <T k="careersPage.heroTitle" />
                     </h1>
 
                     <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-                        Join Marsol Technologies and be part of a team working
-                        towards solutions that help save lives.
+                        <T k="careersPage.heroDescription" />
                     </p>
 
                 </div>
@@ -119,7 +122,7 @@ export default async function CareerPage() {
                     <div className="mt-12">
 
                         <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                            JOB OPENINGS
+                            <T k="careersPage.jobOpenings" />
                         </h2>
 
                         {careers.length === 0 ? (
@@ -127,7 +130,7 @@ export default async function CareerPage() {
                             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8">
 
                                 <p className="text-lg text-gray-600">
-                                    We currently do not have any job openings.
+                                    <T k="careersPage.noOpenings" />
                                 </p>
 
                             </div>
@@ -153,7 +156,7 @@ export default async function CareerPage() {
                                             {career.Department && (
                                                 <span>
                                                     <strong>
-                                                        Department:
+                                                        <T k="careersPage.department" />
                                                     </strong>{" "}
                                                     {career.Department}
                                                 </span>
@@ -162,7 +165,7 @@ export default async function CareerPage() {
                                             {career.Location && (
                                                 <span>
                                                     <strong>
-                                                        Location:
+                                                        <T k="careersPage.location" />
                                                     </strong>{" "}
                                                     {career.Location}
                                                 </span>
@@ -171,7 +174,7 @@ export default async function CareerPage() {
                                             {career.EmploymentType && (
                                                 <span>
                                                     <strong>
-                                                        Employment Type:
+                                                        <T k="careersPage.employmentType" />
                                                     </strong>{" "}
                                                     {career.EmploymentType}
                                                 </span>
@@ -190,7 +193,7 @@ export default async function CareerPage() {
                                         {career.closingDate && (
                                             <p className="mt-4 text-sm text-gray-500">
                                                 <strong>
-                                                    Closing Date:
+                                                    <T k="careersPage.closingDate" />
                                                 </strong>{" "}
                                                 {new Date(
                                                     career.closingDate
@@ -208,7 +211,7 @@ export default async function CareerPage() {
                                                 href={`/careers/${career.slug}`}
                                                 className="inline-flex rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
                                             >
-                                                View Position
+                                                <T k="careersPage.viewPosition" />
                                             </Link>
 
                                         </div>

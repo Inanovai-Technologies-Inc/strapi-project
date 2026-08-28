@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { useI18n } from "@/components/I18nProvider";
+
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -18,6 +20,7 @@ export default function SiteSearch() {
     const [isOpen, setIsOpen] = useState(false);
     const [products, setProducts] = useState<Product[]>([]);
     const router = useRouter();
+    const { t } = useI18n();
 
     const handleSearch = async (value: string) => {
         setQuery(value);
@@ -73,7 +76,7 @@ export default function SiteSearch() {
                             setIsOpen(true);
                         }
                     }}
-                    placeholder="Search products..."
+                    placeholder={t("search.placeholder")}
                     className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pr-10 text-sm text-gray-900 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 />
 
@@ -104,7 +107,7 @@ export default function SiteSearch() {
                         </div>
                     ) : (
                         <div className="px-4 py-3 text-sm text-gray-500">
-                            No products found
+                            {t("search.noResults")}
                         </div>
                     )}
                 </div>

@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
+import { useI18n } from "@/components/I18nProvider";
+
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -116,6 +118,7 @@ function getSpecificationValueFromItem(
 ========================================================= */
 
 export default function ComparePage() {
+    const { t } = useI18n();
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProducts, setSelectedProducts] =
         useState<Product[]>([]);
@@ -205,7 +208,7 @@ export default function ComparePage() {
                 );
 
                 setError(
-                    "Unable to load products. Please try again."
+                    t("compare.errorFetch")
                 );
             } finally {
                 setLoading(false);
@@ -259,7 +262,7 @@ export default function ComparePage() {
 
         if (selectedProducts.length >= 3) {
             alert(
-                "You can compare a maximum of 3 products."
+                t("compare.maxAlert")
             );
             return;
         }
@@ -418,7 +421,7 @@ export default function ComparePage() {
                         <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#0b1f3a]" />
 
                         <p className="text-sm text-gray-600">
-                            Loading products...
+                            {t("compare.loading")}
                         </p>
 
                     </div>
@@ -438,7 +441,7 @@ export default function ComparePage() {
                 <div className="mx-auto max-w-7xl px-6 py-20 text-center">
 
                     <h1 className="text-3xl font-bold text-[#0b1f3a]">
-                        Unable to load products
+                        {t("compare.errorTitle")}
                     </h1>
 
                     <p className="mt-4 text-gray-600">
@@ -449,7 +452,7 @@ export default function ComparePage() {
                         href="/product"
                         className="mt-8 inline-flex rounded-lg bg-[#0b1f3a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#16385f]"
                     >
-                        Back to Products
+                        {t("compare.back")}
                     </Link>
 
                 </div>
@@ -477,7 +480,7 @@ export default function ComparePage() {
                         href="/product"
                         className="text-sm font-medium text-gray-500 transition hover:text-[#0b1f3a]"
                     >
-                        ← Back to Products
+                        ← {t("compare.back")}
                     </Link>
 
                     <div className="mt-8 max-w-3xl">
@@ -487,20 +490,17 @@ export default function ComparePage() {
                             <span className="h-[2px] w-8 bg-orange-500" />
 
                             <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">
-                                Product Comparison
+                                {t("compare.heroEyebrow")}
                             </p>
 
                         </div>
 
                         <h1 className="text-4xl font-bold tracking-tight text-[#0b1f3a] md:text-5xl">
-                            Compare Our Products
+                            {t("compare.heroTitle")}
                         </h1>
 
                         <p className="mt-5 text-lg leading-8 text-gray-600">
-                            Compare Marsol fire protection
-                            solutions side by side and
-                            review their technical
-                            specifications.
+                            {t("compare.heroDescription")}
                         </p>
 
                     </div>
@@ -521,12 +521,11 @@ export default function ComparePage() {
                         <div>
 
                             <h2 className="text-2xl font-bold text-[#0b1f3a]">
-                                Select Products
+                                {t("compare.selectTitle")}
                             </h2>
 
                             <p className="mt-1 text-sm text-gray-500">
-                                Select 2 or 3 products
-                                to compare.
+                                {t("compare.selectSubtitle")}
                             </p>
 
                         </div>
@@ -567,7 +566,7 @@ export default function ComparePage() {
                                                     <div>
 
                                                         <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                                                            Product{" "}
+                                                            {t("compare.productSlot")}{" "}
                                                             {slot +
                                                                 1}
                                                         </p>
@@ -615,7 +614,7 @@ export default function ComparePage() {
                                                     ) : (
 
                                                         <span className="text-sm text-gray-400">
-                                                            No image
+                                                            {t("compare.noImage")}
                                                         </span>
 
                                                     )}
@@ -629,7 +628,7 @@ export default function ComparePage() {
                                             <>
 
                                                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
-                                                    Product{" "}
+                                                    {t("compare.productSlot")}{" "}
                                                     {slot +
                                                         1}
                                                 </p>
@@ -649,7 +648,7 @@ export default function ComparePage() {
                                                 >
 
                                                     <option value="">
-                                                        Select a product
+                                                        {t("compare.selectProduct")}
                                                     </option>
 
                                                     {products.map(
@@ -716,12 +715,11 @@ export default function ComparePage() {
                         <div>
 
                             <h2 className="text-2xl font-bold text-[#0b1f3a]">
-                                Technical Comparison
+                                {t("compare.comparisonTitle")}
                             </h2>
 
                             <p className="mt-1 text-sm text-gray-500">
-                                Technical specifications
-                                compared side by side.
+                                {t("compare.comparisonSubtitle")}
                             </p>
 
                         </div>
@@ -745,7 +743,7 @@ export default function ComparePage() {
                             />
 
                             <span className="text-sm font-medium text-gray-700">
-                                Show only differences
+                                {t("compare.showDifferences")}
                             </span>
 
                         </label>
@@ -762,14 +760,11 @@ export default function ComparePage() {
                         <div className="mb-5 rounded-xl border border-yellow-200 bg-yellow-50 p-5">
 
                             <p className="text-sm font-semibold text-yellow-800">
-                                No technical specifications
-                                were detected.
+                                {t("compare.noSpecsDetected")}
                             </p>
 
                             <p className="mt-1 text-xs text-yellow-700">
-                                Please check the browser
-                                console for the Product API
-                                response.
+                                {t("compare.checkConsole")}
                             </p>
 
                         </div>
@@ -791,7 +786,7 @@ export default function ComparePage() {
                                     <tr className="bg-gray-50">
 
                                         <th className="sticky left-0 z-10 min-w-[220px] border-b border-r border-gray-200 bg-gray-50 px-6 py-6 text-left text-sm font-semibold text-[#0b1f3a]">
-                                            Specification
+                                            {t("compare.tableSpecification")}
                                         </th>
 
                                         {selectedProducts.map(
@@ -844,7 +839,7 @@ export default function ComparePage() {
                                                             href={`/product/${product.slug}`}
                                                             className="mt-3 inline-block text-sm font-medium text-gray-600 underline underline-offset-4 transition hover:text-orange-500"
                                                         >
-                                                            View Product
+                                                            {t("compare.tableViewProduct")}
                                                             →
                                                         </Link>
                                                     )}
@@ -965,11 +960,7 @@ export default function ComparePage() {
                                                 }
                                                 className="px-6 py-12 text-center text-sm text-gray-500"
                                             >
-                                                No technical
-                                                specifications
-                                                found for the
-                                                selected
-                                                products.
+                                                {t("compare.tableNoSpecs")}
                                             </td>
 
                                         </tr>
@@ -1004,16 +995,11 @@ export default function ComparePage() {
                         </div>
 
                         <h2 className="mt-5 text-xl font-semibold text-[#0b1f3a]">
-                            Select at least two
-                            products
+                            {t("compare.emptyTitle")}
                         </h2>
 
                         <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-                            Choose two or three Marsol
-                            products above to compare
-                            their technical
-                            specifications side by
-                            side.
+                            {t("compare.emptyDescription")}
                         </p>
 
                     </div>
@@ -1035,22 +1021,18 @@ export default function ComparePage() {
                     <div className="mx-auto max-w-7xl px-6 py-14 text-center lg:px-8">
 
                         <h2 className="text-2xl font-bold text-[#0b1f3a]">
-                            Need help choosing the
-                            right solution?
+                            {t("compare.helpTitle")}
                         </h2>
 
                         <p className="mx-auto mt-3 max-w-2xl text-gray-600">
-                            Contact the Marsol team to
-                            discuss your requirements
-                            and find the most suitable
-                            fire protection solution.
+                            {t("compare.helpDescription")}
                         </p>
 
                         <Link
                             href="/contact"
                             className="mt-6 inline-flex rounded-lg bg-[#0b1f3a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#16385f]"
                         >
-                            Contact Marsol
+                            {t("compare.helpCta")}
                         </Link>
 
                     </div>

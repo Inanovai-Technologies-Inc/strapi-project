@@ -1,31 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "@/components/I18nProvider";
 
 const sections = [
-    {
-        id: "home",
-        label: "Home",
-    },
-    {
-        id: "about",
-        label: "About",
-    },
-    {
-        id: "products",
-        label: "Products",
-    },
-    {
-        id: "industries",
-        label: "Industries",
-    },
-    {
-        id: "contact",
-        label: "Contact",
-    },
+    { id: "home" },
+    { id: "about" },
+    { id: "products" },
+    { id: "industries" },
+    { id: "contact" },
 ];
 
 export default function SectionNavigation() {
+    const { t } = useI18n();
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
@@ -72,11 +59,14 @@ export default function SectionNavigation() {
 
             <div className="flex flex-col items-center gap-4">
 
-                {sections.map((section) => (
+                {sections.map((section) => {
+                    const label = t(`sectionNav.${section.id}`);
+
+                    return (
                     <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
-                        aria-label={`Go to ${section.label}`}
+                        aria-label={`${t("sectionNav.goTo")} ${label}`}
                         className="group relative flex items-center"
                     >
 
@@ -98,7 +88,7 @@ export default function SectionNavigation() {
                                 group-hover:opacity-100
                             "
                         >
-                            {section.label}
+                            {label}
                         </span>
 
                         {/* Dot */}
@@ -118,7 +108,8 @@ export default function SectionNavigation() {
                         />
 
                     </button>
-                ))}
+                    );
+                })}
 
             </div>
 

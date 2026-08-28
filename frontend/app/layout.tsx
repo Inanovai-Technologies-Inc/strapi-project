@@ -13,6 +13,8 @@ import Navbar from "@/components/navbar";
 import Chatbot from "@/components/Chatbot";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { I18nProvider } from "@/components/I18nProvider";
+import { PageContextProvider } from "@/components/PageContext";
 import PageReveal from "@/components/PageReveal";
 
 
@@ -72,10 +74,13 @@ export default function RootLayout({
                 `}
             >
                 <ThemeProvider>
+                  <I18nProvider>
 
                     {/* ==============================
                         NAVBAR
                     ============================== */}
+
+                    <PageContextProvider>
 
                     <Navbar />
 
@@ -93,6 +98,9 @@ export default function RootLayout({
 
                     <Chatbot />
                      <Footer />
+
+                     </PageContextProvider>
+                  </I18nProvider>
                 </ThemeProvider>
             </body>
         </html>

@@ -1,5 +1,12 @@
 
+import { Suspense } from "react";
 import Link from "next/link";
+import { T } from "@/components/T";
+import AmbientBackground from "@/components/AmbientBackground";
+import ProductCatalogueView, {
+    type CatalogueGroup,
+    type CatalogueProduct,
+} from "@/components/ProductCatalogueView";
 
 const STRAPI_URL =
     process.env.STRAPI_URL ||
@@ -35,305 +42,298 @@ function getImageUrl(image: any) {
 }
 
 /* =========================================================
-   PRODUCT PAGE
+   NORMALISERS
+
+   Strapi can return relations either flattened (v5) or nested
+   under { data: { attributes } }. These helpers keep the page
+   working regardless of the shape that comes back.
 ========================================================= */
 
-export default async function ProductPage() {
-    /* =========================================================
-       FETCH PRODUCTS FROM STRAPI
-    ========================================================= */
+function normalizeEntry(entry: any) {
+    if (!entry) {
+        return null;
+    }
 
-    const response = await fetch(
-        `${STRAPI_URL}/api/products?populate=*`,
-        {
-            cache: "no-store",
-        }
-    );
+    const attributes = entry.attributes || entry;
+
+    return {
+        ...attributes,
+        id: entry.id ?? attributes.id,
+        documentId: entry.documentId ?? attributes.documentId,
+    };
+}
+
+function normalizeList(relation: any): any[] {
+    const raw = Array.isArray(relation)
+        ? relation
+        : Array.isArray(relation?.data)
+        ? relation.data
+        : [];
+
+    return raw
+        .map((item: any) => normalizeEntry(item))
+        .filter(Boolean);
+}
+
+/* =========================================================
+   DATA FETCHING (existing Strapi REST integration)
+========================================================= */
+
+async function fetchCategories() {
+    const url =
+        `${STRAPI_URL}/api/product-categories` +
+        `?populate%5Bproducts%5D%5Bpopulate%5D%5BImage%5D=true` +
+        `&sort=createdAt:asc` +
+        `&pagination%5BpageSize%5D=100`;
+
+    const response = await fetch(url, { cache: "no-store" });
 
     if (!response.ok) {
-        const errorText = await response.text();
-
         throw new Error(
-            `Failed to fetch products: ${response.status} ${errorText}`
+            `Failed to fetch product categories: ${response.status}`
         );
     }
 
     const result = await response.json();
 
-    const allProducts = result.data || [];
+    return (result.data || [])
+        .map((entry: any) => {
+            const category = normalizeEntry(entry);
 
-    /* =========================================================
-       FIND PRODUCTS THAT ARE USED AS RELATED PRODUCTS
-    ========================================================= */
-
-    const relatedProductIds = new Set<string>();
-
-    allProducts.forEach((product: any) => {
-        if (!Array.isArray(product.relatedProducts)) {
-            return;
-        }
-
-        product.relatedProducts.forEach((related: any) => {
-            if (related?.documentId) {
-                relatedProductIds.add(related.documentId);
+            if (!category) {
+                return null;
             }
+
+            return {
+                id: category.id,
+                documentId: category.documentId,
+                name: category.Name || category.name || "",
+                slug: category.slug || "",
+                description:
+                    category.Description || category.description || "",
+                products: normalizeList(category.products),
+            };
+        })
+        .filter(
+            (category: any) =>
+                category && category.products.length > 0
+        );
+}
+
+async function fetchUncategorizedProducts(
+    categorizedIds: Set<string>
+) {
+    const url =
+        `${STRAPI_URL}/api/products` +
+        `?populate%5BImage%5D=true` +
+        `&pagination%5BpageSize%5D=100`;
+
+    const response = await fetch(url, { cache: "no-store" });
+
+    if (!response.ok) {
+        // A missing/blocked products endpoint must not break the page.
+        return [];
+    }
+
+    const result = await response.json();
+
+    return (result.data || [])
+        .map((entry: any) => normalizeEntry(entry))
+        .filter(
+            (product: any) =>
+                product &&
+                !categorizedIds.has(
+                    String(product.documentId ?? product.id)
+                )
+        );
+}
+
+/* =========================================================
+   SERIALISABLE SHAPE
+
+   The two-column catalogue is interactive, so the grouped
+   data is handed to a client component. Everything below is
+   plain JSON (image URLs resolved here on the server).
+========================================================= */
+
+function toCatalogueProduct(product: any): CatalogueProduct {
+    const name = product?.Name || product?.name || "";
+
+    return {
+        key: String(
+            product?.documentId ||
+                product?.id ||
+                product?.slug ||
+                name
+        ),
+        name,
+        slug: product?.slug || "",
+        description:
+            product?.description || product?.Description || "",
+        imageUrl: getImageUrl(product?.Image),
+        imageAlt: product?.Image?.alternativeText || name,
+    };
+}
+
+/* =========================================================
+   CATALOGUE SKELETON (loading state for the two-column view)
+========================================================= */
+
+function CatalogueSkeleton() {
+    return (
+        <div className="lg:grid lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[340px_minmax(0,1fr)]">
+            <div className="hidden lg:block">
+                <div className="space-y-2 rounded-2xl border border-gray-200 bg-white p-4">
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="h-14 animate-pulse rounded-xl bg-gray-100"
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div className="mt-10 lg:mt-0">
+                <div className="h-3 w-32 animate-pulse rounded bg-gray-200" />
+                <div className="mt-3 h-8 w-64 animate-pulse rounded bg-gray-200" />
+                <div className="mt-4 h-1 w-12 bg-orange-200" />
+
+                <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <div key={index}>
+                            <div className="aspect-[4/3] animate-pulse rounded-xl bg-gray-200" />
+                            <div className="mt-5 h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+                            <div className="mt-3 h-3 w-full animate-pulse rounded bg-gray-200" />
+                            <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-gray-200" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* =========================================================
+   PRODUCT CATALOGUE
+
+   Async leaf: fetches categories from Strapi and groups the
+   products by the Product Category relation. Rendered inside
+   a <Suspense> boundary so the page shell paints immediately.
+========================================================= */
+
+async function ProductCatalogue() {
+    const categories = await fetchCategories();
+
+    const categorizedIds = new Set<string>();
+
+    categories.forEach((category: any) => {
+        category.products.forEach((product: any) => {
+            categorizedIds.add(
+                String(product.documentId ?? product.id)
+            );
         });
     });
 
-    /* =========================================================
-       ONLY SHOW MAIN / PARENT PRODUCTS
-
-       Example:
-
-       DIFF SYSTEM
-          ├── FOAM TANK SKID
-          ├── SELF-CONTAINED SKID
-          └── DIFF NOZZLES
-
-       Only DIFF SYSTEM appears on /product.
-    ========================================================= */
-
-    const products = allProducts.filter(
-        (product: any) =>
-            !relatedProductIds.has(product.documentId)
+    const uncategorizedProducts = await fetchUncategorizedProducts(
+        categorizedIds
     );
 
+    const hasContent =
+        categories.length > 0 ||
+        uncategorizedProducts.length > 0;
+
+    if (!hasContent) {
+        return (
+            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
+                <p className="text-gray-500">
+                    <T k="productsPage.noCategories" />
+                </p>
+            </div>
+        );
+    }
+
+    const groups: CatalogueGroup[] = categories.map(
+        (category: any) => ({
+            key: String(
+                category.documentId ||
+                    category.id ||
+                    category.slug
+            ),
+            name: category.name,
+            slug: category.slug || "",
+            description: category.description || "",
+            products: category.products.map(toCatalogueProduct),
+        })
+    );
+
+    if (uncategorizedProducts.length > 0) {
+        groups.push({
+            key: "__other__",
+            name: "",
+            slug: "",
+            description: "",
+            isOther: true,
+            products: uncategorizedProducts.map(toCatalogueProduct),
+        });
+    }
+
+    return <ProductCatalogueView groups={groups} />;
+}
+
+/* =========================================================
+   PRODUCT PAGE
+========================================================= */
+
+export default function ProductPage() {
     return (
         <main className="min-h-screen bg-[#f7f7f5] text-[#111827]">
 
             {/* =========================================================
-                HERO
+                PRODUCTS — grouped by Strapi Product Category
             ========================================================= */}
 
-            <section className="relative overflow-hidden border-b border-gray-200 bg-white">
-
-                {/* Decorative background */}
-
-                <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-orange-100 opacity-50 blur-3xl" />
-
-                <div className="absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-gray-100 opacity-70 blur-3xl" />
-
-                <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
-
-                    <div className="grid items-center gap-12 lg:grid-cols-[1fr_360px]">
-
-                        {/* LEFT */}
-
-                        <div>
-
-                            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
-                                Our Products
-                            </p>
-
-                            <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight text-[#0b1f3a] sm:text-5xl lg:text-6xl">
-                                Engineered Fire Protection Solutions
-                            </h1>
-
-                            <div className="mt-6 h-1 w-16 bg-orange-500" />
-
-                            <p className="mt-7 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
-                                Explore our range of engineered fire protection
-                                systems and equipment designed to provide
-                                reliable performance, safety and protection
-                                across demanding applications.
-                            </p>
-
-                            <Link
-                                href="/product/compare"
-                                className="mt-7 inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-                            >
-                                Compare Products
-
-                                <span className="ml-2">
-                                    →
-                                </span>
-                            </Link>
-
-                        </div>
-
-                        {/* RIGHT */}
-
-                        <div className="relative">
-
-                            <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-8">
-
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                    Marsol Technologies
-                                </p>
-
-                                <h2 className="mt-4 text-2xl font-bold leading-tight text-[#0b1f3a]">
-                                    Advanced Fire Protection Technology
-                                </h2>
-
-                                <p className="mt-4 text-sm leading-7 text-gray-500">
-                                    Innovative systems and equipment engineered
-                                    for demanding fire protection applications.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            {/* =========================================================
-                PRODUCTS
-            ========================================================= */}
-
-            <section className="px-6 py-20 lg:px-8">
+            <section className="border-t border-gray-200 px-6 py-16 lg:px-8 lg:py-20">
 
                 <div className="mx-auto max-w-7xl">
 
                     {/* SECTION HEADING */}
 
-                    <div className="mb-12">
+                    <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
 
-                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            Product Range
-                        </p>
+                        <div className="max-w-3xl">
 
-                        <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                            Our Products
-                        </h2>
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                                <T k="productsPage.catalogueEyebrow" />
+                            </p>
 
-                        <div className="mt-4 h-1 w-12 bg-orange-500" />
+                            <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
+                                <T k="productsPage.catalogueTitle" />
+                            </h2>
 
-                        <p className="mt-5 max-w-3xl text-base leading-7 text-gray-500">
-                            Discover our range of fire protection systems and
-                            engineered equipment developed to meet demanding
-                            industry requirements.
-                        </p>
+                            <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                    </div>
-
-                    {/* =====================================================
-                        PRODUCT GRID
-                    ===================================================== */}
-
-                    {products.length === 0 ? (
-
-                        <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-
-                            <p className="text-gray-500">
-                                No products available.
+                            <p className="mt-5 text-base leading-7 text-gray-500">
+                                <T k="productsPage.rangeDescription" />
                             </p>
 
                         </div>
 
-                    ) : (
+                        <Link
+                            href="/product/compare"
+                            className="inline-flex shrink-0 items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+                        >
+                            <T k="productsPage.compareProducts" />
 
-                        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            <span className="ml-2">
+                                →
+                            </span>
+                        </Link>
 
-                            {products.map((product: any) => {
+                    </div>
 
-                                const imageUrl = getImageUrl(
-                                    product.Image
-                                );
-
-                                const hasRelatedProducts =
-                                    Array.isArray(
-                                        product.relatedProducts
-                                    ) &&
-                                    product.relatedProducts.length > 0;
-
-                                return (
-
-                                    <article
-                                        key={
-                                            product.documentId ||
-                                            product.id
-                                        }
-                                        className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-xl"
-                                    >
-
-                                        {/* =====================================================
-                                            IMAGE
-                                        ===================================================== */}
-
-                                        <div className="relative flex h-64 items-center justify-center overflow-hidden bg-[#f5f6f7] p-8">
-
-                                            {/* Orange corner accent */}
-
-                                            <div className="absolute left-0 top-0 h-1 w-16 bg-orange-500 transition-all duration-300 group-hover:w-24" />
-
-                                            {imageUrl ? (
-
-                                                <img
-                                                    src={imageUrl}
-                                                    alt={
-                                                        product.Image
-                                                            ?.alternativeText ||
-                                                        product.Name
-                                                    }
-                                                    className="h-full w-full object-contain transition duration-500 group-hover:scale-110"
-                                                />
-
-                                            ) : (
-
-                                                <div className="text-sm text-gray-400">
-                                                    Product image unavailable
-                                                </div>
-
-                                            )}
-
-                                        </div>
-
-                                        {/* =====================================================
-                                            CONTENT
-                                        ===================================================== */}
-
-                                        <div className="p-6">
-
-                                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
-                                                Fire Protection
-                                            </p>
-
-                                            <h2 className="mt-3 min-h-[58px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
-                                                {product.Name}
-                                            </h2>
-
-                                            <div className="mt-4 h-px w-full bg-gray-100" />
-
-                                            <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
-                                                {product.description ||
-                                                    "Engineered fire protection equipment designed for reliable performance and demanding safety applications."}
-                                            </p>
-
-                                            {/* =================================================
-                                                VIEW PRODUCT / VIEW PRODUCTS
-                                            ================================================= */}
-
-                                            <Link
-                                                href={`/product/${product.slug}`}
-                                                className="mt-6 flex items-center justify-between rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white"
-                                            >
-
-                                                <span>
-                                                    {hasRelatedProducts
-                                                        ? "View Products"
-                                                        : "View Product"}
-                                                </span>
-
-                                                <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
-                                                    →
-                                                </span>
-
-                                            </Link>
-
-                                        </div>
-
-                                    </article>
-
-                                );
-                            })}
-
-                        </div>
-
-                    )}
+                    <Suspense fallback={<CatalogueSkeleton />}>
+                        <ProductCatalogue />
+                    </Suspense>
 
                 </div>
 
@@ -352,20 +352,17 @@ export default async function ProductPage() {
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Why Choose Us
+                                <T k="productsPage.whyEyebrow" />
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                                Reliable Fire Protection Engineering
+                                <T k="productsPage.whyTitle" />
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-6 text-base leading-8 text-gray-600">
-                                Our fire protection solutions are engineered to
-                                meet demanding operational requirements while
-                                delivering dependable performance and long-term
-                                reliability.
+                                <T k="productsPage.whyDescription" />
                             </p>
 
                         </div>
@@ -375,12 +372,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Engineered Solutions
+                                    <T k="productsPage.whyCard1Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Systems designed around specific project
-                                    and application requirements.
+                                    <T k="productsPage.whyCard1Body" />
                                 </p>
 
                             </div>
@@ -388,12 +384,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Proven Performance
+                                    <T k="productsPage.whyCard2Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Reliable equipment designed for demanding
-                                    fire protection applications.
+                                    <T k="productsPage.whyCard2Body" />
                                 </p>
 
                             </div>
@@ -401,12 +396,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Industry Standards
+                                    <T k="productsPage.whyCard3Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Solutions developed to meet applicable
-                                    industry standards and requirements.
+                                    <T k="productsPage.whyCard3Body" />
                                 </p>
 
                             </div>
@@ -414,12 +408,11 @@ export default async function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    Technical Support
+                                    <T k="productsPage.whyCard4Title" />
                                 </h3>
 
                                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                                    Technical expertise and support throughout
-                                    the project lifecycle.
+                                    <T k="productsPage.whyCard4Body" />
                                 </p>
 
                             </div>
@@ -436,23 +429,24 @@ export default async function ProductPage() {
                 CONTACT
             ========================================================= */}
 
-            <section className="bg-gray-900 px-6 py-16 lg:px-8">
+            <section className="has-ambient relative overflow-hidden bg-gray-900 px-6 py-16 lg:px-8">
+
+                <AmbientBackground tone="dark" density="soft" />
 
                 <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 text-center md:flex-row md:text-left">
 
                     <div>
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-400">
-                            Need More Information?
+                            <T k="cta.needMoreInfo" />
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-white">
-                            Contact our team
+                            <T k="cta.contactOurTeam" />
                         </h2>
 
                         <p className="mt-3 text-gray-400">
-                            Get in touch with us for product specifications,
-                            pricing and technical information.
+                            <T k="cta.productInfo" />
                         </p>
 
                     </div>
@@ -461,7 +455,7 @@ export default async function ProductPage() {
                         href="/contact"
                         className="shrink-0 rounded-lg bg-orange-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-orange-600"
                     >
-                        Contact Us
+                        <T k="cta.contactUs" />
                     </Link>
 
                 </div>
@@ -471,4 +465,3 @@ export default async function ProductPage() {
         </main>
     );
 }
-
