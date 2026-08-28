@@ -1,7 +1,12 @@
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { T } from "@/components/T";
 import AmbientBackground from "@/components/AmbientBackground";
+import ProductCatalogueView, {
+    type CatalogueGroup,
+    type CatalogueProduct,
+} from "@/components/ProductCatalogueView";
 
 const STRAPI_URL =
     process.env.STRAPI_URL ||
@@ -37,313 +42,298 @@ function getImageUrl(image: any) {
 }
 
 /* =========================================================
-   PRODUCT PAGE
+   NORMALISERS
+
+   Strapi can return relations either flattened (v5) or nested
+   under { data: { attributes } }. These helpers keep the page
+   working regardless of the shape that comes back.
 ========================================================= */
 
-export default async function ProductPage() {
-    /* =========================================================
-       FETCH PRODUCTS FROM STRAPI
-    ========================================================= */
+function normalizeEntry(entry: any) {
+    if (!entry) {
+        return null;
+    }
 
-    const response = await fetch(
-        `${STRAPI_URL}/api/products?populate=*`,
-        {
-            cache: "no-store",
-        }
-    );
+    const attributes = entry.attributes || entry;
+
+    return {
+        ...attributes,
+        id: entry.id ?? attributes.id,
+        documentId: entry.documentId ?? attributes.documentId,
+    };
+}
+
+function normalizeList(relation: any): any[] {
+    const raw = Array.isArray(relation)
+        ? relation
+        : Array.isArray(relation?.data)
+        ? relation.data
+        : [];
+
+    return raw
+        .map((item: any) => normalizeEntry(item))
+        .filter(Boolean);
+}
+
+/* =========================================================
+   DATA FETCHING (existing Strapi REST integration)
+========================================================= */
+
+async function fetchCategories() {
+    const url =
+        `${STRAPI_URL}/api/product-categories` +
+        `?populate%5Bproducts%5D%5Bpopulate%5D%5BImage%5D=true` +
+        `&sort=createdAt:asc` +
+        `&pagination%5BpageSize%5D=100`;
+
+    const response = await fetch(url, { cache: "no-store" });
 
     if (!response.ok) {
-        const errorText = await response.text();
-
         throw new Error(
-            `Failed to fetch products: ${response.status} ${errorText}`
+            `Failed to fetch product categories: ${response.status}`
         );
     }
 
     const result = await response.json();
 
-    const allProducts = result.data || [];
+    return (result.data || [])
+        .map((entry: any) => {
+            const category = normalizeEntry(entry);
 
-    /* =========================================================
-       FIND PRODUCTS THAT ARE USED AS RELATED PRODUCTS
-    ========================================================= */
-
-    const relatedProductIds = new Set<string>();
-
-    allProducts.forEach((product: any) => {
-        if (!Array.isArray(product.relatedProducts)) {
-            return;
-        }
-
-        product.relatedProducts.forEach((related: any) => {
-            if (related?.documentId) {
-                relatedProductIds.add(related.documentId);
+            if (!category) {
+                return null;
             }
+
+            return {
+                id: category.id,
+                documentId: category.documentId,
+                name: category.Name || category.name || "",
+                slug: category.slug || "",
+                description:
+                    category.Description || category.description || "",
+                products: normalizeList(category.products),
+            };
+        })
+        .filter(
+            (category: any) =>
+                category && category.products.length > 0
+        );
+}
+
+async function fetchUncategorizedProducts(
+    categorizedIds: Set<string>
+) {
+    const url =
+        `${STRAPI_URL}/api/products` +
+        `?populate%5BImage%5D=true` +
+        `&pagination%5BpageSize%5D=100`;
+
+    const response = await fetch(url, { cache: "no-store" });
+
+    if (!response.ok) {
+        // A missing/blocked products endpoint must not break the page.
+        return [];
+    }
+
+    const result = await response.json();
+
+    return (result.data || [])
+        .map((entry: any) => normalizeEntry(entry))
+        .filter(
+            (product: any) =>
+                product &&
+                !categorizedIds.has(
+                    String(product.documentId ?? product.id)
+                )
+        );
+}
+
+/* =========================================================
+   SERIALISABLE SHAPE
+
+   The two-column catalogue is interactive, so the grouped
+   data is handed to a client component. Everything below is
+   plain JSON (image URLs resolved here on the server).
+========================================================= */
+
+function toCatalogueProduct(product: any): CatalogueProduct {
+    const name = product?.Name || product?.name || "";
+
+    return {
+        key: String(
+            product?.documentId ||
+                product?.id ||
+                product?.slug ||
+                name
+        ),
+        name,
+        slug: product?.slug || "",
+        description:
+            product?.description || product?.Description || "",
+        imageUrl: getImageUrl(product?.Image),
+        imageAlt: product?.Image?.alternativeText || name,
+    };
+}
+
+/* =========================================================
+   CATALOGUE SKELETON (loading state for the two-column view)
+========================================================= */
+
+function CatalogueSkeleton() {
+    return (
+        <div className="lg:grid lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[340px_minmax(0,1fr)]">
+            <div className="hidden lg:block">
+                <div className="space-y-2 rounded-2xl border border-gray-200 bg-white p-4">
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="h-14 animate-pulse rounded-xl bg-gray-100"
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div className="mt-10 lg:mt-0">
+                <div className="h-3 w-32 animate-pulse rounded bg-gray-200" />
+                <div className="mt-3 h-8 w-64 animate-pulse rounded bg-gray-200" />
+                <div className="mt-4 h-1 w-12 bg-orange-200" />
+
+                <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <div key={index}>
+                            <div className="aspect-[4/3] animate-pulse rounded-xl bg-gray-200" />
+                            <div className="mt-5 h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+                            <div className="mt-3 h-3 w-full animate-pulse rounded bg-gray-200" />
+                            <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-gray-200" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* =========================================================
+   PRODUCT CATALOGUE
+
+   Async leaf: fetches categories from Strapi and groups the
+   products by the Product Category relation. Rendered inside
+   a <Suspense> boundary so the page shell paints immediately.
+========================================================= */
+
+async function ProductCatalogue() {
+    const categories = await fetchCategories();
+
+    const categorizedIds = new Set<string>();
+
+    categories.forEach((category: any) => {
+        category.products.forEach((product: any) => {
+            categorizedIds.add(
+                String(product.documentId ?? product.id)
+            );
         });
     });
 
-    /* =========================================================
-       ONLY SHOW MAIN / PARENT PRODUCTS
-
-       Example:
-
-       DIFF SYSTEM
-          ├── FOAM TANK SKID
-          ├── SELF-CONTAINED SKID
-          └── DIFF NOZZLES
-
-       Only DIFF SYSTEM appears on /product.
-    ========================================================= */
-
-    const products = allProducts.filter(
-        (product: any) =>
-            !relatedProductIds.has(product.documentId)
+    const uncategorizedProducts = await fetchUncategorizedProducts(
+        categorizedIds
     );
 
+    const hasContent =
+        categories.length > 0 ||
+        uncategorizedProducts.length > 0;
+
+    if (!hasContent) {
+        return (
+            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
+                <p className="text-gray-500">
+                    <T k="productsPage.noCategories" />
+                </p>
+            </div>
+        );
+    }
+
+    const groups: CatalogueGroup[] = categories.map(
+        (category: any) => ({
+            key: String(
+                category.documentId ||
+                    category.id ||
+                    category.slug
+            ),
+            name: category.name,
+            slug: category.slug || "",
+            description: category.description || "",
+            products: category.products.map(toCatalogueProduct),
+        })
+    );
+
+    if (uncategorizedProducts.length > 0) {
+        groups.push({
+            key: "__other__",
+            name: "",
+            slug: "",
+            description: "",
+            isOther: true,
+            products: uncategorizedProducts.map(toCatalogueProduct),
+        });
+    }
+
+    return <ProductCatalogueView groups={groups} />;
+}
+
+/* =========================================================
+   PRODUCT PAGE
+========================================================= */
+
+export default function ProductPage() {
     return (
         <main className="min-h-screen bg-[#f7f7f5] text-[#111827]">
 
             {/* =========================================================
-                HERO
+                PRODUCTS — grouped by Strapi Product Category
             ========================================================= */}
 
-            <section className="relative overflow-hidden border-b border-gray-200 bg-white">
-
-                <AmbientBackground density="soft" />
-
-                {/* Decorative background */}
-
-                <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-orange-100 opacity-50 blur-3xl" />
-
-                <div className="absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-gray-100 opacity-70 blur-3xl" />
-
-                <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
-
-                    <div className="grid items-center gap-12 lg:grid-cols-[1fr_360px]">
-
-                        {/* LEFT */}
-
-                        <div>
-
-                            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-500">
-                                <T k="productsPage.heroEyebrow" />
-                            </p>
-
-                            <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight text-[#0b1f3a] sm:text-5xl lg:text-6xl">
-                                <T k="productsPage.heroTitle" />
-                            </h1>
-
-                            <div className="mt-6 h-1 w-16 bg-orange-500" />
-
-                            <p className="mt-7 max-w-3xl text-base leading-8 text-gray-600 sm:text-lg">
-                                <T k="productsPage.heroDescription" />
-                            </p>
-
-                            <Link
-                                href="/product/compare"
-                                className="mt-7 inline-flex items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-                            >
-                                <T k="productsPage.compareProducts" />
-
-                                <span className="ml-2">
-                                    →
-                                </span>
-                            </Link>
-
-                        </div>
-
-                        {/* RIGHT */}
-
-                        <div className="relative">
-
-                            <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-8">
-
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                    Marsol Technologies
-                                </p>
-
-                                <h2 className="mt-4 text-2xl font-bold leading-tight text-[#0b1f3a]">
-                                    <T k="productsPage.heroCardTitle" />
-                                </h2>
-
-                                <p className="mt-4 text-sm leading-7 text-gray-500">
-                                    <T k="productsPage.heroCardDescription" />
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            {/* =========================================================
-                PRODUCTS
-            ========================================================= */}
-
-            <section className="px-6 py-20 lg:px-8">
+            <section className="border-t border-gray-200 px-6 py-16 lg:px-8 lg:py-20">
 
                 <div className="mx-auto max-w-7xl">
 
                     {/* SECTION HEADING */}
 
-                    <div className="mb-12">
+                    <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
 
-                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            <T k="productsPage.rangeEyebrow" />
-                        </p>
+                        <div className="max-w-3xl">
 
-                        <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                            <T k="productsPage.rangeTitle" />
-                        </h2>
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                                <T k="productsPage.catalogueEyebrow" />
+                            </p>
 
-                        <div className="mt-4 h-1 w-12 bg-orange-500" />
+                            <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
+                                <T k="productsPage.catalogueTitle" />
+                            </h2>
 
-                        <p className="mt-5 max-w-3xl text-base leading-7 text-gray-500">
-                            <T k="productsPage.rangeDescription" />
-                        </p>
+                            <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                    </div>
-
-                    {/* =====================================================
-                        PRODUCT GRID
-                    ===================================================== */}
-
-                    {products.length === 0 ? (
-
-                        <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-
-                            <p className="text-gray-500">
-                                <T k="productsPage.noProducts" />
+                            <p className="mt-5 text-base leading-7 text-gray-500">
+                                <T k="productsPage.rangeDescription" />
                             </p>
 
                         </div>
 
-                    ) : (
+                        <Link
+                            href="/product/compare"
+                            className="inline-flex shrink-0 items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+                        >
+                            <T k="productsPage.compareProducts" />
 
-                        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+                            <span className="ml-2">
+                                →
+                            </span>
+                        </Link>
 
-                            {products.map((product: any) => {
+                    </div>
 
-                                const imageUrl = getImageUrl(
-                                    product.Image
-                                );
-
-                                const hasRelatedProducts =
-                                    Array.isArray(
-                                        product.relatedProducts
-                                    ) &&
-                                    product.relatedProducts.length > 0;
-
-                                const productHref = `/product/${product.slug}`;
-
-                                return (
-
-                                    <article
-                                        key={
-                                            product.documentId ||
-                                            product.id
-                                        }
-                                        className="group flex flex-col"
-                                    >
-
-                                        {/* =====================================================
-                                            IMAGE (entire image links to product page)
-                                        ===================================================== */}
-
-                                        <Link
-                                            href={productHref}
-                                            aria-label={product.Name}
-                                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-[#f5f6f7] p-8"
-                                        >
-
-                                            {/* Orange corner accent */}
-
-                                            <div className="absolute left-0 top-0 h-1 w-16 bg-orange-500 transition-all duration-300 group-hover:w-24" />
-
-                                            {imageUrl ? (
-
-                                                <img
-                                                    src={imageUrl}
-                                                    alt={
-                                                        product.Image
-                                                            ?.alternativeText ||
-                                                        product.Name
-                                                    }
-                                                    className="h-full w-full object-contain transition duration-500 group-hover:scale-110"
-                                                />
-
-                                            ) : (
-
-                                                <div className="text-sm text-gray-400">
-                                                    <T k="productsPage.imageUnavailable" />
-                                                </div>
-
-                                            )}
-
-                                        </Link>
-
-                                        {/* =====================================================
-                                            CONTENT (below the image)
-                                        ===================================================== */}
-
-                                        <div className="mt-5 flex flex-1 flex-col">
-
-                                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
-                                                <T k="productsPage.cardCategory" />
-                                            </p>
-
-                                            <h2 className="mt-3 text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
-                                                <Link
-                                                    href={productHref}
-                                                    className="transition-colors duration-300 group-hover:text-orange-600"
-                                                >
-                                                    {product.Name}
-                                                </Link>
-                                            </h2>
-
-                                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-500">
-                                                {product.description || (
-                                                    <T k="productsPage.cardDefaultDescription" />
-                                                )}
-                                            </p>
-
-                                            {/* =================================================
-                                                VIEW PRODUCT / VIEW PRODUCTS
-                                            ================================================= */}
-
-                                            <Link
-                                                href={productHref}
-                                                className="mt-6 flex items-center justify-between rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white"
-                                            >
-
-                                                <span>
-                                                    {hasRelatedProducts ? (
-                                                        <T k="productsPage.viewProducts" />
-                                                    ) : (
-                                                        <T k="productsPage.viewProduct" />
-                                                    )}
-                                                </span>
-
-                                                <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
-                                                    →
-                                                </span>
-
-                                            </Link>
-
-                                        </div>
-
-                                    </article>
-
-                                );
-                            })}
-
-                        </div>
-
-                    )}
+                    <Suspense fallback={<CatalogueSkeleton />}>
+                        <ProductCatalogue />
+                    </Suspense>
 
                 </div>
 
@@ -475,4 +465,3 @@ export default async function ProductPage() {
         </main>
     );
 }
-

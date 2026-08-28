@@ -5,7 +5,11 @@
         "products": "Products",
         "careers": "Careers",
         "technicalDocuments": "Technical Documents",
-        "contact": "Contact"
+        "contact": "Contact",
+        "fireFightingProducts": "Fire-Fighting Products",
+        "menu": "Menu",
+        "closeMenu": "Close menu",
+        "openMenu": "Open menu"
     },
     "footer": {
         "company": "Company",
@@ -257,7 +261,13 @@
         "whyCard3Title": "Industry Standards",
         "whyCard3Body": "Solutions developed to meet applicable industry standards and requirements.",
         "whyCard4Title": "Technical Support",
-        "whyCard4Body": "Technical expertise and support throughout the project lifecycle."
+        "whyCard4Body": "Technical expertise and support throughout the project lifecycle.",
+        "catalogueEyebrow": "Fire-Fighting Products",
+        "catalogueTitle": "Products",
+        "categoryEyebrow": "Product Category",
+        "otherProducts": "Other Products",
+        "noCategories": "No products are available at the moment. Please check back soon.",
+        "categoriesTitle": "Categories"
     },
     "productDetail": {
         "backToProducts": "Back to Products",

@@ -601,7 +601,7 @@ export interface ApiCareerCareer extends Struct.CollectionTypeSchema {
     closingDate: Schema.Attribute.Date &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     createdAt: Schema.Attribute.DateTime;
@@ -712,14 +712,14 @@ export interface ApiCarrerApplicationCarrerApplication
     Phone: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
     Resume: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     updatedAt: Schema.Attribute.DateTime;
@@ -794,7 +794,7 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
     emailAddress: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     howDidYouHearAboutUs: Schema.Attribute.String &
@@ -905,7 +905,7 @@ export interface ApiNewNew extends Struct.CollectionTypeSchema {
     Date: Schema.Attribute.Date &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     Description: Schema.Attribute.Text &

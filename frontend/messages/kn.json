@@ -5,7 +5,11 @@
         "products": "ಉತ್ಪನ್ನಗಳು",
         "careers": "ವೃತ್ತಿ ಅವಕಾಶಗಳು",
         "technicalDocuments": "ತಾಂತ್ರಿಕ ದಾಖಲೆಗಳು",
-        "contact": "ಸಂಪರ್ಕಿಸಿ"
+        "contact": "ಸಂಪರ್ಕಿಸಿ",
+        "fireFightingProducts": "Fire-Fighting Products",
+        "menu": "Menu",
+        "closeMenu": "Close menu",
+        "openMenu": "Open menu"
     },
     "footer": {
         "company": "ಕಂಪನಿ",
@@ -257,7 +261,13 @@
         "whyCard3Title": "ಕೈಗಾರಿಕಾ ಮಾನದಂಡಗಳು",
         "whyCard3Body": "ಅನ್ವಯವಾಗುವ ಕೈಗಾರಿಕಾ ಮಾನದಂಡಗಳು ಮತ್ತು ಅವಶ್ಯಕತೆಗಳನ್ನು ಪೂರೈಸಲು ಅಭಿವೃದ್ಧಿಪಡಿಸಲಾದ ಪರಿಹಾರಗಳು.",
         "whyCard4Title": "ತಾಂತ್ರಿಕ ಬೆಂಬಲ",
-        "whyCard4Body": "ಯೋಜನೆಯ ಸಂಪೂರ್ಣ ಜೀವನಚಕ್ರದುದ್ದಕ್ಕೂ ತಾಂತ್ರಿಕ ಪರಿಣತಿ ಮತ್ತು ಬೆಂಬಲ."
+        "whyCard4Body": "ಯೋಜನೆಯ ಸಂಪೂರ್ಣ ಜೀವನಚಕ್ರದುದ್ದಕ್ಕೂ ತಾಂತ್ರಿಕ ಪರಿಣತಿ ಮತ್ತು ಬೆಂಬಲ.",
+        "catalogueEyebrow": "Fire-Fighting Products",
+        "catalogueTitle": "Products",
+        "categoryEyebrow": "Product Category",
+        "otherProducts": "Other Products",
+        "noCategories": "No products are available at the moment. Please check back soon.",
+        "categoriesTitle": "Categories"
     },
     "productDetail": {
         "backToProducts": "ಉತ್ಪನ್ನಗಳಿಗೆ ಹಿಂತಿರುಗಿ",

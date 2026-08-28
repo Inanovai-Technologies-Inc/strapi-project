@@ -5,7 +5,11 @@
         "products": "उत्पाद",
         "careers": "करियर",
         "technicalDocuments": "तकनीकी दस्तावेज़",
-        "contact": "संपर्क करें"
+        "contact": "संपर्क करें",
+        "fireFightingProducts": "Fire-Fighting Products",
+        "menu": "Menu",
+        "closeMenu": "Close menu",
+        "openMenu": "Open menu"
     },
     "footer": {
         "company": "कंपनी",
@@ -257,7 +261,13 @@
         "whyCard3Title": "उद्योग मानक",
         "whyCard3Body": "लागू उद्योग मानकों और आवश्यकताओं को पूरा करने के लिए विकसित समाधान।",
         "whyCard4Title": "तकनीकी सहायता",
-        "whyCard4Body": "परियोजना के पूरे जीवनचक्र में तकनीकी विशेषज्ञता और सहायता।"
+        "whyCard4Body": "परियोजना के पूरे जीवनचक्र में तकनीकी विशेषज्ञता और सहायता।",
+        "catalogueEyebrow": "Fire-Fighting Products",
+        "catalogueTitle": "Products",
+        "categoryEyebrow": "Product Category",
+        "otherProducts": "Other Products",
+        "noCategories": "No products are available at the moment. Please check back soon.",
+        "categoriesTitle": "Categories"
     },
     "productDetail": {
         "backToProducts": "उत्पादों पर वापस जाएं",
