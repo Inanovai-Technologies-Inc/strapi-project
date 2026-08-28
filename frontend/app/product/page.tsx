@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 import { T } from "@/components/T";
+import AmbientBackground from "@/components/AmbientBackground";
 
 const STRAPI_URL =
     process.env.STRAPI_URL ||
@@ -107,6 +108,8 @@ export default async function ProductPage() {
             ========================================================= */}
 
             <section className="relative overflow-hidden border-b border-gray-200 bg-white">
+
+                <AmbientBackground density="soft" />
 
                 {/* Decorative background */}
 
@@ -221,7 +224,7 @@ export default async function ProductPage() {
 
                     ) : (
 
-                        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
 
                             {products.map((product: any) => {
 
@@ -235,6 +238,8 @@ export default async function ProductPage() {
                                     ) &&
                                     product.relatedProducts.length > 0;
 
+                                const productHref = `/product/${product.slug}`;
+
                                 return (
 
                                     <article
@@ -242,14 +247,18 @@ export default async function ProductPage() {
                                             product.documentId ||
                                             product.id
                                         }
-                                        className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-xl"
+                                        className="group flex flex-col"
                                     >
 
                                         {/* =====================================================
-                                            IMAGE
+                                            IMAGE (entire image links to product page)
                                         ===================================================== */}
 
-                                        <div className="relative flex h-64 items-center justify-center overflow-hidden bg-[#f5f6f7] p-8">
+                                        <Link
+                                            href={productHref}
+                                            aria-label={product.Name}
+                                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-[#f5f6f7] p-8"
+                                        >
 
                                             {/* Orange corner accent */}
 
@@ -275,25 +284,28 @@ export default async function ProductPage() {
 
                                             )}
 
-                                        </div>
+                                        </Link>
 
                                         {/* =====================================================
-                                            CONTENT
+                                            CONTENT (below the image)
                                         ===================================================== */}
 
-                                        <div className="p-6">
+                                        <div className="mt-5 flex flex-1 flex-col">
 
                                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
                                                 <T k="productsPage.cardCategory" />
                                             </p>
 
-                                            <h2 className="mt-3 min-h-[58px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
-                                                {product.Name}
+                                            <h2 className="mt-3 text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
+                                                <Link
+                                                    href={productHref}
+                                                    className="transition-colors duration-300 group-hover:text-orange-600"
+                                                >
+                                                    {product.Name}
+                                                </Link>
                                             </h2>
 
-                                            <div className="mt-4 h-px w-full bg-gray-100" />
-
-                                            <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
+                                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-500">
                                                 {product.description || (
                                                     <T k="productsPage.cardDefaultDescription" />
                                                 )}
@@ -304,7 +316,7 @@ export default async function ProductPage() {
                                             ================================================= */}
 
                                             <Link
-                                                href={`/product/${product.slug}`}
+                                                href={productHref}
                                                 className="mt-6 flex items-center justify-between rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white"
                                             >
 
@@ -427,7 +439,9 @@ export default async function ProductPage() {
                 CONTACT
             ========================================================= */}
 
-            <section className="bg-gray-900 px-6 py-16 lg:px-8">
+            <section className="has-ambient relative overflow-hidden bg-gray-900 px-6 py-16 lg:px-8">
+
+                <AmbientBackground tone="dark" density="soft" />
 
                 <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 text-center md:flex-row md:text-left">
 

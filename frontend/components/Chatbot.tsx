@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { usePageContext } from "./PageContext";
 
@@ -97,9 +98,16 @@ const markdownComponents: Components = {
 
 export default function Chatbot() {
     const { pageContext } = usePageContext();
+    const pathname = usePathname();
 
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
+
+    /* Automatically close/unmount the chat window on route/page
+       navigation so it never stays open across pages. */
+    useEffect(() => {
+        setIsOpen(false);
+    }, [pathname]);
 
     const [messages, setMessages] = useState<Message[]>([
         {
@@ -215,7 +223,7 @@ export default function Chatbot() {
                         HEADER
                     ================================================= */}
 
-                    <div className="flex items-center justify-between bg-[#0b1f3a] px-5 py-4 text-white">
+                    <div className="flex items-center justify-between bg-[#010b13] px-5 py-4 text-white">
 
                         <div>
                             <h2 className="font-semibold">

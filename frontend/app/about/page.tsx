@@ -3,6 +3,7 @@
 import React from "react";
 
 import { useI18n } from "@/components/I18nProvider";
+import AmbientBackground from "@/components/AmbientBackground";
 
 export default function About() {
     const { t } = useI18n();
@@ -11,7 +12,8 @@ export default function About() {
         <main className="min-h-screen bg-gray-50 text-gray-800">
 
             {/* Hero */}
-            <section className="border-b border-gray-200 bg-white">
+            <section className="has-ambient relative overflow-hidden border-b border-gray-200 bg-white">
+                <AmbientBackground density="soft" />
                 <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
@@ -79,7 +81,8 @@ export default function About() {
 
 
             {/* Since 2015 */}
-            <section className="bg-[#0b1f3a]">
+            <section className="has-ambient relative overflow-hidden bg-[#0b1f3a]">
+                <AmbientBackground tone="navy" />
                 <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                     <div className="grid gap-10 md:grid-cols-[220px_1fr]">

@@ -6,6 +6,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import SectionNavigation from "@/components/SectionNavigation";
 import Reveal from "@/components/Reveal";
 import HomeMotion, { DiffsMotion, FlowingLines } from "@/components/HomeMotion";
+import AmbientBackground from "@/components/AmbientBackground";
 import { T } from "@/components/T";
 
 const STRAPI_URL = "http://localhost:1337";
@@ -830,6 +831,7 @@ export default async function Home() {
                 "
             >
                 <FlowingLines />
+                <AmbientBackground tone="navy" density="soft" />
                 {/* Background decoration */}
 
                 <div
@@ -988,6 +990,7 @@ export default async function Home() {
                 "
             >
                 <FlowingLines />
+                <AmbientBackground density="soft" />
                 <div
                     className="
                         pointer-events-none
@@ -1357,6 +1360,7 @@ export default async function Home() {
                 "
             >
                 <FlowingLines />
+                <AmbientBackground density="soft" />
                 <div className="mx-auto max-w-[1400px]">
                     <Reveal direction="up">
                         <div className="text-center">
@@ -1548,6 +1552,7 @@ export default async function Home() {
                 "
             >
                 <FlowingLines />
+                <AmbientBackground density="soft" />
                 <div
                     className="
                         pointer-events-none

@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useI18n } from "@/components/I18nProvider";
+import AmbientBackground from "@/components/AmbientBackground";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -195,7 +196,8 @@ export default function TechnicalDocumentsPage() {
                 HERO
             ===================================================== */}
 
-            <section className="border-b bg-gray-50">
+            <section className="has-ambient relative overflow-hidden border-b bg-gray-50">
+                <AmbientBackground density="soft" />
                 <div className="mx-auto max-w-7xl px-6 py-16">
 
                     <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">

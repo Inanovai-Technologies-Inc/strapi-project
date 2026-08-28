@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { T } from "@/components/T";
+import AmbientBackground from "@/components/AmbientBackground";
 export const dynamic = "force-dynamic";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -60,7 +61,9 @@ export default async function CareerPage() {
             {/* =====================================================
                 HERO
             ===================================================== */}
-            <section className="bg-gray-50 py-20">
+            <section className="has-ambient relative overflow-hidden bg-gray-50 py-20">
+
+                <AmbientBackground density="soft" />
 
                 <div className="mx-auto max-w-7xl px-6 text-center">
 

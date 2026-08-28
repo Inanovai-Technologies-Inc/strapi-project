@@ -3,6 +3,7 @@
 import React, { FormEvent, useState } from "react";
 
 import { useI18n } from "@/components/I18nProvider";
+import AmbientBackground from "@/components/AmbientBackground";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -296,7 +297,8 @@ export default function ContactPage() {
                 HEADER
             ================================================= */}
 
-            <section className="bg-gray-50 py-16">
+            <section className="has-ambient relative overflow-hidden bg-gray-50 py-16">
+                <AmbientBackground density="soft" />
                 <div className="mx-auto max-w-7xl px-6 text-center">
 
                     <h1 className="text-4xl font-bold text-gray-900">
