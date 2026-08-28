@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CareerApplicationForm from "@/components/CareerApplicationForm";
 
-const STRAPI_URL = "http://localhost:1337";
+const STRAPI_URL =
+    process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 interface Career {
     id: number;
