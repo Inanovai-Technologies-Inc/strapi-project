@@ -19,12 +19,12 @@ const STRAPI_URL = "http://localhost:1337";
 ========================================================= */
 
 const marketSegments = [
-    "offshore",
-    "maritime",
-    "aviation",
-    "yacht",
-    "renewable",
-    "onshore",
+    { name: "offshore", logo: "/images/offshore.png" },
+    { name: "maritime", logo: "/images/maritime.png" },
+    { name: "aviation", logo: "/images/aviation.png" },
+    { name: "yacht", logo: "/images/yacht.png" },
+    { name: "renewable", logo: "/images/renewable.png" },
+    { name: "onshore", logo: "/images/onshore.png" },
 ];
 
 /* =========================================================
@@ -898,75 +898,132 @@ export default async function Home() {
 
                     <div
                         className="
-                            mt-14
+                           mt-14
                             grid
                             grid-cols-2
-                            gap-4
+                            gap-5
                             md:grid-cols-3
                             lg:grid-cols-6
                         "
                     >
                         {marketSegments.map((segment, index) => (
-                            <Reveal
-                                key={segment}
-                                delay={index * 80}
-                                direction="up"
-                            >
-                                <div
-                                    className="
-                                        group
-                                        relative
-                                        flex
-                                        h-36
-                                        cursor-pointer
-                                        items-center
-                                        justify-center
-                                        overflow-hidden
-                                        rounded-2xl
-                                        border
-                                        border-white/10
-                                        bg-white/[0.04]
-                                        px-4
-                                        backdrop-blur-sm
-                                        transition-all
-                                        duration-500
-                                        hover:-translate-y-2
-                                        hover:border-orange-400/50
-                                        hover:bg-orange-500
-                                        hover:shadow-2xl
-                                        hover:shadow-orange-500/10
-                                    "
-                                >
-                                    <div
-                                        className="
-                                            absolute
-                                            inset-0
-                                            -translate-y-full
-                                            bg-gradient-to-b
-                                            from-orange-400
-                                            to-orange-600
-                                            transition-transform
-                                            duration-500
-                                            group-hover:translate-y-0
-                                        "
-                                    />
+        <Reveal
+            key={segment.name}
+            delay={index * 80}
+            direction="up"
+        >
+            <div
+                className="
+                    group
+                    relative
+                    flex
+                    h-40
+                    items-center
+                    justify-center
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-white/10
+                    bg-white/[0.035]
+                    px-6
+                    py-6
+                    backdrop-blur-sm
+                    transition-all
+                    duration-500
 
-                                    <h3
-                                        className="
-                                            relative
-                                            z-10
-                                            text-center
-                                            text-xs
-                                            font-bold
-                                            tracking-[0.18em]
-                                            text-white
-                                            sm:text-sm
-                                        "
-                                    >
-                                        <T k={`home.industries.${segment}`} />
-                                    </h3>
-                                </div>
-                            </Reveal>
+                    hover:-translate-y-1
+                    hover:border-orange-400/40
+                    hover:bg-white/[0.06]
+                    hover:shadow-xl
+                    hover:shadow-orange-500/5
+                "
+            >
+                {/* Subtle glow */}
+
+                <div
+                    className="
+                        pointer-events-none
+                        absolute
+                        inset-0
+                        opacity-0
+                        transition-opacity
+                        duration-500
+                        group-hover:opacity-100
+                    "
+                >
+                    <div
+                        className="
+                            absolute
+                            left-1/2
+                            top-1/2
+                            h-24
+                            w-24
+                            -translate-x-1/2
+                            -translate-y-1/2
+                            rounded-full
+                            bg-orange-400/10
+                            blur-3xl
+                        "
+                    />
+                </div>
+
+                {/* Logo */}
+
+                <div
+                    className="
+                        relative
+                        z-10
+                        flex
+                        h-full
+                        w-full
+                        items-center
+                        justify-center
+                    "
+                >
+                    <Image
+                        src={segment.logo}
+                        alt={segment.name}
+                        width={140}
+                        height={90}
+                        className="
+                            max-h-20
+                            w-auto
+                            max-w-[140px]
+                            object-contain
+                            opacity-90
+                            transition-all
+                            duration-500
+
+                            group-hover:scale-110
+                            group-hover:opacity-100
+                        "
+                    />
+                </div>
+
+                {/* Small industry label */}
+
+                <div
+                    className="
+                        absolute
+                        bottom-3
+                        left-0
+                        right-0
+                        text-center
+                        text-[10px]
+                        font-semibold
+                        uppercase
+                        tracking-[0.2em]
+                        text-gray-500
+                        transition-colors
+                        duration-300
+
+                        group-hover:text-orange-400
+                    "
+                >
+                    <T k={`home.industries.${segment.name}`} />
+                </div>
+            </div>
+        </Reveal>
                         ))}
                     </div>
                 </div>

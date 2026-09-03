@@ -1,0 +1,31 @@
+[2026-08-31 09:59:56.421] info: [export] Diagnostic log file: C:\Users\ThrishaShetty\Desktop\Strapi\strapi-project\sample-project\export_1788150596391.log (info-level messages are written here even without --verbose)
+[2026-08-31 09:59:56.422] info: [file-destination-provider] creating gzip
+
+[2026-08-31 09:59:56.507] info: [local-source-provider] getting metadata
+
+[2026-08-31 09:59:56.507] info: [local-source-provider] getting metadata
+
+[2026-08-31 09:59:56.508] info: [local-source-provider] getting schemas
+
+[2026-08-31 09:59:56.514] info: [local-source-provider] getting schemas
+
+[2026-08-31 09:59:56.517] info: [file-destination-provider] creating schemas write stream
+
+[2026-08-31 09:59:56.537] info: [local-source-provider] creating entities read stream
+
+[2026-08-31 09:59:56.537] info: [file-destination-provider] creating entities write stream
+
+[2026-08-31 09:59:56.643] info: [local-source-provider] creating assets read stream
+
+[2026-08-31 09:59:56.644] info: [file-destination-provider] creating assets write stream
+
+[2026-08-31 09:59:57.010] info: [local-source-provider] creating links read stream
+
+[2026-08-31 09:59:57.011] info: [file-destination-provider] creating links write stream
+
+[2026-08-31 09:59:57.120] info: [local-source-provider] creating configuration read stream
+
+[2026-08-31 09:59:57.121] info: [file-destination-provider] creating configuration write stream
+
+[2026-08-31 09:59:57.157] info: [file-destination-provider] writing metadata
+

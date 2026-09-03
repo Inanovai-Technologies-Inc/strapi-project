@@ -9,7 +9,8 @@
         "fireFightingProducts": "Fire-Fighting Products",
         "menu": "Menu",
         "closeMenu": "Close menu",
-        "openMenu": "Open menu"
+        "openMenu": "Open menu",
+        "services": "Services"
     },
     "footer": {
         "company": "Company",
@@ -424,5 +425,26 @@
         "phone": "Phone:",
         "fax": "Fax:",
         "email": "Email:"
+    },
+    "servicesPage": {
+        "eyebrow": "What We Offer",
+        "title": "Services",
+        "description": "Explore the specialised environmental and fire-protection services Marsol delivers alongside its product range.",
+        "empty": "Services are being updated. Please check back soon.",
+        "errorTitle": "Services are temporarily unavailable",
+        "errorDescription": "We could not connect to the services catalogue. Please try again shortly.",
+        "viewService": "View Service"
+    },
+    "serviceDetail": {
+        "eyebrow": "Service",
+        "backToServices": "Back to Services",
+        "introHeading": "Introduction",
+        "partnerHeading": "Our Partner",
+        "imagesHeading": "Service Images",
+        "requestMoreInfo": "Request More Info",
+        "notFoundTitle": "Service not found",
+        "notFoundDescription": "We could not find the service you are looking for.",
+        "errorTitle": "Services are temporarily unavailable",
+        "errorDescription": "We could not connect to the services catalogue. Please try again shortly."
     }
 }
