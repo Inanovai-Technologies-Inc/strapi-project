@@ -9,7 +9,8 @@
         "fireFightingProducts": "Fire-Fighting Products",
         "menu": "Menu",
         "closeMenu": "Close menu",
-        "openMenu": "Open menu"
+        "openMenu": "Open menu",
+        "services": "सेवाएं"
     },
     "footer": {
         "company": "कंपनी",
@@ -424,5 +425,26 @@
         "phone": "फ़ोन:",
         "fax": "फ़ैक्स:",
         "email": "ईमेल:"
+    },
+    "servicesPage": {
+        "eyebrow": "हम क्या प्रदान करते हैं",
+        "title": "सेवाएं",
+        "description": "मार्सोल अपनी उत्पाद श्रृंखला के साथ प्रदान की जाने वाली विशेष पर्यावरण और अग्नि सुरक्षा सेवाओं का अन्वेषण करें।",
+        "empty": "सेवाएं अपडेट की जा रही हैं। कृपया शीघ्र ही पुनः देखें।",
+        "errorTitle": "सेवाएं अस्थायी रूप से अनुपलब्ध हैं",
+        "errorDescription": "हम सेवा कैटलॉग से कनेक्ट नहीं हो सके। कृपया थोड़ी देर बाद पुनः प्रयास करें।",
+        "viewService": "सेवा देखें"
+    },
+    "serviceDetail": {
+        "eyebrow": "सेवा",
+        "backToServices": "सेवाओं पर वापस जाएं",
+        "introHeading": "परिचय",
+        "partnerHeading": "हमारा साझेदार",
+        "imagesHeading": "सेवा चित्र",
+        "requestMoreInfo": "अधिक जानकारी का अनुरोध करें",
+        "notFoundTitle": "सेवा नहीं मिली",
+        "notFoundDescription": "आप जिस सेवा को खोज रहे हैं वह नहीं मिली।",
+        "errorTitle": "सेवाएं अस्थायी रूप से अनुपलब्ध हैं",
+        "errorDescription": "हम सेवा कैटलॉग से कनेक्ट नहीं हो सके। कृपया थोड़ी देर बाद पुनः प्रयास करें।"
     }
 }

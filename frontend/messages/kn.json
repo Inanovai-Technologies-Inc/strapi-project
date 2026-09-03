@@ -9,7 +9,8 @@
         "fireFightingProducts": "Fire-Fighting Products",
         "menu": "Menu",
         "closeMenu": "Close menu",
-        "openMenu": "Open menu"
+        "openMenu": "Open menu",
+        "services": "ಸೇವೆಗಳು"
     },
     "footer": {
         "company": "ಕಂಪನಿ",
@@ -424,5 +425,26 @@
         "phone": "ದೂರವಾಣಿ:",
         "fax": "ಫ್ಯಾಕ್ಸ್:",
         "email": "ಇಮೇಲ್:"
+    },
+    "servicesPage": {
+        "eyebrow": "ನಾವು ನೀಡುವ ಸೇವೆಗಳು",
+        "title": "ಸೇವೆಗಳು",
+        "description": "ಮಾರ್ಸೋಲ್ ತನ್ನ ಉತ್ಪನ್ನ ಶ್ರೇಣಿಯ ಜೊತೆಗೆ ನೀಡುವ ವಿಶೇಷ ಪರಿಸರ ಮತ್ತು ಅಗ್ನಿ ಸುರಕ್ಷತಾ ಸೇವೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
+        "empty": "ಸೇವೆಗಳನ್ನು ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಪರಿಶೀಲಿಸಿ.",
+        "errorTitle": "ಸೇವೆಗಳು ತಾತ್ಕಾಲಿಕವಾಗಿ ಲಭ್ಯವಿಲ್ಲ",
+        "errorDescription": "ನಮಗೆ ಸೇವಾ ಸೂಚಿಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+        "viewService": "ಸೇವೆ ನೋಡಿ"
+    },
+    "serviceDetail": {
+        "eyebrow": "ಸೇವೆ",
+        "backToServices": "ಸೇವೆಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+        "introHeading": "ಪರಿಚಯ",
+        "partnerHeading": "ನಮ್ಮ ಪಾಲುದಾರ",
+        "imagesHeading": "ಸೇವಾ ಚಿತ್ರಗಳು",
+        "requestMoreInfo": "ಹೆಚ್ಚಿನ ಮಾಹಿತಿ ಕೋರಿ",
+        "notFoundTitle": "ಸೇವೆ ಕಂಡುಬಂದಿಲ್ಲ",
+        "notFoundDescription": "ನೀವು ಹುಡುಕುತ್ತಿರುವ ಸೇವೆ ಕಂಡುಬಂದಿಲ್ಲ.",
+        "errorTitle": "ಸೇವೆಗಳು ತಾತ್ಕಾಲಿಕವಾಗಿ ಲಭ್ಯವಿಲ್ಲ",
+        "errorDescription": "ನಮಗೆ ಸೇವಾ ಸೂಚಿಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
     }
 }
