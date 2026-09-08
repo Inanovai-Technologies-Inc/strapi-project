@@ -137,6 +137,11 @@
       },
       "component": "product.foam-skid-series",
       "repeatable": true
+    },
+    "segments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::segment.segment"
     }
   }
 }

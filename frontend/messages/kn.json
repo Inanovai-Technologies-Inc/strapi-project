@@ -35,8 +35,11 @@
     "sectionNav": {
         "home": "ಮುಖಪುಟ",
         "about": "ನಮ್ಮ ಬಗ್ಗೆ",
+        "diffs": "DiFFS",
         "products": "ಉತ್ಪನ್ನಗಳು",
         "industries": "ಕೈಗಾರಿಕೆಗಳು",
+        "certifications": "ಪ್ರಮಾಣೀಕರಣಗಳು",
+        "request-quote": "ಕೋಟ್ ವಿನಂತಿಸಿ",
         "contact": "ಸಂಪರ್ಕಿಸಿ",
         "goTo": "ಇಲ್ಲಿಗೆ ಹೋಗಿ"
     },

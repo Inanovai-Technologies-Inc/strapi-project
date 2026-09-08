@@ -3,12 +3,17 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "@/components/I18nProvider";
 
+/* Order must mirror the rendered section order in app/page.tsx.
+   Disabled sections (global-presence, news) are intentionally
+   omitted so no dead dot is shown. */
 const sections = [
     { id: "home" },
     { id: "about" },
-    { id: "products" },
+    { id: "diffs" },
     { id: "industries" },
-    { id: "contact" },
+    { id: "products" },
+    { id: "certifications" },
+    { id: "request-quote" },
 ];
 
 export default function SectionNavigation() {
@@ -16,31 +21,44 @@ export default function SectionNavigation() {
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
-        const observers: IntersectionObserver[] = [];
+        const elements = sections
+            .map((section) => document.getElementById(section.id))
+            .filter((element): element is HTMLElement => Boolean(element));
 
-        sections.forEach((section) => {
-            const element = document.getElementById(section.id);
+        if (elements.length === 0) return;
 
-            if (!element) return;
+        const visibleIds = new Set<string>();
 
-            const observer = new IntersectionObserver(
-                ([entry]) => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        setActiveSection(section.id);
+                        visibleIds.add(entry.target.id);
+                    } else {
+                        visibleIds.delete(entry.target.id);
                     }
-                },
-                {
-                    threshold: 0.35,
+                });
+
+                // The active section is the first one (in page order)
+                // currently crossing the vertical centre of the viewport,
+                // so there is always exactly one active dot.
+                const current = sections.find((section) =>
+                    visibleIds.has(section.id)
+                );
+
+                if (current) {
+                    setActiveSection(current.id);
                 }
-            );
+            },
+            {
+                rootMargin: "-45% 0px -45% 0px",
+                threshold: 0,
+            }
+        );
 
-            observer.observe(element);
-            observers.push(observer);
-        });
+        elements.forEach((element) => observer.observe(element));
 
-        return () => {
-            observers.forEach((observer) => observer.disconnect());
-        };
+        return () => observer.disconnect();
     }, []);
 
     const scrollToSection = (id: string) => {
@@ -91,7 +109,9 @@ export default function SectionNavigation() {
                             {label}
                         </span>
 
-                        {/* Dot */}
+                        {/* Dot — double outline (light border + dark ring)
+                            so it stays visible on both dark and white
+                            section backgrounds */}
                         <span
                             className={`
                                 block
@@ -101,8 +121,8 @@ export default function SectionNavigation() {
                                 duration-300
                                 ${
                                     activeSection === section.id
-                                        ? "h-3 w-3 border-orange-500 bg-orange-500"
-                                        : "h-2 w-2 border-white/50 bg-white/30 hover:bg-orange-400"
+                                        ? "h-3 w-3 border-orange-500 bg-orange-500 shadow-[0_0_0_1.5px_rgba(255,255,255,0.6)]"
+                                        : "h-2.5 w-2.5 border-gray-300 bg-white/70 shadow-[0_0_0_1.5px_rgba(2,9,20,0.25)] hover:border-orange-400 hover:bg-orange-400"
                                 }
                             `}
                         />
