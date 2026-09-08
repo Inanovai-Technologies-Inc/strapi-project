@@ -35,8 +35,11 @@
     "sectionNav": {
         "home": "होम",
         "about": "हमारे बारे में",
+        "diffs": "DiFFS",
         "products": "उत्पाद",
         "industries": "उद्योग",
+        "certifications": "प्रमाणपत्र",
+        "request-quote": "कोटेशन का अनुरोध करें",
         "contact": "संपर्क करें",
         "goTo": "यहाँ जाएं"
     },

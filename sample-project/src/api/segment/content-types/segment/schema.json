@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "segments",
+  "info": {
+    "singularName": "segment",
+    "pluralName": "segments",
+    "displayName": "Segment"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "Name"
+    },
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

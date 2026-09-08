@@ -28,19 +28,6 @@ const marketSegments = [
 ];
 
 /* =========================================================
-   CERTIFICATIONS
-========================================================= */
-
-const certifications = [
-    "UL",
-    "ABS",
-    "CAA",
-    "USCG",
-    "ISO",
-    "DNV",
-];
-
-/* =========================================================
    HOME PAGE
 ========================================================= */
 
@@ -516,7 +503,7 @@ export default async function Home() {
                         max-w-[1400px]
                         gap-12
                         lg:grid-cols-2
-                        lg:items-center
+                        lg:items-start
                         lg:gap-20
                     "
                 >
@@ -538,7 +525,7 @@ export default async function Home() {
 
                             <h2
                                 className="
-                                    mt-4
+                                    mt-2
                                     text-3xl
                                     font-bold
                                     leading-tight
@@ -551,12 +538,13 @@ export default async function Home() {
                                 <T k="home.about.title" />
                             </h2>
 
-                            <div className="mt-6 h-1 w-16 rounded-full bg-orange-500" />
+                            <div className="mt-4 h-1 w-16 rounded-full bg-orange-500" />
 
                             <p
                                 className="
-                                    mt-7
+                                    mt-4
                                     max-w-xl
+                                    text-justify
                                     text-sm
                                     leading-7
                                     text-gray-600
@@ -571,7 +559,7 @@ export default async function Home() {
                                 href="/about"
                                 className="
                                     group
-                                    mt-8
+                                    mt-7
                                     inline-flex
                                     items-center
                                     gap-2
@@ -617,7 +605,7 @@ export default async function Home() {
                             "
                         >
                             <Image
-                                src="/images/about.jpg"
+                                src="/images/new_about.png"
                                 alt="Marsol Technologies"
                                 fill
                                 className="
@@ -684,7 +672,7 @@ export default async function Home() {
                         max-w-[1400px]
                         gap-12
                         lg:grid-cols-2
-                        lg:items-center
+                        lg:items-stretch
                         lg:gap-20
                     "
                 >
@@ -707,7 +695,7 @@ export default async function Home() {
                             "
                         >
                             <Image
-                                src="/images/diffs.jpg"
+                                src="/images/new_diff.jpg"
                                 alt="Marsol DiFFS"
                                 fill
                                 className="
@@ -733,8 +721,8 @@ export default async function Home() {
 
                     {/* Text */}
 
-                    <Reveal direction="right" delay={150}>
-                        <div className="order-1 lg:order-2">
+                    <Reveal direction="right" delay={150} className="lg:h-full">
+                        <div className="order-1 lg:order-2 lg:flex lg:h-full lg:flex-col">
                             <p
                                 className="
                                     text-xs
@@ -749,7 +737,7 @@ export default async function Home() {
 
                             <h2
                                 className="
-                                    mt-4
+                                    mt-2
                                     text-3xl
                                     font-bold
                                     tracking-tight
@@ -761,12 +749,13 @@ export default async function Home() {
                                 Marsol DiFFS
                             </h2>
 
-                            <div className="mt-6 h-1 w-16 rounded-full bg-orange-500" />
+                            <div className="mt-4 h-1 w-16 rounded-full bg-orange-500" />
 
                             <p
                                 className="
-                                    mt-7
+                                    mt-4
                                     max-w-xl
+                                    text-justify
                                     text-sm
                                     leading-7
                                     text-gray-600
@@ -778,13 +767,14 @@ export default async function Home() {
                             </p>
 
                             <Link
-                                href="/diff-system"
+                                href="product/diff-system"
                                 className="
                                     group
-                                    mt-8
+                                    mt-7
                                     inline-flex
                                     items-center
                                     gap-2
+                                    self-start
                                     rounded-lg
                                     bg-orange-500
                                     px-7
@@ -800,6 +790,8 @@ export default async function Home() {
                                     hover:bg-orange-600
                                     hover:shadow-xl
                                     hover:shadow-orange-500/20
+
+                                    lg:mt-auto
                                 "
                             >
                                 <T k="home.diffs.learnMore" />
@@ -1449,64 +1441,139 @@ export default async function Home() {
                         </div>
                     </Reveal>
 
-                    <div
-                        className="
-                            mt-12
-                            grid
-                            grid-cols-2
-                            gap-4
-                            sm:grid-cols-3
-                            md:grid-cols-6
-                        "
-                    >
-                        {certifications.map((certification, index) => (
-                            <Reveal
-                                key={certification}
-                                delay={index * 80}
-                                direction="scale"
-                            >
-                                <div
-                                    className="
-                                        group
-                                        flex
-                                        h-28
-                                        items-center
-                                        justify-center
-                                        rounded-2xl
-                                        border
-                                        border-gray-200
-                                        bg-white
-                                        shadow-sm
-                                        transition-all
-                                        duration-500
-                                        hover:-translate-y-2
-                                        hover:border-orange-200
-                                        hover:shadow-xl
-                                    "
-                                >
-                                    <span
-                                        className="
-                                            text-xl
-                                            font-bold
-                                            text-gray-400
-                                            transition-colors
-                                            duration-300
-                                            group-hover:text-orange-500
-                                        "
-                                    >
-                                        {certification}
-                                    </span>
-                                </div>
-                            </Reveal>
-                        ))}
-                    </div>
+                    <Reveal direction="scale">
+                        <div
+                            className="
+                                mt-12
+                                overflow-hidden
+                                rounded-2xl
+                                border
+                                border-gray-200
+                                bg-white
+                                p-4
+                                shadow-sm
+                                sm:p-6
+                            "
+                        >
+                            <Image
+                                src="/images/certifications1.png"
+                                alt="Marsol Technologies certifications and approvals"
+                                width={1460}
+                                height={630}
+                                sizes="(max-width: 1200px) 92vw, 1360px"
+                                className="h-auto w-full object-contain"
+                            />
+                        </div>
+                    </Reveal>
                 </div>
             </section>
 
             {/* =====================================================
-                GLOBAL PRESENCE
+                REQUEST A QUOTE
             ===================================================== */}
 
+            <section
+                id="request-quote"
+                className="
+                    relative
+                    isolate
+                    overflow-hidden
+                    px-6
+                    py-24
+                    sm:px-8
+                    lg:px-12
+                    lg:py-32
+                "
+            >
+                <Image
+                    src="/images/request-quote_2 (1).webp"
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    className="-z-10 object-cover"
+                />
+
+                <div className="absolute inset-0 -z-10 bg-[#04121f]/60" />
+
+                <div className="mx-auto max-w-[1400px]">
+                    <Reveal direction="up">
+                        <div className="flex flex-col items-center text-center">
+                            <h2
+                                className="
+                                    text-3xl
+                                    font-bold
+                                    tracking-tight
+                                    text-white
+                                    sm:text-4xl
+                                    lg:text-5xl
+                                "
+                            >
+                                Let&rsquo;s Build Safe Spaces Together
+                            </h2>
+
+                            <p
+                                className="
+                                    mx-auto
+                                    mt-5
+                                    max-w-2xl
+                                    text-sm
+                                    leading-7
+                                    text-white/90
+                                    sm:text-base
+                                "
+                            >
+                                At Marsol, we engineer fire protection systems
+                                that meet the highest industry standards
+                                tailored to your space, timeline, and technical
+                                needs.
+                            </p>
+
+                            <Link
+                                href="/contact"
+                                className="
+                                    group
+                                    mt-8
+                                    inline-flex
+                                    items-center
+                                    gap-2
+                                    rounded-lg
+                                    bg-orange-500
+                                    px-7
+                                    py-3.5
+                                    text-sm
+                                    font-semibold
+                                    uppercase
+                                    tracking-wide
+                                    text-white
+                                    transition-all
+                                    duration-300
+                                    hover:-translate-y-1
+                                    hover:bg-orange-600
+                                    hover:shadow-xl
+                                    hover:shadow-orange-500/20
+                                "
+                            >
+                                Request a Quote
+
+                                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                    →
+                                </span>
+                            </Link>
+                        </div>
+                    </Reveal>
+                </div>
+            </section>
+
+            {/* =====================================================
+                GLOBAL PRESENCE + LATEST NEWS
+
+                Temporarily disabled — not required for now. Flip
+                the `false` below back to `true` (or remove the
+                wrapper) to restore both sections as-is.
+            ===================================================== */}
+
+            {false && (
+            <>
             <section
                 id="global-presence"
                 className="
@@ -1794,12 +1861,14 @@ export default async function Home() {
                     </div>
                 </div>
             </section>
+            </>
+            )}
 
             {/* =====================================================
                 FOOTER
             ===================================================== */}
 
-           
+
         </main>
     );
 }

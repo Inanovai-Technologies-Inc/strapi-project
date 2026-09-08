@@ -35,8 +35,11 @@
     "sectionNav": {
         "home": "Home",
         "about": "About",
+        "diffs": "DiFFS",
         "products": "Products",
         "industries": "Industries",
+        "certifications": "Certifications",
+        "request-quote": "Request a Quote",
         "contact": "Contact",
         "goTo": "Go to"
     },
@@ -65,12 +68,12 @@
         },
         "about": {
             "title": "Welcome to Marsol Technologies",
-            "description": "Comes with more than 30 years of experience working with Oil & Gas and Offshore Industries. Specialized in helideck fire suppression, we are expanding our reach across industries and regions.",
+            "description": "Marsol Technologies, Inc. is a global leader in firefighting and safety solutions, delivering innovative fire protection systems that safeguard people, assets, and critical operations. With operations across the USA, UAE, and India, we combine engineering excellence, quality, and reliability to serve customers worldwide. Our ISO 9001, ISO 14001, and ISO 45001 certifications reflect our unwavering commitment to safety, quality, and environmental responsibility.",
             "learnMore": "Learn More"
         },
         "diffs": {
             "eyebrow": "Innovation",
-            "description": "Our DiFFS (Deck Integrated Fire Fighting Systems) removes the issues and concerns of mechanical failure. Fully certified and recognized by the likes of UL, ABS, CAA and USCG.",
+            "description": "Marsol's Deck Integrated Firefighting System (DiFFS) provides rapid, reliable fire protection for helipads and helidecks. Designed for automatic or manual operation, the system delivers effective foam-water suppression across the entire deck surface. Tested, certified, and engineered to meet leading international standards, DiFFS ensures superior safety and dependable performance in critical operations.",
             "learnMore": "Learn More"
         },
         "industries": {
