@@ -119,16 +119,23 @@
     "about": {
         "hero": {
             "eyebrow": "About Us",
-            "title": "Why Work With Us",
-            "description": "MARSOL Technologies is focused on delivering advanced fire protection and safety solutions for demanding industries around the world."
+            "title": "The Values That Define Us",
+            "description1": "At Marsol, our values are the foundation of everything we do. They guide our decisions, shape our systems, and strengthen our partnerships. More than principles, they represent who we are, how we work, and the standards of excellence we uphold in delivering world-class fire protection solutions.",
+            "description2": "Driven by integrity, innovation, reliability, and a commitment to safety, we strive to create lasting value for our customers, employees, and stakeholders. These values inspire us to consistently exceed expectations while protecting what matters most."
         },
-        "why": {
-            "card1Title": "Industry Experience",
-            "card1Body": "The team of people behind, in the midst and in front of the company, have a wealth of knowledge and experience garnered from over 30 years of working within the Oil & Gas and Off-shore industries.",
-            "card2Title": "Comprehensive Certifications",
-            "card2Body": "All of our products and systems are subjected to rigorous testing and certification processes that ensure industry compliance to the highest level possible, giving you unprecedented assurance as to what MARSOL is all about.",
-            "card3Title": "Customer Service",
-            "card3Body": "Our leadership team passionately believe in the key principle that our customer always comes first. We have an uncompromising commitment to our clients and view customer satisfaction as our highest priority."
+        "values": {
+            "accountabilityTitle": "Accountability",
+            "accountabilityBody": "We take responsibility for our actions, decisions, and results. Whether it's a small task or a major project, we own the outcome and always strive to deliver what we promise.",
+            "integrityTitle": "Integrity",
+            "integrityBody": "We are honest, fair & transparent. That's how we build trust with our team, Partners, and customers.",
+            "passionTitle": "Passion",
+            "passionBody": "Our commitment to fire safety & innovation drives everything we do. Passion keeps us focused, motivated, and ready to take on any challenge.",
+            "qualityTitle": "Quality",
+            "qualityBody": "Quality is at the core of everything we deliver, from our products to our service. We strive for excellence to ensure consistent performance and customer trust.",
+            "sustainabilityTitle": "Sustainability",
+            "sustainabilityBody": "Sustainability is part of our design. Our solutions are designed to protect not just people and assets, but also the environment by using cleaner, safer, and greener technologies.",
+            "innovationTitle": "Innovation",
+            "innovationBody": "We're constantly looking for better ways to solve fire safety challenges. We push boundaries to solve modern fire risks with smarter and safer technologies."
         },
         "since": {
             "label": "Since",
@@ -137,18 +144,13 @@
             "p2Safety": "SAFETY.",
             "p3": "With our Head Office located in USA and offices in UAE and Singapore, we are well positioned to coordinate and react to the demands and requirements of this great global industry we are proud to be a part of."
         },
-        "associations": {
-            "eyebrow": "Associations",
-            "title": "Industry Connected",
-            "body": "MARSOL is proud to be part of the global fire protection and safety industry, working alongside professionals and organizations committed to improving safety standards."
-        },
         "qhse": {
             "eyebrow": "QHSE",
             "title": "Quality, Health, Safety & Environment",
-            "philosophyIntro": "Marsol operates under the philosophy:",
-            "philosophyQuote": "“To get it right the first time, every time and strive to exceed customer expectation”.",
-            "body2": "Marsol regards the promotion of Health, Safety and Environment measures as a mutual objective for management and employees at all levels.",
-            "body3": "Marsol has an integrated management system accredited by TUV Rheinland."
+            "p1": "At Marsol, we operate by a simple yet powerful philosophy: \"Get it right the first time, every time, and strive to exceed customer expectations.\"",
+            "p2": "We are committed to maintaining the highest standards of Quality, Health, Safety, and Environmental (QHSE) performance across all aspects of our operations. Marsol recognizes that the promotion of health, safety, and environmental responsibility is a shared commitment between management and employees at every level of the organization.",
+            "p3": "To support this commitment, Marsol has implemented an Integrated Management System (IMS) accredited by TÜV Rheinland, ensuring compliance with internationally recognized standards and driving continuous improvement in our processes, services, and workplace practices.",
+            "p4": "Through a culture of excellence, accountability, and sustainability, we strive to protect our people, preserve the environment, and deliver reliable, world-class fire protection solutions to our customers."
         },
         "policies": {
             "eyebrow": "Policies",
