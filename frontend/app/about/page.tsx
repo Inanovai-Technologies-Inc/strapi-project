@@ -1,9 +1,86 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 import { useI18n } from "@/components/I18nProvider";
 import AmbientBackground from "@/components/AmbientBackground";
+
+/* Core values — icon per value, copy pulled from about.values.* */
+const VALUE_ICON_PROPS = {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    className: "h-6 w-6",
+};
+
+const VALUES: { key: string; icon: React.ReactNode }[] = [
+    {
+        key: "accountability",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="m16 11 2 2 4-4" />
+            </svg>
+        ),
+    },
+    {
+        key: "integrity",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+                <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+                <path d="m21 3 1 11h-2" />
+                <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+                <path d="M3 4h8" />
+            </svg>
+        ),
+    },
+    {
+        key: "passion",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5Z" />
+            </svg>
+        ),
+    },
+    {
+        key: "quality",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                <path d="m9 12 2 2 4-4" />
+            </svg>
+        ),
+    },
+    {
+        key: "sustainability",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
+                <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12" />
+                <path d="m14 16-3 3 3 3" />
+                <path d="M8.293 13.596 7.196 9.5 3.1 10.598" />
+                <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843" />
+                <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
+            </svg>
+        ),
+    },
+    {
+        key: "innovation",
+        icon: (
+            <svg {...VALUE_ICON_PROPS}>
+                <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                <path d="M9 18h6" />
+                <path d="M10 22h4" />
+            </svg>
+        ),
+    },
+];
 
 export default function About() {
     const { t } = useI18n();
@@ -24,56 +101,43 @@ export default function About() {
                         {t("about.hero.title")}
                     </h1>
 
-                    <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
-                        {t("about.hero.description")}
-                    </p>
+                    <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-7 shadow-sm lg:p-10">
+                        <p className="text-justify text-base leading-8 text-gray-600 lg:text-lg">
+                            {t("about.hero.description1")}
+                        </p>
+
+                        <p className="mt-5 text-justify text-base leading-8 text-gray-600 lg:text-lg">
+                            {t("about.hero.description2")}
+                        </p>
+                    </div>
 
                 </div>
             </section>
 
 
-            {/* Why Work With Us */}
+            {/* Core Values */}
             <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
-                <div className="grid gap-6 md:grid-cols-3">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
-                    <div className="rounded-xl border border-gray-200 bg-white p-7">
-                        <div className="mb-5 h-1 w-10 bg-orange-500" />
+                    {VALUES.map((value) => (
+                        <div
+                            key={value.key}
+                            className="group rounded-xl border border-gray-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-orange-400 hover:shadow-md"
+                        >
+                            <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-orange-50 text-orange-500 transition-colors duration-300 group-hover:bg-orange-500 group-hover:text-white">
+                                {value.icon}
+                            </span>
 
-                        <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            {t("about.why.card1Title")}
-                        </h2>
+                            <h2 className="mt-5 text-xl font-bold text-[#0b1f3a]">
+                                {t(`about.values.${value.key}Title`)}
+                            </h2>
 
-                        <p className="mt-4 text-sm leading-7 text-gray-600">
-                            {t("about.why.card1Body")}
-                        </p>
-                    </div>
-
-
-                    <div className="rounded-xl border border-gray-200 bg-white p-7">
-                        <div className="mb-5 h-1 w-10 bg-orange-500" />
-
-                        <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            {t("about.why.card2Title")}
-                        </h2>
-
-                        <p className="mt-4 text-sm leading-7 text-gray-600">
-                            {t("about.why.card2Body")}
-                        </p>
-                    </div>
-
-
-                    <div className="rounded-xl border border-gray-200 bg-white p-7">
-                        <div className="mb-5 h-1 w-10 bg-orange-500" />
-
-                        <h2 className="text-xl font-bold text-[#0b1f3a]">
-                            {t("about.why.card3Title")}
-                        </h2>
-
-                        <p className="mt-4 text-sm leading-7 text-gray-600">
-                            {t("about.why.card3Body")}
-                        </p>
-                    </div>
+                            <p className="mt-3 text-justify text-sm leading-7 text-gray-600">
+                                {t(`about.values.${value.key}Body`)}
+                            </p>
+                        </div>
+                    ))}
 
                 </div>
 
@@ -122,52 +186,37 @@ export default function About() {
             </section>
 
 
-            {/* Associations / QHSE */}
+            {/* QHSE */}
             <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
-                <div className="grid gap-12 md:grid-cols-2">
+                <div className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm lg:p-10">
 
-                    {/* Associations */}
-                    <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                            {t("about.associations.eyebrow")}
-                        </p>
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
+                        {t("about.qhse.eyebrow")}
+                    </p>
 
-                        <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                            {t("about.associations.title")}
-                        </h2>
+                    <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a] sm:text-3xl">
+                        {t("about.qhse.title")}
+                    </h2>
 
-                        <p className="mt-4 leading-7 text-gray-600">
-                            {t("about.associations.body")}
-                        </p>
-                    </div>
+                    <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_320px] lg:items-center">
 
+                        <div className="space-y-4 text-justify text-sm leading-7 text-gray-600 sm:text-base sm:leading-8">
+                            <p>{t("about.qhse.p1")}</p>
+                            <p>{t("about.qhse.p2")}</p>
+                            <p>{t("about.qhse.p3")}</p>
+                            <p>{t("about.qhse.p4")}</p>
+                        </div>
 
-                    {/* QHSE */}
-                    <div className="rounded-xl border border-gray-200 bg-white p-7">
-
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                            {t("about.qhse.eyebrow")}
-                        </p>
-
-                        <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a]">
-                            {t("about.qhse.title")}
-                        </h2>
-
-                        <p className="mt-4 leading-7 text-gray-600">
-                            {t("about.qhse.philosophyIntro")}
-                            <span className="font-semibold text-gray-800">
-                                {" "}{t("about.qhse.philosophyQuote")}
-                            </span>
-                        </p>
-
-                        <p className="mt-4 leading-7 text-gray-600">
-                            {t("about.qhse.body2")}
-                        </p>
-
-                        <p className="mt-4 leading-7 text-gray-600">
-                            {t("about.qhse.body3")}
-                        </p>
+                        <div className="flex justify-center lg:justify-end">
+                            <Image
+                                src="/images/IMS.png"
+                                alt="Integrated Management System — ISO 9001, ISO 14001 and ISO 45001 accreditations"
+                                width={587}
+                                height={529}
+                                className="h-auto w-full max-w-[280px] object-contain lg:max-w-none"
+                            />
+                        </div>
 
                     </div>
 
@@ -274,15 +323,15 @@ export default function About() {
 
                     <div className="rounded-xl bg-white p-6 shadow-sm">
                         <h3 className="font-bold text-[#0b1f3a]">
-                            Marsol Engineering (India) Pvt. Ltd.
+                            Marsol Technologies Pvt. Ltd.
                         </h3>
 
                         <p className="mt-3 text-sm leading-6 text-gray-600">
-                            Akshatha Enclave, Kuvempunagar,
+                            No. 2877/14, New No. K-13, Second Floor
                             <br />
-                            Mysore, 570023
+                            J.L.B Road, Chamundipuram, K.R. Mohalla,
                             <br />
-                            Karnataka, India
+                            Mysore, Karnataka, 570 004
                         </p>
                     </div>
 
@@ -296,80 +345,6 @@ export default function About() {
                     <p className="mt-2 text-xl font-semibold text-white">
                         info@marsoltech.com
                     </p>
-                </div>
-
-            </section>
-
-
-            {/* Latest News */}
-            <section className="bg-gray-100">
-
-                <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-
-                    <div className="flex items-end justify-between">
-                        <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                {t("about.news.eyebrow")}
-                            </p>
-
-                            <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                                {t("about.news.title")}
-                            </h2>
-                        </div>
-                    </div>
-
-
-                    <div className="mt-8 grid gap-6 md:grid-cols-2">
-
-                        <article className="rounded-xl bg-white p-7 shadow-sm">
-
-                            <p className="text-xs font-semibold uppercase tracking-wider text-orange-500">
-                                {t("about.news.card1Badge")}
-                            </p>
-
-                            <h3 className="mt-3 text-xl font-bold text-[#0b1f3a]">
-                                {t("about.news.card1Title")}
-                            </h3>
-
-                            <p className="mt-4 text-sm leading-7 text-gray-600">
-                                {t("about.news.card1Body")}
-                            </p>
-
-                            <a
-                                href="/news"
-                                className="mt-5 inline-block text-sm font-bold text-orange-500 hover:text-orange-600"
-                            >
-                                {t("about.news.readMore")} →
-                            </a>
-
-                        </article>
-
-
-                        <article className="rounded-xl bg-white p-7 shadow-sm">
-
-                            <p className="text-xs font-semibold uppercase tracking-wider text-orange-500">
-                                {t("about.news.card2Badge")}
-                            </p>
-
-                            <h3 className="mt-3 text-xl font-bold text-[#0b1f3a]">
-                                {t("about.news.card2Title")}
-                            </h3>
-
-                            <p className="mt-4 text-sm leading-7 text-gray-600">
-                                {t("about.news.card2Body")}
-                            </p>
-
-                            <a
-                                href="/news"
-                                className="mt-5 inline-block text-sm font-bold text-orange-500 hover:text-orange-600"
-                            >
-                                {t("about.news.readMore")} →
-                            </a>
-
-                        </article>
-
-                    </div>
-
                 </div>
 
             </section>

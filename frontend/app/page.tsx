@@ -15,17 +15,45 @@ const STRAPI_URL =
 /* =========================================================
    MARKET SEGMENTS
 
-   Translation keys under home.industries.* keep the UI label
-   localisable; the id stays constant for the React key.
+   Rendered as two rows of five. Logos live in /public/images
+   (next/image URL-encodes the spaces and "&" in the paths).
 ========================================================= */
 
 const marketSegments = [
-    { name: "offshore", logo: "/images/offshore.png" },
-    { name: "maritime", logo: "/images/maritime.png" },
-    { name: "aviation", logo: "/images/aviation.png" },
-    { name: "yacht", logo: "/images/yacht.png" },
-    { name: "renewable", logo: "/images/renewable.png" },
-    { name: "onshore", logo: "/images/onshore.png" },
+    { name: "aviation", label: "Aviation", logo: "/images/AVIATION.png" },
+    { name: "commercial", label: "Commercial", logo: "/images/COMMERCIAL.png" },
+    {
+        name: "marine-offshore",
+        label: "Marine & Offshore",
+        logo: "/images/MARINE & OFFSHORE.png",
+    },
+    {
+        name: "manufacturing",
+        label: "Manufacturing",
+        logo: "/images/MANUFACTURING.png",
+    },
+    { name: "military", label: "Military", logo: "/images/MILITARY.png" },
+    {
+        name: "power-generation",
+        label: "Power Generation",
+        logo: "/images/POWER GENERATION.png",
+    },
+    {
+        name: "petrochemical",
+        label: "Petrochemical",
+        logo: "/images/PETROCHEMICAL.png",
+    },
+    { name: "renewable", label: "Renewable", logo: "/images/RENEWABLE.png" },
+    {
+        name: "transportation",
+        label: "Transportation",
+        logo: "/images/TRANSPORTATION.png",
+    },
+    {
+        name: "waste-recycling",
+        label: "Waste Recycling",
+        logo: "/images/WASTE RECYCLING.png",
+    },
 ];
 
 /* =========================================================
@@ -114,14 +142,17 @@ export default async function Home() {
                 id="home"
                 className="
                     relative
-                    h-[calc(100svh-68px)]
-                    min-h-[650px]
-                    max-h-[920px]
+                    min-h-[600px]
                     overflow-hidden
+                    bg-[#04121f]
+                    lg:min-h-0
                 "
             >
 
-                {/* HERO VIDEO */}
+                {/* HERO VIDEO — full-width, full frame. The video sits
+                    in normal flow so its native 16:9 ratio drives the
+                    hero height with no cropping; the copy, gradients
+                    and scroll cue are layered over it. */}
 
                 <video
                     autoPlay
@@ -130,18 +161,18 @@ export default async function Home() {
                     playsInline
                     preload="auto"
                     className="
-                        absolute
-                        inset-0
-                        h-full
+                        block
+                        h-auto
                         w-full
-                        object-cover
                     "
                 >
                     <source
-                        src="/videos/hero.mp4"
+                        src="/videos/new_hero.mp4"
                         type="video/mp4"
                     />
                 </video>
+
+
 
 
                 {/* DARK OVERLAY */}
@@ -193,10 +224,10 @@ export default async function Home() {
 
                 <div
                     className="
-                        relative
+                        absolute
+                        inset-0
                         z-10
                         flex
-                        h-full
                         items-center
                     "
                 >
@@ -887,136 +918,98 @@ export default async function Home() {
                         </div>
                     </Reveal>
 
-                    {/* Industry cards */}
+                    {/* Industry cards — two rows of five */}
 
                     <div
                         className="
-                           mt-14
+                            mt-14
                             grid
                             grid-cols-2
-                            gap-5
-                            md:grid-cols-3
-                            lg:grid-cols-6
+                            gap-4
+                            sm:grid-cols-3
+                            sm:gap-5
+                            lg:grid-cols-5
                         "
                     >
                         {marketSegments.map((segment, index) => (
-        <Reveal
-            key={segment.name}
-            delay={index * 80}
-            direction="up"
-        >
-            <div
-                className="
-                    group
-                    relative
-                    flex
-                    h-40
-                    items-center
-                    justify-center
-                    overflow-hidden
-                    rounded-2xl
-                    border
-                    border-white/10
-                    bg-white/[0.035]
-                    px-6
-                    py-6
-                    backdrop-blur-sm
-                    transition-all
-                    duration-500
+                            <Reveal
+                                key={segment.name}
+                                delay={index * 60}
+                                direction="up"
+                            >
+                                <div
+                                    className="
+                                        group
+                                        flex
+                                        h-full
+                                        flex-col
+                                        overflow-hidden
+                                        rounded-2xl
+                                        border
+                                        border-white/10
+                                        bg-white/[0.04]
+                                        p-3
+                                        transition-all
+                                        duration-500
 
-                    hover:-translate-y-1
-                    hover:border-orange-400/40
-                    hover:bg-white/[0.06]
-                    hover:shadow-xl
-                    hover:shadow-orange-500/5
-                "
-            >
-                {/* Subtle glow */}
+                                        hover:-translate-y-1
+                                        hover:border-orange-400/40
+                                        hover:bg-white/[0.07]
+                                        hover:shadow-xl
+                                        hover:shadow-orange-500/5
+                                    "
+                                >
+                                    {/* Logo plate */}
 
-                <div
-                    className="
-                        pointer-events-none
-                        absolute
-                        inset-0
-                        opacity-0
-                        transition-opacity
-                        duration-500
-                        group-hover:opacity-100
-                    "
-                >
-                    <div
-                        className="
-                            absolute
-                            left-1/2
-                            top-1/2
-                            h-24
-                            w-24
-                            -translate-x-1/2
-                            -translate-y-1/2
-                            rounded-full
-                            bg-orange-400/10
-                            blur-3xl
-                        "
-                    />
-                </div>
+                                    <div
+                                        className="
+                                            flex
+                                            h-28
+                                            items-center
+                                            justify-center
+                                            rounded-xl
+                                            bg-white
+                                            p-4
+                                            sm:h-32
+                                        "
+                                    >
+                                        <Image
+                                            src={segment.logo}
+                                            alt={segment.label}
+                                            width={180}
+                                            height={140}
+                                            className="
+                                                max-h-20
+                                                w-auto
+                                                max-w-[150px]
+                                                object-contain
+                                                transition-transform
+                                                duration-500
 
-                {/* Logo */}
+                                                group-hover:scale-110
+                                            "
+                                        />
+                                    </div>
 
-                <div
-                    className="
-                        relative
-                        z-10
-                        flex
-                        h-full
-                        w-full
-                        items-center
-                        justify-center
-                    "
-                >
-                    <Image
-                        src={segment.logo}
-                        alt={segment.name}
-                        width={140}
-                        height={90}
-                        className="
-                            max-h-20
-                            w-auto
-                            max-w-[140px]
-                            object-contain
-                            opacity-90
-                            transition-all
-                            duration-500
+                                    {/* Label */}
 
-                            group-hover:scale-110
-                            group-hover:opacity-100
-                        "
-                    />
-                </div>
-
-                {/* Small industry label */}
-
-                <div
-                    className="
-                        absolute
-                        bottom-3
-                        left-0
-                        right-0
-                        text-center
-                        text-[10px]
-                        font-semibold
-                        uppercase
-                        tracking-[0.2em]
-                        text-gray-500
-                        transition-colors
-                        duration-300
-
-                        group-hover:text-orange-400
-                    "
-                >
-                    <T k={`home.industries.${segment.name}`} />
-                </div>
-            </div>
-        </Reveal>
+                                    <div
+                                        className="
+                                            mt-3
+                                            pb-1
+                                            text-center
+                                            text-[11px]
+                                            font-bold
+                                            uppercase
+                                            tracking-[0.15em]
+                                            text-orange-400
+                                            sm:text-xs
+                                        "
+                                    >
+                                        {segment.label}
+                                    </div>
+                                </div>
+                            </Reveal>
                         ))}
                     </div>
                 </div>
@@ -1457,109 +1450,13 @@ export default async function Home() {
                             "
                         >
                             <Image
-                                src="/images/certifications1.png"
+                                src="/images/certifications_black.png"
                                 alt="Marsol Technologies certifications and approvals"
                                 width={1460}
                                 height={630}
                                 sizes="(max-width: 1200px) 92vw, 1360px"
                                 className="h-auto w-full object-contain"
                             />
-                        </div>
-                    </Reveal>
-                </div>
-            </section>
-
-            {/* =====================================================
-                REQUEST A QUOTE
-            ===================================================== */}
-
-            <section
-                id="request-quote"
-                className="
-                    relative
-                    isolate
-                    overflow-hidden
-                    px-6
-                    py-24
-                    sm:px-8
-                    lg:px-12
-                    lg:py-32
-                "
-            >
-                <Image
-                    src="/images/request-quote_2 (1).webp"
-                    alt=""
-                    fill
-                    sizes="100vw"
-                    className="-z-10 object-cover"
-                />
-
-                <div className="absolute inset-0 -z-10 bg-[#04121f]/60" />
-
-                <div className="mx-auto max-w-[1400px]">
-                    <Reveal direction="up">
-                        <div className="flex flex-col items-center text-center">
-                            <h2
-                                className="
-                                    text-3xl
-                                    font-bold
-                                    tracking-tight
-                                    text-white
-                                    sm:text-4xl
-                                    lg:text-5xl
-                                "
-                            >
-                                Let&rsquo;s Build Safe Spaces Together
-                            </h2>
-
-                            <p
-                                className="
-                                    mx-auto
-                                    mt-5
-                                    max-w-2xl
-                                    text-sm
-                                    leading-7
-                                    text-white/90
-                                    sm:text-base
-                                "
-                            >
-                                At Marsol, we engineer fire protection systems
-                                that meet the highest industry standards
-                                tailored to your space, timeline, and technical
-                                needs.
-                            </p>
-
-                            <Link
-                                href="/contact"
-                                className="
-                                    group
-                                    mt-8
-                                    inline-flex
-                                    items-center
-                                    gap-2
-                                    rounded-lg
-                                    bg-orange-500
-                                    px-7
-                                    py-3.5
-                                    text-sm
-                                    font-semibold
-                                    uppercase
-                                    tracking-wide
-                                    text-white
-                                    transition-all
-                                    duration-300
-                                    hover:-translate-y-1
-                                    hover:bg-orange-600
-                                    hover:shadow-xl
-                                    hover:shadow-orange-500/20
-                                "
-                            >
-                                Request a Quote
-
-                                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                                    →
-                                </span>
-                            </Link>
                         </div>
                     </Reveal>
                 </div>

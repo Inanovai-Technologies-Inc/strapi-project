@@ -11,6 +11,7 @@ import "./globals.css";
 
 import Navbar from "@/components/navbar";
 import Chatbot from "@/components/Chatbot";
+import RequestQuote from "@/components/RequestQuote";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { I18nProvider } from "@/components/I18nProvider";
@@ -97,6 +98,10 @@ export default function RootLayout({
                     ============================== */}
 
                     <Chatbot />
+
+                    {/* Shared pre-footer CTA on every route */}
+                    <RequestQuote />
+
                      <Footer />
 
                      </PageContextProvider>
