@@ -24,12 +24,6 @@
     "introductionContent": {
       "type": "richtext"
     },
-    "description": {
-      "type": "richtext"
-    },
-    "partnerDescription": {
-      "type": "richtext"
-    },
     "images": {
       "type": "media",
       "multiple": true,
@@ -50,6 +44,34 @@
       "type": "component",
       "component": "shared.sections",
       "repeatable": true
+    },
+    "ExpandableItem": {
+      "type": "component",
+      "component": "shared.expandable-item",
+      "repeatable": true
+    },
+    "ExpandableItemImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "ExpandableItemtitle": {
+      "type": "string"
     }
   }
 }

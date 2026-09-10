@@ -42,6 +42,18 @@ export interface ProductFoamSkidSeries extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedExpandableItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_expandable_items';
+  info: {
+    displayName: 'Expandable Item';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    number: Schema.Attribute.Integer;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedImage extends Struct.ComponentSchema {
   collectionName: 'components_shared_images';
   info: {
@@ -148,6 +160,7 @@ declare module '@strapi/strapi' {
       'footer.office': FooterOffice;
       'footer.social-links': FooterSocialLinks;
       'product.foam-skid-series': ProductFoamSkidSeries;
+      'shared.expandable-item': SharedExpandableItem;
       'shared.image': SharedImage;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;

@@ -1152,6 +1152,15 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::product.product'
     >;
+    SecondaryImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     segments: Schema.Attribute.Relation<'oneToMany', 'api::segment.segment'>;
     slug: Schema.Attribute.UID<'Name'>;
     TechnicalSpecification: Schema.Attribute.Component<
@@ -1259,7 +1268,12 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText;
+    ExpandableItem: Schema.Attribute.Component<'shared.expandable-item', true>;
+    ExpandableItemImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    ExpandableItemtitle: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     images: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -1272,7 +1286,6 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
       'api::service.service'
     > &
       Schema.Attribute.Private;
-    partnerDescription: Schema.Attribute.RichText;
     publishedAt: Schema.Attribute.DateTime;
     sections: Schema.Attribute.Component<'shared.sections', true>;
     slug: Schema.Attribute.UID<'title'>;

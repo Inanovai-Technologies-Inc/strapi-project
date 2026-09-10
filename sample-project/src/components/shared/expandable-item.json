@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_expandable_items",
+  "info": {
+    "displayName": "Expandable Item"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "number": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}
