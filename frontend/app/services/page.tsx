@@ -84,6 +84,39 @@ export default async function ServicesPage() {
         <main className="min-h-screen bg-[#f7f7f5] text-[#111827]">
 
             {/* =================================================
+                HERO — full-bleed image, overlaid title and the
+                same scroll-driven parallax/veil transition used
+                on the service detail hero (.service-hero* in
+                globals.css). Content below is untouched.
+            ================================================= */}
+
+            <section className="service-hero relative isolate overflow-hidden">
+
+                <img
+                    src="/images/hero.jpg"
+                    alt=""
+                    className="service-hero__media absolute inset-0 -z-10 h-full w-full object-cover"
+                />
+
+                <div className="service-hero__overlay absolute inset-0 -z-10 bg-gradient-to-tr from-[#04121f]/70 via-[#04121f]/25 to-transparent" />
+
+                <div className="service-hero__content mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-400 sm:text-sm">
+                        <T k="servicesPage.eyebrow" />
+                    </p>
+
+                    <h1 className="mt-4 max-w-3xl text-2xl font-bold uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+                        <T k="servicesPage.title" />
+                    </h1>
+
+                    <div className="mt-6 h-1 w-16 bg-orange-500" />
+
+                </div>
+
+            </section>
+
+            {/* =================================================
                 LISTING
             ================================================= */}
 

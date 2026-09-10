@@ -142,6 +142,21 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::segment.segment"
+    },
+    "SecondaryImage": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }
