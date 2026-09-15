@@ -1,6 +1,7 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
+import Link from "next/link";
 
 import { useI18n } from "@/components/I18nProvider";
 import AmbientBackground from "@/components/AmbientBackground";
@@ -19,6 +20,7 @@ interface ContactFormData {
     subject: string;
     howDidYouHearAboutUs: string;
     yourMessage: string;
+    agreedToPolicies: boolean;
 }
 
 const initialFormData: ContactFormData = {
@@ -32,7 +34,27 @@ const initialFormData: ContactFormData = {
     subject: "",
     howDidYouHearAboutUs: "",
     yourMessage: "",
+    agreedToPolicies: false,
 };
+
+function PhoneIcon() {
+    return (
+        <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            className="h-4 w-4 text-blue-600"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 5c0-1.1.9-2 2-2h2.28a1 1 0 0 1 .97.76l1 4a1 1 0 0 1-.5 1.11L7 9.5a12.05 12.05 0 0 0 5.5 5.5l.63-1.75a1 1 0 0 1 1.11-.5l4 1a1 1 0 0 1 .76.97V19c0 1.1-.9 2-2 2h-1C10.4 21 3 13.6 3 4V5Z"
+            />
+        </svg>
+    );
+}
 
 export default function ContactPage() {
     const { t } = useI18n();
@@ -42,6 +64,7 @@ export default function ContactPage() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
+    const [consentError, setConsentError] = useState(false);
 
     // =========================================================
     // HANDLE INPUT CHANGE
@@ -62,6 +85,21 @@ export default function ContactPage() {
         }));
     };
 
+    const handleConsentChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const { checked } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            agreedToPolicies: checked,
+        }));
+
+        if (checked) {
+            setConsentError(false);
+        }
+    };
+
     // =========================================================
     // SUBMIT FORM
     // =========================================================
@@ -71,9 +109,16 @@ export default function ContactPage() {
     ) => {
         e.preventDefault();
 
-        setLoading(true);
         setSuccess("");
         setError("");
+
+        if (!formData.agreedToPolicies) {
+            setConsentError(true);
+            return;
+        }
+
+        setConsentError(false);
+        setLoading(true);
 
         try {
             // =====================================================
@@ -298,15 +343,15 @@ export default function ContactPage() {
                 HEADER
             ================================================= */}
 
-            <section className="has-ambient relative overflow-hidden bg-gray-50 py-16">
+            <section className="has-ambient relative overflow-hidden border-b border-gray-200 bg-white py-16">
                 <AmbientBackground density="soft" />
                 <div className="mx-auto max-w-7xl px-6 text-center">
 
-                    <h1 className="text-4xl font-bold text-gray-900">
+                    <h1 className="text-4xl font-bold text-[#0b1f3a]">
                         {t("contact.title")}
                     </h1>
 
-                    <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+                    <p className="mx-auto mt-4 text-gray-500 lg:whitespace-nowrap">
                         {t("contact.description")}
                     </p>
 
@@ -656,6 +701,62 @@ export default function ContactPage() {
                         </div>
 
                         {/* =================================================
+                            DISCLAIMER
+                        ================================================= */}
+
+                        <p className="font-semibold text-gray-900">
+                            {t("contact.disclaimer")}
+                        </p>
+
+                        {/* =================================================
+                            POLICY CONSENT
+                        ================================================= */}
+
+                        <div>
+
+                            <label className="flex items-start gap-3">
+
+                                <input
+                                    type="checkbox"
+                                    name="agreedToPolicies"
+                                    checked={formData.agreedToPolicies}
+                                    onChange={handleConsentChange}
+                                    className="mt-1 h-4 w-4 shrink-0 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                />
+
+                                <span className="text-sm uppercase tracking-wide text-gray-800">
+                                    I confirm that I have read and understood
+                                    Marsol Technologies{" "}
+                                    <Link
+                                        href="/privacy-policy"
+                                        className="underline hover:text-blue-600"
+                                    >
+                                        Privacy Policy
+                                    </Link>{" "}
+                                    and{" "}
+                                    <Link
+                                        href="/terms-conditions"
+                                        className="underline hover:text-blue-600"
+                                    >
+                                        Terms and Conditions
+                                    </Link>
+                                    *
+                                </span>
+
+                            </label>
+
+                            {consentError && (
+                                <p className="mt-2 text-sm text-red-600">
+                                    I confirm that I have read and
+                                    understood Marsol Technologies Privacy
+                                    Policy and Terms and Conditions* is
+                                    required
+                                </p>
+                            )}
+
+                        </div>
+
+                        {/* =================================================
                             SUCCESS
                         ================================================= */}
 
@@ -679,12 +780,12 @@ export default function ContactPage() {
                             SUBMIT
                         ================================================= */}
 
-                        <div>
+                        <div className="flex justify-center">
 
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="bg-blue-600 px-8 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="rounded-lg bg-blue-600 px-10 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                                 {loading
                                     ? t("contact.form.submitting")
@@ -694,6 +795,89 @@ export default function ContactPage() {
                         </div>
 
                     </form>
+
+                </div>
+
+            </section>
+
+            {/* =================================================
+                OFFICES
+            ================================================= */}
+
+            <section className="border-t border-gray-200 bg-white py-14">
+
+                <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:grid-cols-3">
+
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                            North America / HQ
+                        </p>
+
+                        <h3 className="mt-2 text-xl font-bold text-gray-900">
+                            United States
+                        </h3>
+
+                        <p className="mt-3 text-sm leading-6 text-gray-600">
+                            Marsol Technologies Inc.
+                            <br />
+                            14331 Spencer Road (FM-529),
+                            <br />
+                            Houston, Texas-77095, USA.
+                        </p>
+
+                        <p className="mt-4 flex items-center gap-2 text-sm text-gray-800">
+                            <PhoneIcon />
+                            Phone: +1-346-701-8268
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                            Middle East Hub
+                        </p>
+
+                        <h3 className="mt-2 text-xl font-bold text-gray-900">
+                            United Arab Emirates
+                        </h3>
+
+                        <p className="mt-3 text-sm leading-6 text-gray-600">
+                            Marsol Technologies FZE.
+                            <br />
+                            P.O Box 50481,
+                            <br />
+                            Hamriyah Free Zone, Sharjah, UAE.
+                        </p>
+
+                        <p className="mt-4 flex items-center gap-2 text-sm text-gray-800">
+                            <PhoneIcon />
+                            Phone: +971-(0)6-526-9350
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                            Asia Pacific Center
+                        </p>
+
+                        <h3 className="mt-2 text-xl font-bold text-gray-900">
+                            India
+                        </h3>
+
+                        <p className="mt-3 text-sm leading-6 text-gray-600">
+                            Marsol Technologies Pvt. Ltd.
+                            <br />
+                            No. 2877/14, New No. K-13, Second Floor,
+                            <br />
+                            J.L.B Road, Chamundipuram, K.R. Mohalla,
+                            <br />
+                            Mysore, Karnataka, 570 004.
+                        </p>
+
+                        <p className="mt-4 flex items-center gap-2 text-sm text-gray-800">
+                            <PhoneIcon />
+                            Phone: +91-(0)821-422-1225
+                        </p>
+                    </div>
 
                 </div>
 

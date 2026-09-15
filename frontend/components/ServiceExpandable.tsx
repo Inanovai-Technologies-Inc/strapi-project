@@ -119,7 +119,9 @@ export default function ServiceExpandable({
                                     >
                                         <div className="overflow-hidden">
                                             <div className="border-t border-gray-200 bg-white px-5 py-4 text-sm leading-7 text-gray-600">
-                                                {renderBlocks(item.content)}
+                                                {renderBlocks(item.content, {
+                                                    justify: true,
+                                                })}
                                             </div>
                                         </div>
                                     </div>

@@ -230,7 +230,9 @@ export default function FeatureTabs({
                 "
             >
                 {activeSection.blocks.length > 0 ? (
-                    renderBlocks(activeSection.blocks)
+                    renderBlocks(activeSection.blocks, {
+                        justify: true,
+                    })
                 ) : (
                     <p className="text-base leading-8 text-gray-500">
                         {activeSection.label}

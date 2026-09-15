@@ -107,7 +107,7 @@ export default function Navbar() {
                     "
                 >
                     <Image
-                        src="/images/marsol-logo.jpg"
+                        src="/images/marsol-solidworks-logo.png"
                         alt="Marsol Technologies"
                         width={160}
                         height={55}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { T } from "@/components/T";
 import { renderBlocks } from "@/components/richText";
 import ServiceExpandable from "@/components/ServiceExpandable";
+import ServiceHeroCollapse from "@/components/ServiceHeroCollapse";
 import {
     getImageUrl,
     getMediaAlt,
@@ -34,12 +35,12 @@ type ServicePageProps = {
 
 function RichText({ value }: { value: any }) {
     if (Array.isArray(value)) {
-        return <>{renderBlocks(value)}</>;
+        return <>{renderBlocks(value, { justify: true })}</>;
     }
 
     if (typeof value === "string" && value.trim()) {
         return (
-            <p className="whitespace-pre-line text-base leading-8 text-gray-600">
+            <p className="whitespace-pre-line text-justify text-base leading-8 text-gray-600">
                 {value}
             </p>
         );
@@ -128,7 +129,7 @@ function ServiceSection({
                     )}
 
                     <div className="mt-7">
-                        {renderBlocks(section?.content)}
+                        {renderBlocks(section?.content, { justify: true })}
                     </div>
                 </div>
 
@@ -281,38 +282,27 @@ export default async function ServiceDetailPage({
             ================================================= */}
 
             {heroImageUrl ? (
-                <section className="service-hero relative isolate overflow-hidden">
+                <ServiceHeroCollapse
+                    imageUrl={heroImageUrl}
+                    imageAlt={heroImageAlt}
+                >
+                    <Link
+                        href="/services"
+                        className="inline-flex items-center text-sm font-medium text-white/75 transition hover:text-orange-400"
+                    >
+                        ← <T k="serviceDetail.backToServices" />
+                    </Link>
 
-                    <img
-                        src={heroImageUrl}
-                        alt={heroImageAlt}
-                        className="service-hero__media absolute inset-0 -z-10 h-full w-full object-cover"
-                    />
+                    <p className="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-orange-400 sm:text-sm">
+                        <T k="serviceDetail.eyebrow" />
+                    </p>
 
-                    <div className="service-hero__overlay absolute inset-0 -z-10 bg-gradient-to-tr from-[#04121f]/70 via-[#04121f]/25 to-transparent" />
+                    <h1 className="mt-4 max-w-3xl text-2xl font-bold uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+                        {service.title}
+                    </h1>
 
-                    <div className="service-hero__content mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
-
-                        <Link
-                            href="/services"
-                            className="inline-flex items-center text-sm font-medium text-white/75 transition hover:text-orange-400"
-                        >
-                            ← <T k="serviceDetail.backToServices" />
-                        </Link>
-
-                        <p className="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-orange-400 sm:text-sm">
-                            <T k="serviceDetail.eyebrow" />
-                        </p>
-
-                        <h1 className="mt-4 max-w-3xl text-2xl font-bold uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-                            {service.title}
-                        </h1>
-
-                        <div className="mt-6 h-1 w-16 bg-orange-500" />
-
-                    </div>
-
-                </section>
+                    <div className="mt-6 h-1 w-16 bg-orange-500" />
+                </ServiceHeroCollapse>
             ) : (
                 <section className="bg-white px-6 pt-14 lg:px-8 lg:pt-20">
 

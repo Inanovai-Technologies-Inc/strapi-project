@@ -16,43 +16,45 @@ const STRAPI_URL =
    MARKET SEGMENTS
 
    Rendered as two rows of five. Logos live in /public/images
-   (next/image URL-encodes the spaces and "&" in the paths).
+   under lowercase, hyphenated filenames (no spaces or "&") so
+   they resolve identically on case-sensitive production hosts
+   as they do in local dev on a case-insensitive filesystem.
 ========================================================= */
 
 const marketSegments = [
-    { name: "aviation", label: "Aviation", logo: "/images/AVIATION.png" },
-    { name: "commercial", label: "Commercial", logo: "/images/COMMERCIAL.png" },
+    { name: "aviation", label: "Aviation", logo: "/images/aviation1.png" },
+    { name: "commercial", label: "Commercial", logo: "/images/commercial1.png" },
     {
         name: "marine-offshore",
         label: "Marine & Offshore",
-        logo: "/images/MARINE & OFFSHORE.png",
+        logo: "/images/marine1.png",
     },
     {
         name: "manufacturing",
         label: "Manufacturing",
-        logo: "/images/MANUFACTURING.png",
+        logo: "/images/manufacturing1.png",
     },
-    { name: "military", label: "Military", logo: "/images/MILITARY.png" },
+    { name: "military", label: "Military", logo: "/images/military1.png" },
     {
         name: "power-generation",
         label: "Power Generation",
-        logo: "/images/POWER GENERATION.png",
+        logo: "/images/power1.png",
     },
     {
         name: "petrochemical",
         label: "Petrochemical",
-        logo: "/images/PETROCHEMICAL.png",
+        logo: "/images/petrochemical1.png",
     },
-    { name: "renewable", label: "Renewable", logo: "/images/RENEWABLE.png" },
+    { name: "renewable", label: "Renewable", logo: "/images/renewable1.png" },
     {
         name: "transportation",
         label: "Transportation",
-        logo: "/images/TRANSPORTATION.png",
+        logo: "/images/transportation1.png",
     },
     {
         name: "waste-recycling",
         label: "Waste Recycling",
-        logo: "/images/WASTE RECYCLING.png",
+        logo: "/images/waste-recycle1.png",
     },
 ];
 
@@ -318,9 +320,9 @@ export default async function Home() {
 
                             <br />
 
-                            <span className="text-orange-500">
+                            {/* <span className="text-orange-500">
                                 <T k="home.hero.titleLine3" />
-                            </span>
+                            </span> */}
                         </h1>
 
 
@@ -727,7 +729,7 @@ export default async function Home() {
                             "
                         >
                             <Image
-                                src="/images/new_diff.jpg"
+                                src="/images/diff1.webp"
                                 alt="Marsol DiFFS"
                                 fill
                                 className="

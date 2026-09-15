@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { T } from "@/components/T";
+import AmbientBackground from "@/components/AmbientBackground";
+import Reveal from "@/components/Reveal";
 import { getImageUrl, getMediaAlt } from "@/components/strapiMedia";
 
 const STRAPI_URL =
@@ -19,14 +21,43 @@ type ServiceEntry = {
     slug?: string;
     description?: string | null;
     introductionContent?: string | null;
-    images?: any;
+    heroImage?: any;
 };
+
+/* =========================================================
+   DISPLAY ORDER
+
+   The services collection has no manual ordering field, so
+   the listing order is pinned here by slug to match the
+   approved design. Any service not listed falls after the
+   pinned ones, in their normal fetch order.
+========================================================= */
+
+const DISPLAY_ORDER = [
+    "pfas-free-firefighting-foam",
+    "pfas-filtration-system",
+    "advanced-oxidation-system",
+    "fire-safety-engineering-services",
+    "project-management",
+];
+
+function sortByDisplayOrder(services: ServiceEntry[]): ServiceEntry[] {
+    return [...services].sort((a, b) => {
+        const aIndex = DISPLAY_ORDER.indexOf(a.slug || "");
+        const bIndex = DISPLAY_ORDER.indexOf(b.slug || "");
+
+        const aRank = aIndex === -1 ? DISPLAY_ORDER.length : aIndex;
+        const bRank = bIndex === -1 ? DISPLAY_ORDER.length : bIndex;
+
+        return aRank - bRank;
+    });
+}
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function excerpt(value: string | null | undefined, max = 180): string {
+function excerpt(value: string | null | undefined, max = 160): string {
     if (!value) {
         return "";
     }
@@ -47,8 +78,8 @@ function excerpt(value: string | null | undefined, max = 180): string {
 async function fetchServices(): Promise<ServiceEntry[] | null> {
     const url =
         `${STRAPI_URL}/api/services` +
-        `?populate[images]=true` +
-        `&sort[0]=createdAt:asc` +
+        `?sort[0]=createdAt:asc` +
+        `&populate[heroImage]=true` +
         `&pagination[pageSize]=100`;
 
     try {
@@ -75,74 +106,52 @@ async function fetchServices(): Promise<ServiceEntry[] | null> {
 
 /* =========================================================
    SERVICES LISTING PAGE
+
+   A quiet, editorial portfolio list rather than an image
+   grid: each service is a numbered row — index, title,
+   description, "View Service" — separated by hairlines, with
+   a scroll reveal and a hover accent. No service imagery is
+   fetched or shown here; the detail page carries the visuals.
 ========================================================= */
 
 export default async function ServicesPage() {
     const services = await fetchServices();
 
     return (
-        <main className="min-h-screen bg-[#f7f7f5] text-[#111827]">
+        <main className="min-h-screen bg-white text-[#111827]">
 
             {/* =================================================
-                HERO — full-bleed image, overlaid title and the
-                same scroll-driven parallax/veil transition used
-                on the service detail hero (.service-hero* in
-                globals.css). Content below is untouched.
+                HERO — label, heading, description only. No image.
             ================================================= */}
 
-            <section className="service-hero relative isolate overflow-hidden">
+            <section className="has-ambient relative overflow-hidden border-b border-gray-200 bg-white">
+                <AmbientBackground density="soft" />
 
-                <img
-                    src="/images/hero.jpg"
-                    alt=""
-                    className="service-hero__media absolute inset-0 -z-10 h-full w-full object-cover"
-                />
-
-                <div className="service-hero__overlay absolute inset-0 -z-10 bg-gradient-to-tr from-[#04121f]/70 via-[#04121f]/25 to-transparent" />
-
-                <div className="service-hero__content mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
-
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-400 sm:text-sm">
-                        <T k="servicesPage.eyebrow" />
-                    </p>
-
-                    <h1 className="mt-4 max-w-3xl text-2xl font-bold uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-                        <T k="servicesPage.title" />
-                    </h1>
-
-                    <div className="mt-6 h-1 w-16 bg-orange-500" />
-
-                </div>
-
-            </section>
-
-            {/* =================================================
-                LISTING
-            ================================================= */}
-
-            <section className="border-t border-gray-200 px-6 py-16 lg:px-8 lg:py-20">
-
-                <div className="mx-auto max-w-7xl">
-
-                    {/* SECTION HEADING */}
-
-                    <div className="mb-14 max-w-3xl">
-
-                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                <div className="mx-auto max-w-7xl px-6 py-14 text-center lg:px-8 lg:py-16">
+                    <Reveal>
+                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500 sm:text-sm">
                             <T k="servicesPage.eyebrow" />
                         </p>
 
-                        <h1 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
+                        <h1 className="mt-3 text-4xl font-bold text-[#0b1f3a] sm:text-5xl">
                             <T k="servicesPage.title" />
                         </h1>
 
-                        <div className="mt-4 h-1 w-12 bg-orange-500" />
+                        <div className="mx-auto mt-4 h-1 w-14 bg-orange-500" />
 
-                        <p className="mt-5 text-base leading-7 text-gray-500">
+                        <p className="mx-auto mt-4 text-sm leading-7 text-gray-500 sm:text-base lg:whitespace-nowrap">
                             <T k="servicesPage.description" />
                         </p>
+                    </Reveal>
+                </div>
+            </section>
 
-                    </div>
+            {/* =================================================
+                LISTING — an image-led service card grid
+            ================================================= */}
+
+            <section className="bg-gray-50 px-6 py-16 lg:px-8 lg:py-24">
+                <div className="mx-auto max-w-7xl">
 
                     {services === null ? (
                         <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
@@ -160,91 +169,156 @@ export default async function ServicesPage() {
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
 
-                            {services.map((service) => {
-                                const imageUrl = getImageUrl(
-                                    service.images
-                                );
+                            {sortByDisplayOrder(services).map(
+                                (service, index) => {
+                                    const summary = excerpt(
+                                        service.description ||
+                                            service.introductionContent
+                                    );
 
-                                const summary = excerpt(
-                                    service.description ||
-                                        service.introductionContent
-                                );
+                                    if (!service.slug) {
+                                        return null;
+                                    }
 
-                                return (
-                                    <article
-                                        key={
-                                            service.documentId ||
-                                            service.id
-                                        }
-                                        className="group bg-white"
-                                    >
+                                    const imageUrl = getImageUrl(
+                                        service.heroImage
+                                    );
 
-                                        {/* IMAGE */}
+                                    const imageAlt = getMediaAlt(
+                                        service.heroImage,
+                                        service.title || "Service"
+                                    );
 
-                                        <div className="flex h-64 items-center justify-center bg-white p-8">
-                                            {imageUrl ? (
-                                                <img
-                                                    src={imageUrl}
-                                                    alt={getMediaAlt(
-                                                        service.images,
-                                                        service.title ||
-                                                            "Service"
+                                    return (
+                                        <Reveal
+                                            key={
+                                                service.documentId ||
+                                                service.id
+                                            }
+                                            delay={Math.min(index, 5) * 70}
+                                        >
+                                            <Link
+                                                href={`/services/${service.slug}`}
+                                                className="
+                                                    group
+                                                    flex
+                                                    h-full
+                                                    flex-col
+                                                    overflow-hidden
+                                                    rounded-2xl
+                                                    border
+                                                    border-gray-200
+                                                    bg-white
+                                                    shadow-sm
+                                                    transition-all
+                                                    duration-500
+                                                    hover:-translate-y-2
+                                                    hover:shadow-2xl
+                                                "
+                                            >
+                                                {/* IMAGE — fixed aspect ratio, always full-bleed */}
+
+                                                <div className="relative h-56 w-full overflow-hidden bg-gray-100">
+                                                    {imageUrl ? (
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt={imageAlt}
+                                                            className="
+                                                                h-full
+                                                                w-full
+                                                                object-cover
+                                                                transition-transform
+                                                                duration-700
+                                                                ease-out
+                                                                group-hover:scale-105
+                                                            "
+                                                        />
+                                                    ) : (
+                                                        <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
+                                                            <T k="servicesPage.imageUnavailable" />
+                                                        </div>
                                                     )}
-                                                    className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
-                                                />
-                                            ) : (
-                                                <div className="flex h-full w-full items-center justify-center rounded-xl bg-[#f7f7f5] text-sm text-gray-400">
-                                                    <T k="serviceDetail.imagesHeading" />
                                                 </div>
-                                            )}
-                                        </div>
 
-                                        {/* CONTENT */}
+                                                {/* CONTENT */}
 
-                                        <div className="px-2 pb-4 pt-4">
+                                                <div className="flex flex-1 flex-col p-6">
+                                                    <p
+                                                        className="
+                                                            text-[11px]
+                                                            font-bold
+                                                            uppercase
+                                                            tracking-[0.2em]
+                                                            text-orange-500
+                                                        "
+                                                    >
+                                                        <T k="servicesPage.serviceLabel" />
+                                                    </p>
 
-                                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
-                                                <T k="serviceDetail.eyebrow" />
-                                            </p>
+                                                    <h2
+                                                        className="
+                                                            mt-3
+                                                            text-lg
+                                                            font-bold
+                                                            uppercase
+                                                            leading-tight
+                                                            text-[#0b1f3a]
+                                                            transition-colors
+                                                            duration-300
+                                                            group-hover:text-orange-600
+                                                        "
+                                                    >
+                                                        {service.title}
+                                                    </h2>
 
-                                            <h2 className="mt-3 min-h-[56px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
-                                                {service.title}
-                                            </h2>
+                                                    {summary && (
+                                                        <p className="mt-3 line-clamp-3 text-justify text-sm leading-6 text-gray-500">
+                                                            {summary}
+                                                        </p>
+                                                    )}
 
-                                            {summary && (
-                                                <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
-                                                    {summary}
-                                                </p>
-                                            )}
-
-                                            {service.slug && (
-                                                <Link
-                                                    href={`/services/${service.slug}`}
-                                                    className="mt-6 flex items-center justify-between border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 hover:border-orange-500 hover:bg-orange-500 hover:text-white"
-                                                >
-                                                    <span>
+                                                    <span
+                                                        className="
+                                                            mt-6
+                                                            inline-flex
+                                                            items-center
+                                                            gap-2
+                                                            text-sm
+                                                            font-semibold
+                                                            uppercase
+                                                            tracking-wide
+                                                            text-[#0b1f3a]
+                                                            transition-colors
+                                                            duration-300
+                                                            group-hover:text-orange-500
+                                                        "
+                                                    >
                                                         <T k="servicesPage.viewService" />
+
+                                                        <span
+                                                            className="
+                                                                text-lg
+                                                                transition-transform
+                                                                duration-300
+                                                                group-hover:translate-x-1.5
+                                                            "
+                                                        >
+                                                            →
+                                                        </span>
                                                     </span>
-
-                                                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
-                                                        →
-                                                    </span>
-                                                </Link>
-                                            )}
-
-                                        </div>
-
-                                    </article>
-                                );
-                            })}
+                                                </div>
+                                            </Link>
+                                        </Reveal>
+                                    );
+                                }
+                            )}
 
                         </div>
                     )}
 
                 </div>
-
             </section>
 
         </main>

@@ -24,6 +24,20 @@ export default function RequestQuote() {
         return null;
     }
 
+    const isCareers =
+        pathname === "/careers" || pathname.startsWith("/careers/");
+
+    const heading = isCareers
+        ? "Ready to Get Started?"
+        : "Let’s Build Safe Spaces Together";
+
+    const description = isCareers
+        ? "We foster a culture built on trust, accountability, and continuous learning. Here you'll collaborate with experts, tackle meaningful challenges, and contribute to safer, more sustainable solutions for industries that rely on us."
+        : "At Marsol, we engineer fire protection systems that meet the highest industry standards tailored to your space, timeline, and technical needs.";
+
+    const ctaHref = isCareers ? "/careers#job-openings" : "/contact";
+    const ctaLabel = isCareers ? "View Open Positions" : "Request a Quote";
+
     return (
         <section
             id="request-quote"
@@ -61,7 +75,7 @@ export default function RequestQuote() {
                                 lg:text-5xl
                             "
                         >
-                            Let&rsquo;s Build Safe Spaces Together
+                            {heading}
                         </h2>
 
                         <p
@@ -75,14 +89,11 @@ export default function RequestQuote() {
                                 sm:text-base
                             "
                         >
-                            At Marsol, we engineer fire protection systems
-                            that meet the highest industry standards
-                            tailored to your space, timeline, and technical
-                            needs.
+                            {description}
                         </p>
 
                         <Link
-                            href="/contact"
+                            href={ctaHref}
                             className="
                                 group
                                 mt-8
@@ -106,7 +117,7 @@ export default function RequestQuote() {
                                 hover:shadow-orange-500/20
                             "
                         >
-                            Request a Quote
+                            {ctaLabel}
 
                             <span className="transition-transform duration-300 group-hover:translate-x-1">
                                 →

@@ -312,7 +312,7 @@ export default function ProductPage() {
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <p className="mt-5 text-base leading-7 text-gray-500">
+                            <p className="mt-5 text-justify text-base leading-7 text-gray-500">
                                 <T k="productsPage.rangeDescription" />
                             </p>
 
@@ -361,7 +361,7 @@ export default function ProductPage() {
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <p className="mt-6 text-base leading-8 text-gray-600">
+                            <p className="mt-6 text-justify text-base leading-8 text-gray-600">
                                 <T k="productsPage.whyDescription" />
                             </p>
 
@@ -375,7 +375,7 @@ export default function ProductPage() {
                                     <T k="productsPage.whyCard1Title" />
                                 </h3>
 
-                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
                                     <T k="productsPage.whyCard1Body" />
                                 </p>
 
@@ -387,7 +387,7 @@ export default function ProductPage() {
                                     <T k="productsPage.whyCard2Title" />
                                 </h3>
 
-                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
                                     <T k="productsPage.whyCard2Body" />
                                 </p>
 
@@ -399,7 +399,7 @@ export default function ProductPage() {
                                     <T k="productsPage.whyCard3Title" />
                                 </h3>
 
-                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
                                     <T k="productsPage.whyCard3Body" />
                                 </p>
 
@@ -411,7 +411,7 @@ export default function ProductPage() {
                                     <T k="productsPage.whyCard4Title" />
                                 </h3>
 
-                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
                                     <T k="productsPage.whyCard4Body" />
                                 </p>
 
