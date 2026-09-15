@@ -563,7 +563,7 @@ export default async function ProductDetailPage({
                                         <T k="productDetail.descriptionHeading" />
                                     </h2>
 
-                                    <p className="mt-4 whitespace-pre-line text-base leading-8 text-gray-600">
+                                    <p className="mt-4 whitespace-pre-line text-justify text-base leading-8 text-gray-600">
                                         {
                                             product.description
                                         }
@@ -622,7 +622,7 @@ export default async function ProductDetailPage({
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <p className="mt-5 max-w-3xl text-base leading-8 text-gray-500">
+                            <p className="mt-5 max-w-3xl text-justify text-base leading-8 text-gray-500">
                                 <T k="productDetail.foamSkidDescription" />
                             </p>
 
@@ -768,11 +768,12 @@ export default async function ProductDetailPage({
                                                     ) ? (
                                                         <div className="mt-7">
                                                             {renderBlocks(
-                                                                series.SeriesDescription
+                                                                series.SeriesDescription,
+                                                                { justify: true }
                                                             )}
                                                         </div>
                                                     ) : series.SeriesDescription ? (
-                                                        <p className="mt-7 whitespace-pre-line text-base leading-8 text-gray-600">
+                                                        <p className="mt-7 whitespace-pre-line text-justify text-base leading-8 text-gray-600">
                                                             {
                                                                 series.SeriesDescription
                                                             }
@@ -848,7 +849,8 @@ export default async function ProductDetailPage({
 
                             <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
                                 {renderBlocks(
-                                    product.Applications
+                                    product.Applications,
+                                    { justify: true }
                                 )}
                             </div>
 
@@ -948,7 +950,7 @@ export default async function ProductDetailPage({
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <p className="mt-4 max-w-2xl text-base leading-7 text-gray-500">
+                            <p className="mt-4 max-w-2xl text-justify text-base leading-7 text-gray-500">
                                 <T k="productDetail.relatedDescriptionPrefix" />
                                 <span className="font-semibold text-gray-700">
                                     {product.Name}
@@ -1026,7 +1028,7 @@ export default async function ProductDetailPage({
                                                     }
                                                 </h3>
 
-                                                <p className="mt-4 line-clamp-3 text-sm leading-6 text-gray-500">
+                                                <p className="mt-4 line-clamp-3 text-justify text-sm leading-6 text-gray-500">
                                                     {related.description || (
                                                         <T k="productDetail.relatedDefaultDescription" />
                                                     )}

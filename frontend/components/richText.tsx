@@ -9,10 +9,15 @@ import React from "react";
    Client Components.
 ========================================================= */
 
-export function renderBlocks(blocks: any[]) {
+export function renderBlocks(
+    blocks: any[],
+    options?: { justify?: boolean }
+) {
     if (!Array.isArray(blocks)) {
         return null;
     }
+
+    const justify = options?.justify ? "text-justify" : "";
 
     return blocks.map((block: any, index: number) => {
         if (!block) {
@@ -46,7 +51,7 @@ export function renderBlocks(blocks: any[]) {
                 return (
                     <ul
                         key={index}
-                        className="mb-4 list-disc space-y-2 pl-6 text-base leading-8 text-gray-600"
+                        className={`mb-4 list-disc space-y-2 pl-6 text-base leading-8 text-gray-600 ${justify}`}
                     >
                         {children.map(
                             (
@@ -71,7 +76,7 @@ export function renderBlocks(blocks: any[]) {
                 return (
                     <blockquote
                         key={index}
-                        className="my-6 border-l-4 border-orange-500 pl-5 italic text-gray-600"
+                        className={`my-6 border-l-4 border-orange-500 pl-5 italic text-gray-600 ${justify}`}
                     >
                         {text}
                     </blockquote>
@@ -81,7 +86,7 @@ export function renderBlocks(blocks: any[]) {
                 return (
                     <p
                         key={index}
-                        className="mb-4 text-base leading-8 text-gray-600 last:mb-0"
+                        className={`mb-4 text-base leading-8 text-gray-600 last:mb-0 ${justify}`}
                     >
                         {text}
                     </p>

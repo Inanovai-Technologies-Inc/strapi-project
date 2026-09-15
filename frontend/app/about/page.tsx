@@ -163,11 +163,11 @@ export default function About() {
 
                         <div className="space-y-5 text-gray-300">
 
-                            <p className="leading-8">
+                            <p className="leading-8 text-justify">
                                 {t("about.since.p1")}
                             </p>
 
-                            <p className="leading-8">
+                            {/* <p className="leading-8">
                                 {t("about.since.p2Prefix")}
                                 <strong className="text-white">
                                     {t("about.since.p2Safety")}
@@ -176,7 +176,7 @@ export default function About() {
 
                             <p className="leading-8">
                                 {t("about.since.p3")}
-                            </p>
+                            </p> */}
 
                         </div>
 
@@ -210,7 +210,7 @@ export default function About() {
 
                         <div className="flex justify-center lg:justify-end">
                             <Image
-                                src="/images/IMS.png"
+                                src="/images/ims1.jpg"
                                 alt="Integrated Management System — ISO 9001, ISO 14001 and ISO 45001 accreditations"
                                 width={587}
                                 height={529}
@@ -296,10 +296,6 @@ export default function About() {
                             14331 Spencer Road (FM-529),
                             <br />
                             Houston, Texas-77095, USA
-                            <br />
-                            Phone: +1-346-701-8268
-                            <br />
-                            Fax: +1-346-701-8261
                         </p>
                     </div>
 
@@ -313,10 +309,6 @@ export default function About() {
                             P.O Box 50481,
                             <br />
                             Hamriyah Free Zone, Sharjah, UAE
-                            <br />
-                            Phone: +971-6-5269350
-                            <br />
-                            Fax: +971-6-5269340
                         </p>
                     </div>
 

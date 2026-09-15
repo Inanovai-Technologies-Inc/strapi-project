@@ -107,16 +107,6 @@ export default function Footer() {
     const socialLinks = settings?.SocialLinks || {};
 
     /* =====================================================
-       LOGO URL
-    ===================================================== */
-
-    const logoUrl = settings?.Logo?.url
-        ? settings.Logo.url.startsWith("http")
-            ? settings.Logo.url
-            : `${STRAPI_URL}${settings.Logo.url}`
-        : "/images/brand/logo.png";
-
-    /* =====================================================
        JSX
     ===================================================== */
 
@@ -128,7 +118,7 @@ export default function Footer() {
                    MAIN FOOTER
                 ================================================= */}
 
-                <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
 
                     {/* =================================================
                        BRAND
@@ -141,12 +131,8 @@ export default function Footer() {
                             className="inline-block"
                         >
                             <Image
-                                src={logoUrl}
-                                alt={
-                                    settings?.Logo
-                                        ?.alternativeText ||
-                                    "Marsol Technologies"
-                                }
+                                src="/images/marsol-solidworks-logo.png"
+                                alt="Marsol Technologies"
                                 width={180}
                                 height={60}
                                 className="h-auto w-[170px] object-contain"
@@ -313,6 +299,67 @@ export default function Footer() {
                             )}
 
                         </div>
+
+                    </div>
+
+                    {/* =================================================
+                       POLICIES
+                    ================================================= */}
+
+                    <div>
+
+                        <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+                            {t("footer.ourPolicies")}
+                        </h3>
+
+                        <ul className="mt-5 space-y-3">
+
+                            <li>
+                                <Link
+                                    href="/privacy-policy"
+                                    className="text-sm text-gray-600 transition hover:text-gray-900"
+                                >
+                                    {t("footer.privacyPolicy")}
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    href="/terms-conditions"
+                                    className="text-sm text-gray-600 transition hover:text-gray-900"
+                                >
+                                    {t("footer.termsConditions")}
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    href="/hse-policy"
+                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                >
+                                    {t("footer.hsePolicy")}
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    href="/quality-policy"
+                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                >
+                                    {t("footer.qualityPolicy")}
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    href="/adc-policy"
+                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                >
+                                    {t("footer.adcPolicy")}
+                                </Link>
+                            </li>
+
+                        </ul>
 
                     </div>
 

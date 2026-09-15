@@ -25,6 +25,12 @@
         "regionalOffice": "Regional Office",
         "manufacturingEngineering": "Manufacturing & Engineering",
         "follow": "Follow",
+        "ourPolicies": "Our Policies",
+        "privacyPolicy": "Privacy Policy",
+        "termsConditions": "Terms & Conditions",
+        "hsePolicy": "HSE Policy",
+        "qualityPolicy": "Quality Policy",
+        "adcPolicy": "ADC Policy",
         "companyDescription": "30+ years of combined experience engineering fire suppression systems for offshore, marine, aviation and industrial environments.",
         "copyright": "© 2026 Marsol Technologies. All rights reserved."
     },
@@ -58,10 +64,9 @@
     },
     "home": {
         "hero": {
-            "titleLine1": "Fire Protection",
-            "titleLine2": "Engineered for",
-            "titleLine3": "Excellence",
-            "description": "More than 30 years of experience serving the Oil & Gas and Offshore industries with advanced fire suppression and safety solutions.",
+            "titleLine1": "Engineering Excellence",
+            "titleLine2": "in Fire Protection",
+            "description": "Over 30 years of proven expertise in delivering advanced fire suppression and life safety solutions, protecting people, property, and business continuity across diverse industries.",
             "learnMore": "Learn More",
             "ourProducts": "Our Products",
             "scroll": "Scroll"
@@ -139,10 +144,7 @@
         },
         "since": {
             "label": "Since",
-            "p1": "Our particular specialisms primarily relate to the aspects of foam fire suppression – designing and deploying next-gen products and systems that ensure the best practice and the safest possible environment is achieved.",
-            "p2Prefix": "MARSOL products and systems are unique – not just for the sake of it – but because in being so, they provide enhanced performance and ultimately – ",
-            "p2Safety": "SAFETY.",
-            "p3": "With our Head Office located in USA and offices in UAE and Singapore, we are well positioned to coordinate and react to the demands and requirements of this great global industry we are proud to be a part of."
+            "p1": "At MARSOL, our expertise lies in fire suppression and life safety solutions, where innovation, performance, and safety come together. We design, develop, and deploy next-generation fire protection and life safety products and systems that help organizations achieve the highest standards of safety, reliability, and operational excellence.What sets MARSOL apart is our commitment to purposeful innovation. Every product and system is engineered to deliver enhanced performance, greater efficiency, and, most importantly, SAFETY.Headquartered in the USA, with offices in the UAE and India, MARSOL combines global reach with local responsiveness. This strategic presence enables us to effectively support customers across diverse industries and regions, providing tailored solutions that address evolving safety challenges. As a trusted partner in fire protection and life safety, we take pride in helping create safer workplaces, facilities, and communities around the world."
         },
         "qhse": {
             "eyebrow": "QHSE",
@@ -181,7 +183,8 @@
     },
     "contact": {
         "title": "Contact Us",
-        "description": "Have a question or need technical assistance? Get in touch with our team.",
+        "description": "Have a question or need technical assistance? Share your requirements, and our team will get back to you shortly.",
+        "disclaimer": "We welcome genuine inquiries related to business, customer support, and partnerships. Spam, unsolicited promotions, and marketing messages will not be reviewed or responded to.",
         "form": {
             "name": "Name",
             "companyName": "Company Name",
@@ -193,7 +196,7 @@
             "subject": "Subject",
             "howHeard": "How did you hear about us?",
             "message": "Your Message",
-            "submit": "Submit Request",
+            "submit": "Submit Form",
             "submitting": "Submitting..."
         },
         "placeholders": {
@@ -438,7 +441,9 @@
         "empty": "Services are being updated. Please check back soon.",
         "errorTitle": "Services are temporarily unavailable",
         "errorDescription": "We could not connect to the services catalogue. Please try again shortly.",
-        "viewService": "View Service"
+        "viewService": "View Service",
+        "serviceLabel": "Service",
+        "imageUnavailable": "Image unavailable"
     },
     "serviceDetail": {
         "eyebrow": "Service",

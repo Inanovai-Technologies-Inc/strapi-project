@@ -84,7 +84,7 @@ function ProductItem({
             </h3>
 
             <p
-                className={`mt-2 line-clamp-3 text-sm leading-6 ${
+                className={`mt-2 line-clamp-3 text-justify text-sm leading-6 ${
                     product.description
                         ? "text-gray-500"
                         : "text-gray-400"
@@ -276,7 +276,7 @@ export default function ProductCatalogueView({
                     <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                     {activeGroup.description ? (
-                        <p className="mt-5 text-base leading-7 text-gray-500">
+                        <p className="mt-5 text-justify text-base leading-7 text-gray-500">
                             {activeGroup.description}
                         </p>
                     ) : null}
