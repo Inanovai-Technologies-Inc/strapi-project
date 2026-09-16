@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { T } from "@/components/T";
 import AmbientBackground from "@/components/AmbientBackground";
 import Reveal from "@/components/Reveal";
 import { getImageUrl, getMediaAlt } from "@/components/strapiMedia";
@@ -130,17 +129,17 @@ export default async function ServicesPage() {
                 <div className="mx-auto max-w-7xl px-6 py-14 text-center lg:px-8 lg:py-16">
                     <Reveal>
                         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500 sm:text-sm">
-                            <T k="servicesPage.eyebrow" />
+                            What We Offer
                         </p>
 
                         <h1 className="mt-3 text-4xl font-bold text-[#0b1f3a] sm:text-5xl">
-                            <T k="servicesPage.title" />
+                            Services
                         </h1>
 
                         <div className="mx-auto mt-4 h-1 w-14 bg-orange-500" />
 
                         <p className="mx-auto mt-4 text-sm leading-7 text-gray-500 sm:text-base lg:whitespace-nowrap">
-                            <T k="servicesPage.description" />
+                            Explore the specialised environmental and fire-protection services Marsol delivers alongside its product range.
                         </p>
                     </Reveal>
                 </div>
@@ -156,16 +155,16 @@ export default async function ServicesPage() {
                     {services === null ? (
                         <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
                             <p className="text-lg font-semibold text-gray-900">
-                                <T k="servicesPage.errorTitle" />
+                                Services are temporarily unavailable
                             </p>
                             <p className="mt-2 text-gray-500">
-                                <T k="servicesPage.errorDescription" />
+                                We could not connect to the services catalogue. Please try again shortly.
                             </p>
                         </div>
                     ) : services.length === 0 ? (
                         <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
                             <p className="text-gray-500">
-                                <T k="servicesPage.empty" />
+                                Services are being updated. Please check back soon.
                             </p>
                         </div>
                     ) : (
@@ -237,7 +236,7 @@ export default async function ServicesPage() {
                                                         />
                                                     ) : (
                                                         <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
-                                                            <T k="servicesPage.imageUnavailable" />
+                                                            Image unavailable
                                                         </div>
                                                     )}
                                                 </div>
@@ -254,7 +253,7 @@ export default async function ServicesPage() {
                                                             text-orange-500
                                                         "
                                                     >
-                                                        <T k="servicesPage.serviceLabel" />
+                                                        Service
                                                     </p>
 
                                                     <h2
@@ -295,7 +294,7 @@ export default async function ServicesPage() {
                                                             group-hover:text-orange-500
                                                         "
                                                     >
-                                                        <T k="servicesPage.viewService" />
+                                                        View Service
 
                                                         <span
                                                             className="

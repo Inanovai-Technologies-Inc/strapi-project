@@ -7,48 +7,45 @@ import { usePathname } from "next/navigation";
 
 import SiteSearch from "./SiteSearch";
 import ThemeToggle from "./ThemeToggle";
-import LanguageSelector from "./LanguageSelector";
-import { useI18n } from "@/components/I18nProvider";
 
 export default function Navbar() {
     const pathname = usePathname();
-    const { t } = useI18n();
 
     // ALL navigation routes live inside the hamburger menu.
     // Products is additionally visible in the main navbar.
     const navItems = [
         {
-            name: t("nav.home"),
+            name: "Home",
             href: "/",
             active: pathname === "/",
         },
         {
-            name: t("nav.about"),
+            name: "About",
             href: "/about",
             active: pathname.startsWith("/about"),
         },
         {
-            name: t("nav.products"),
+            name: "Products",
             href: "/product",
             active: pathname.startsWith("/product"),
         },
         {
-            name: t("nav.services"),
+            name: "Services",
             href: "/services",
             active: pathname.startsWith("/services"),
         },
         {
-            name: t("nav.careers"),
+            name: "Careers",
             href: "/careers",
             active: pathname.startsWith("/careers"),
         },
         {
-            name: t("nav.technicalDocuments"),
+            name: "Technical Documents",
             href: "/technical-documents",
             active: pathname.startsWith("/technical-documents"),
         },
         {
-            name: t("nav.contact"),
+            name: "Contact",
             href: "/contact",
             active: pathname.startsWith("/contact"),
         },
@@ -109,17 +106,17 @@ export default function Navbar() {
                     <Image
                         src="/images/marsol-solidworks-logo.png"
                         alt="Marsol Technologies"
-                        width={160}
-                        height={55}
+                        width={260}
+                        height={90}
                         priority
                         className="
                             h-auto
-                            w-[132px]
+                            w-[190px]
                             object-contain
 
                             dark:brightness-110
 
-                            sm:w-[150px]
+                            sm:w-[230px]
                         "
                     />
                 </Link>
@@ -206,7 +203,7 @@ export default function Navbar() {
                     )}
 
                     {/* =================================================
-                        LANGUAGE + THEME
+                        THEME
                         Always visible.
                     ================================================== */}
                     <div
@@ -224,7 +221,6 @@ export default function Navbar() {
                             dark:border-white/10
                         "
                     >
-                        <LanguageSelector />
                         <ThemeToggle />
                     </div>
 
@@ -236,7 +232,6 @@ export default function Navbar() {
                         id="main-navigation-menu"
                         items={navItems}
                         pathname={pathname}
-                        t={t}
                     />
                 </div>
             </div>
@@ -264,7 +259,6 @@ function NavMenu({
     id,
     items,
     pathname,
-    t,
 }: {
     id: string;
 
@@ -275,8 +269,6 @@ function NavMenu({
     }[];
 
     pathname: string;
-
-    t: (key: string) => string;
 }) {
     const [open, setOpen] = React.useState(false);
 
@@ -364,8 +356,8 @@ function NavMenu({
                 aria-controls={id}
                 aria-label={
                     open
-                        ? t("nav.closeMenu")
-                        : t("nav.openMenu")
+                        ? "Close menu"
+                        : "Open menu"
                 }
                 className="
                     group
@@ -392,8 +384,8 @@ function NavMenu({
             >
                 <span className="sr-only">
                     {open
-                        ? t("nav.closeMenu")
-                        : t("nav.openMenu")}
+                        ? "Close menu"
+                        : "Open menu"}
                 </span>
 
                 <span

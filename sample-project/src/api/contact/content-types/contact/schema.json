@@ -39,14 +39,6 @@
         }
       }
     },
-    "linkedinProfileUrl": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "emailAddress": {
       "type": "string",
       "pluginOptions": {

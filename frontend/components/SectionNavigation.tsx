@@ -1,23 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useI18n } from "@/components/I18nProvider";
 
 /* Order must mirror the rendered section order in app/page.tsx.
    Disabled sections (global-presence, news) are intentionally
    omitted so no dead dot is shown. */
 const sections = [
-    { id: "home" },
-    { id: "about" },
-    { id: "diffs" },
-    { id: "industries" },
-    { id: "products" },
-    { id: "certifications" },
-    { id: "request-quote" },
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "diffs", label: "DiFFS" },
+    { id: "industries", label: "Industries" },
+    { id: "products", label: "Products" },
+    { id: "certifications", label: "Certifications" },
+    { id: "request-quote", label: "Request a Quote" },
 ];
 
 export default function SectionNavigation() {
-    const { t } = useI18n();
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
@@ -78,13 +76,13 @@ export default function SectionNavigation() {
             <div className="flex flex-col items-center gap-4">
 
                 {sections.map((section) => {
-                    const label = t(`sectionNav.${section.id}`);
+                    const label = section.label;
 
                     return (
                     <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
-                        aria-label={`${t("sectionNav.goTo")} ${label}`}
+                        aria-label={`Go to ${label}`}
                         className="group relative flex items-center"
                     >
 

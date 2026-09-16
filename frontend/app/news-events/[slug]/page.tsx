@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { T } from "@/components/T";
 
 const STRAPI_URL = "http://localhost:1337";
 
@@ -39,18 +38,18 @@ export default async function NewsDetailPage({
                 <div className="text-center">
 
                     <h1 className="text-3xl font-bold text-gray-900">
-                        <T k="newsDetail.notFoundTitle" />
+                        News Not Found
                     </h1>
 
                     <p className="mt-3 text-gray-500">
-                        <T k="newsDetail.notFoundDescription" />
+                        The news article you are looking for does not exist.
                     </p>
 
                     <Link
                         href="/news-events"
                         className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
                     >
-                        <T k="newsDetail.back" />
+                        Back to News
                     </Link>
 
                 </div>
@@ -74,14 +73,14 @@ export default async function NewsDetailPage({
                         href="/news-events"
                         className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                     >
-                        ← <T k="newsDetail.back" />
+                        ← Back to News
                     </Link>
 
 
                     <div className="mt-10">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            <T k="newsDetail.eyebrow" />
+                            News & Events
                         </p>
 
                         <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
@@ -120,7 +119,7 @@ export default async function NewsDetailPage({
                     <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm sm:p-10">
 
                         <h2 className="text-2xl font-bold text-gray-900">
-                            <T k="newsDetail.descriptionHeading" />
+                            Description
                         </h2>
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -145,11 +144,11 @@ export default async function NewsDetailPage({
                     <div className="mx-auto max-w-5xl">
 
                         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            <T k="newsDetail.moreInfoEyebrow" />
+                            More Information
                         </p>
 
                         <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                            <T k="newsDetail.moreInfoTitle" />
+                            Additional Information
                         </h2>
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />

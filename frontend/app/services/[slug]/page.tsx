@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { T } from "@/components/T";
 import { renderBlocks } from "@/components/richText";
 import ServiceExpandable from "@/components/ServiceExpandable";
 import ServiceHeroCollapse from "@/components/ServiceHeroCollapse";
@@ -182,28 +181,28 @@ async function fetchService(slug: string) {
 ========================================================= */
 
 function ServiceMessage({
-    titleKey,
-    descriptionKey,
+    title,
+    description,
 }: {
-    titleKey: string;
-    descriptionKey: string;
+    title: string;
+    description: string;
 }) {
     return (
         <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
             <div className="max-w-lg text-center">
                 <h1 className="text-3xl font-bold text-gray-900">
-                    <T k={titleKey} />
+                    {title}
                 </h1>
 
                 <p className="mt-3 text-gray-500">
-                    <T k={descriptionKey} />
+                    {description}
                 </p>
 
                 <Link
                     href="/services"
                     className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
                 >
-                    <T k="serviceDetail.backToServices" />
+                    Back to Services
                 </Link>
             </div>
         </main>
@@ -224,8 +223,8 @@ export default async function ServiceDetailPage({
     if (error) {
         return (
             <ServiceMessage
-                titleKey="serviceDetail.errorTitle"
-                descriptionKey="serviceDetail.errorDescription"
+                title="Services are temporarily unavailable"
+                description="We could not connect to the services catalogue. Please try again shortly."
             />
         );
     }
@@ -233,8 +232,8 @@ export default async function ServiceDetailPage({
     if (!service) {
         return (
             <ServiceMessage
-                titleKey="serviceDetail.notFoundTitle"
-                descriptionKey="serviceDetail.notFoundDescription"
+                title="Service not found"
+                description="We could not find the service you are looking for."
             />
         );
     }
@@ -290,11 +289,11 @@ export default async function ServiceDetailPage({
                         href="/services"
                         className="inline-flex items-center text-sm font-medium text-white/75 transition hover:text-orange-400"
                     >
-                        ← <T k="serviceDetail.backToServices" />
+                        ← Back to Services
                     </Link>
 
                     <p className="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-orange-400 sm:text-sm">
-                        <T k="serviceDetail.eyebrow" />
+                        Service
                     </p>
 
                     <h1 className="mt-4 max-w-3xl text-2xl font-bold uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
@@ -312,13 +311,13 @@ export default async function ServiceDetailPage({
                             href="/services"
                             className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                         >
-                            ← <T k="serviceDetail.backToServices" />
+                            ← Back to Services
                         </Link>
 
                         <div className="mt-10">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="serviceDetail.eyebrow" />
+                                Service
                             </p>
 
                             <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
@@ -365,9 +364,7 @@ export default async function ServiceDetailPage({
                                 className="inline-flex items-center gap-3 rounded-lg bg-orange-500 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-600 hover:shadow-lg"
                             >
                                 <span>
-                                    {service.buttonText || (
-                                        <T k="serviceDetail.requestMoreInfo" />
-                                    )}
+                                    {service.buttonText || "Request More Info"}
                                 </span>
 
                                 <span className="text-lg">→</span>

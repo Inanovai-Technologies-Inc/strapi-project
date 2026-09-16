@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 
-import { useI18n } from "@/components/I18nProvider";
 import AmbientBackground from "@/components/AmbientBackground";
 
 /* Core values — icon per value, copy pulled from about.values.* */
@@ -17,9 +16,11 @@ const VALUE_ICON_PROPS = {
     className: "h-6 w-6",
 };
 
-const VALUES: { key: string; icon: React.ReactNode }[] = [
+const VALUES: { key: string; title: string; body: string; icon: React.ReactNode }[] = [
     {
         key: "accountability",
+        title: "Accountability",
+        body: "We take responsibility for our actions, decisions, and results. Whether it's a small task or a major project, we own the outcome and always strive to deliver what we promise.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -30,6 +31,8 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
     },
     {
         key: "integrity",
+        title: "Integrity",
+        body: "We are honest, fair & transparent. That's how we build trust with our team, Partners, and customers.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="m11 17 2 2a1 1 0 1 0 3-3" />
@@ -42,6 +45,8 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
     },
     {
         key: "passion",
+        title: "Passion",
+        body: "Our commitment to fire safety & innovation drives everything we do. Passion keeps us focused, motivated, and ready to take on any challenge.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5Z" />
@@ -50,6 +55,8 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
     },
     {
         key: "quality",
+        title: "Quality",
+        body: "Quality is at the core of everything we deliver, from our products to our service. We strive for excellence to ensure consistent performance and customer trust.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
@@ -59,6 +66,8 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
     },
     {
         key: "sustainability",
+        title: "Sustainability",
+        body: "Sustainability is part of our design. Our solutions are designed to protect not just people and assets, but also the environment by using cleaner, safer, and greener technologies.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
@@ -72,6 +81,8 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
     },
     {
         key: "innovation",
+        title: "Innovation",
+        body: "We're constantly looking for better ways to solve fire safety challenges. We push boundaries to solve modern fire risks with smarter and safer technologies.",
         icon: (
             <svg {...VALUE_ICON_PROPS}>
                 <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
@@ -83,10 +94,21 @@ const VALUES: { key: string; icon: React.ReactNode }[] = [
 ];
 
 export default function About() {
-    const { t } = useI18n();
-
     return (
         <main className="min-h-screen bg-gray-50 text-gray-800">
+
+            {/* Banner */}
+            <section className="relative h-[220px] w-full overflow-hidden sm:h-[320px] lg:h-[420px]">
+                <Image
+                    src="/images/about-us-banner.png"
+                    alt="Marsol Technologies global operations across aviation, maritime, offshore and industrial sites"
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#04121f]/60 via-transparent to-transparent" />
+            </section>
 
             {/* Hero */}
             <section className="has-ambient relative overflow-hidden border-b border-gray-200 bg-white">
@@ -94,20 +116,20 @@ export default function About() {
                 <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                        {t("about.hero.eyebrow")}
+                        About Us
                     </p>
 
                     <h1 className="mt-3 text-4xl font-bold text-[#0b1f3a] md:text-5xl">
-                        {t("about.hero.title")}
+                        The Values That Define Us
                     </h1>
 
                     <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-7 shadow-sm lg:p-10">
                         <p className="text-justify text-base leading-8 text-gray-600 lg:text-lg">
-                            {t("about.hero.description1")}
+                            At Marsol, our values are the foundation of everything we do. They guide our decisions, shape our systems, and strengthen our partnerships. More than principles, they represent who we are, how we work, and the standards of excellence we uphold in delivering world-class fire protection solutions.
                         </p>
 
                         <p className="mt-5 text-justify text-base leading-8 text-gray-600 lg:text-lg">
-                            {t("about.hero.description2")}
+                            Driven by integrity, innovation, reliability, and a commitment to safety, we strive to create lasting value for our customers, employees, and stakeholders. These values inspire us to consistently exceed expectations while protecting what matters most.
                         </p>
                     </div>
 
@@ -130,11 +152,11 @@ export default function About() {
                             </span>
 
                             <h2 className="mt-5 text-xl font-bold text-[#0b1f3a]">
-                                {t(`about.values.${value.key}Title`)}
+                                {value.title}
                             </h2>
 
                             <p className="mt-3 text-justify text-sm leading-7 text-gray-600">
-                                {t(`about.values.${value.key}Body`)}
+                                {value.body}
                             </p>
                         </div>
                     ))}
@@ -153,7 +175,7 @@ export default function About() {
 
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-400">
-                                {t("about.since.label")}
+                                Since
                             </p>
 
                             <p className="mt-2 text-6xl font-bold text-white">
@@ -164,7 +186,7 @@ export default function About() {
                         <div className="space-y-5 text-gray-300">
 
                             <p className="leading-8 text-justify">
-                                {t("about.since.p1")}
+                                At MARSOL, our expertise lies in fire suppression and life safety solutions, where innovation, performance, and safety come together. We design, develop, and deploy next-generation fire protection and life safety products and systems that help organizations achieve the highest standards of safety, reliability, and operational excellence.What sets MARSOL apart is our commitment to purposeful innovation. Every product and system is engineered to deliver enhanced performance, greater efficiency, and, most importantly, SAFETY.Headquartered in the USA, with offices in the UAE and India, MARSOL combines global reach with local responsiveness. This strategic presence enables us to effectively support customers across diverse industries and regions, providing tailored solutions that address evolving safety challenges. As a trusted partner in fire protection and life safety, we take pride in helping create safer workplaces, facilities, and communities around the world.
                             </p>
 
                             {/* <p className="leading-8">
@@ -192,20 +214,20 @@ export default function About() {
                 <div className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm lg:p-10">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                        {t("about.qhse.eyebrow")}
+                        QHSE
                     </p>
 
                     <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a] sm:text-3xl">
-                        {t("about.qhse.title")}
+                        Quality, Health, Safety & Environment
                     </h2>
 
                     <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_320px] lg:items-center">
 
                         <div className="space-y-4 text-justify text-sm leading-7 text-gray-600 sm:text-base sm:leading-8">
-                            <p>{t("about.qhse.p1")}</p>
-                            <p>{t("about.qhse.p2")}</p>
-                            <p>{t("about.qhse.p3")}</p>
-                            <p>{t("about.qhse.p4")}</p>
+                            <p>At Marsol, we operate by a simple yet powerful philosophy: &quot;Get it right the first time, every time, and strive to exceed customer expectations.&quot;</p>
+                            <p>We are committed to maintaining the highest standards of Quality, Health, Safety, and Environmental (QHSE) performance across all aspects of our operations. Marsol recognizes that the promotion of health, safety, and environmental responsibility is a shared commitment between management and employees at every level of the organization.</p>
+                            <p>To support this commitment, Marsol has implemented an Integrated Management System (IMS) accredited by TÜV Rheinland, ensuring compliance with internationally recognized standards and driving continuous improvement in our processes, services, and workplace practices.</p>
+                            <p>Through a culture of excellence, accountability, and sustainability, we strive to protect our people, preserve the environment, and deliver reliable, world-class fire protection solutions to our customers.</p>
                         </div>
 
                         <div className="flex justify-center lg:justify-end">
@@ -231,39 +253,39 @@ export default function About() {
                 <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
 
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                        {t("about.policies.eyebrow")}
+                        Policies
                     </p>
 
                     <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                        {t("about.policies.title")}
+                        Our Commitment
                     </h2>
 
                     <div className="mt-8 grid gap-4 sm:grid-cols-3">
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                {t("about.policies.hseTitle")}
+                                HSE Policy
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                {t("about.policies.hseDesc")}
+                                Health, Safety & Environment
                             </p>
                         </div>
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                {t("about.policies.qualityTitle")}
+                                Quality Policy
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                {t("about.policies.qualityDesc")}
+                                Quality and continuous improvement
                             </p>
                         </div>
 
                         <div className="rounded-lg border border-gray-200 p-5 transition hover:border-orange-400">
                             <h3 className="font-bold text-[#0b1f3a]">
-                                {t("about.policies.adcTitle")}
+                                ADC Policy
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                {t("about.policies.adcDesc")}
+                                Alcohol & Drug Policy
                             </p>
                         </div>
 
@@ -278,11 +300,11 @@ export default function About() {
             <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
-                    {t("about.locations.eyebrow")}
+                    Our Locations
                 </p>
 
                 <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a]">
-                    {t("about.locations.title")}
+                    Global Presence
                 </h2>
 
                 <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -331,7 +353,7 @@ export default function About() {
 
                 <div className="mt-8 rounded-xl bg-[#0b1f3a] p-7 text-center">
                     <p className="text-sm uppercase tracking-[0.2em] text-gray-400">
-                        {t("about.locations.email")}
+                        Email
                     </p>
 
                     <p className="mt-2 text-xl font-semibold text-white">
