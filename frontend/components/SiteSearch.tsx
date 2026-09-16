@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const STRAPI_URL =
+    process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
 type Product = {
     id: number;
     documentId?: string;
@@ -27,7 +30,7 @@ export default function SiteSearch() {
 
         try {
             const response = await fetch(
-                `http://localhost:1337/api/products?filters[Name][$containsi]=${encodeURIComponent(
+                `${STRAPI_URL}/api/products?filters[Name][$containsi]=${encodeURIComponent(
                     value
                 )}&populate=*`
             );

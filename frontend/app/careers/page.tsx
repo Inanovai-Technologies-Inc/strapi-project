@@ -3,7 +3,8 @@ import Link from "next/link";
 import AmbientBackground from "@/components/AmbientBackground";
 export const dynamic = "force-dynamic";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL =
+    process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 interface Career {
     id: number;
