@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { T } from "@/components/T";
 import AmbientBackground from "@/components/AmbientBackground";
 export const dynamic = "force-dynamic";
 
@@ -70,11 +69,11 @@ export default async function CareerPage() {
                 <div className="mx-auto max-w-7xl px-6 text-center">
 
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-                        <T k="careersPage.heroTitle" />
+                        Career
                     </h1>
 
                     <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-                        <T k="careersPage.heroDescription" />
+                        Join Marsol Technologies and be part of a team working towards solutions that help save lives.
                     </p>
 
                 </div>
@@ -89,134 +88,131 @@ export default async function CareerPage() {
 
                 <div className="mx-auto max-w-5xl px-6">
 
-                    {/* =================================================
-                        JOIN OUR TEAM
-                    ================================================= */}
-                    <div className="rounded-2xl bg-white p-8 shadow-sm md:p-12">
+                    <div className="space-y-16">
 
-                        <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                            JOIN OUR TEAM
-                        </h2>
+                        <div className="max-w-5xl">
 
-                        <h3 className="mb-3 text-lg font-bold text-gray-900">
-                            Join Our Team
-                        </h3>
-
-                        <p className="mb-6 text-lg leading-8 text-gray-700">
-                            At Marsol Technologies, we do more than design
-                            fire suppression systems. We bring together
-                            passionate professionals dedicated to protecting
-                            lives, safeguarding assets, and delivering
-                            innovative solutions.
-                        </p>
-
-                        <p className="mb-6 text-lg leading-8 text-gray-700">
-                            We believe great ideas can come from anyone,
-                            which is why we foster a culture of
-                            collaboration, continuous learning, and
-                            professional growth.
-                        </p>
-
-                        <p className="mb-8 text-lg leading-8 text-gray-700">
-                            If you&apos;re looking for a workplace where your
-                            contributions make a real impact and where you
-                            can help solve meaningful engineering challenges,
-                            we&apos;d love to hear from you.
-                        </p>
-
-                        <Link
-                            href="#job-openings"
-                            className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-                        >
-                            View Open Positions
-                            <span>&gt;</span>
-                        </Link>
-
-                        <div className="mt-12">
+                            <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                                JOIN OUR TEAM
+                            </h2>
 
                             <h3 className="mb-3 text-lg font-bold text-gray-900">
-                                Why Work With Us
+                                Join Our Team
                             </h3>
 
-                            <p className="mb-6 text-lg leading-8 text-gray-700">
-                                At Marsol Technologies, you&apos;re joining
-                                more than a company, you&apos;re becoming
-                                part of a mission to protect lives,
-                                safeguard critical assets, and create safer
-                                environments through innovative engineering
-                                solutions. Every role plays an important
-                                part in making a meaningful impact.
+                            <p className="mb-6 text-justify text-lg leading-8 text-gray-700">
+                                At Marsol Technologies, we do more than design
+                                fire suppression systems. We bring together
+                                passionate professionals dedicated to protecting
+                                lives, safeguarding assets, and delivering
+                                innovative solutions.
                             </p>
 
-                            <p className="text-lg leading-8 text-gray-700">
-                                We foster a culture built on collaboration,
-                                mutual respect, and a shared commitment to
-                                excellence. Whether you&apos;re advancing
-                                your expertise, contributing new ideas, or
-                                taking on exciting challenges, you&apos;ll
-                                find opportunities to grow and thrive with
-                                us.
+                            <p className="mb-6 text-justify text-lg leading-8 text-gray-700">
+                                We believe great ideas can come from anyone,
+                                which is why we foster a culture of
+                                collaboration, continuous learning, and
+                                professional growth.
                             </p>
 
-                        </div>
+                            <p className="mb-8 text-justify text-lg leading-8 text-gray-700">
+                                If you&apos;re looking for a workplace where your
+                                contributions make a real impact and where you
+                                can help solve meaningful engineering challenges,
+                                we&apos;d love to hear from you.
+                            </p>
 
-                    </div>
+                            <Link
+                                href="#job-openings"
+                                className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+                            >
+                                View Open Positions
+                                <span>&gt;</span>
+                            </Link>
 
+                            <div className="mt-12">
 
-                    {/* =================================================
-                        LIFE AT MARSOL TECHNOLOGIES
-                    ================================================= */}
-                    <div className="mt-16">
+                                <h3 className="mb-3 text-lg font-bold text-gray-900">
+                                    Why Work With Us
+                                </h3>
 
-                        <span className="inline-block rounded-full bg-orange-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
-                            Culture
-                        </span>
-
-                        <h2 className="mb-8 mt-4 text-3xl font-bold text-gray-900">
-                            LIFE AT MARSOL TECHNOLOGIES
-                        </h2>
-
-                        <div className="grid gap-10 md:grid-cols-2 md:items-center">
-
-                            <div className="space-y-5 text-lg leading-8 text-gray-700">
-
-                                <p>
-                                    At Marsol Technologies, life is about
-                                    collaboration, continuous learning, and
-                                    working together to build a safer
-                                    future. We believe in fostering a
-                                    supportive environment where every team
-                                    member is valued, encouraged, and
-                                    empowered to succeed.
+                                <p className="mb-6 text-justify text-lg leading-8 text-gray-700">
+                                    At Marsol Technologies, you&apos;re joining
+                                    more than a company, you&apos;re becoming
+                                    part of a mission to protect lives,
+                                    safeguard critical assets, and create safer
+                                    environments through innovative engineering
+                                    solutions. Every role plays an important
+                                    part in making a meaningful impact.
                                 </p>
 
-                                <p>
-                                    From casual coffee conversations and
-                                    team celebrations to tackling complex
-                                    engineering challenges, there&apos;s
-                                    always an opportunity to connect,
-                                    innovate, and grow. We embrace new
-                                    ideas, recognize achievements, and
-                                    inspire one another to deliver our
-                                    best.
-                                </p>
-
-                                <p>
-                                    It&apos;s a place where you can be
-                                    yourself, develop your skills, make a
-                                    meaningful impact, and take pride in
-                                    the work you do every day.
+                                <p className="text-justify text-lg leading-8 text-gray-700">
+                                    We foster a culture built on collaboration,
+                                    mutual respect, and a shared commitment to
+                                    excellence. Whether you&apos;re advancing
+                                    your expertise, contributing new ideas, or
+                                    taking on exciting challenges, you&apos;ll
+                                    find opportunities to grow and thrive with
+                                    us.
                                 </p>
 
                             </div>
 
-                            <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg sm:h-96">
-                                <Image
-                                    src="/images/career-image.jfif"
-                                    alt="Life at Marsol Technologies"
-                                    fill
-                                    className="object-cover"
-                                />
+                        </div>
+
+                        <div className="max-w-5xl">
+
+                            <span className="inline-block rounded-full bg-orange-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
+                                Culture
+                            </span>
+
+                            <h2 className="mb-8 mt-4 text-3xl font-bold text-gray-900">
+                                LIFE AT MARSOL TECHNOLOGIES
+                            </h2>
+
+                            <div className="grid gap-10 md:grid-cols-2 md:items-center">
+
+                                <div className="space-y-5 text-justify text-lg leading-8 text-gray-700">
+
+                                    <p>
+                                        At Marsol Technologies, life is about
+                                        collaboration, continuous learning, and
+                                        working together to build a safer
+                                        future. We believe in fostering a
+                                        supportive environment where every team
+                                        member is valued, encouraged, and
+                                        empowered to succeed.
+                                    </p>
+
+                                    <p>
+                                        From casual coffee conversations and
+                                        team celebrations to tackling complex
+                                        engineering challenges, there&apos;s
+                                        always an opportunity to connect,
+                                        innovate, and grow. We embrace new
+                                        ideas, recognize achievements, and
+                                        inspire one another to deliver our
+                                        best.
+                                    </p>
+
+                                    <p>
+                                        It&apos;s a place where you can be
+                                        yourself, develop your skills, make a
+                                        meaningful impact, and take pride in
+                                        the work you do every day.
+                                    </p>
+
+                                </div>
+
+                                <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg sm:h-96">
+                                    <Image
+                                        src="/images/career-image.jfif"
+                                        alt="Life at Marsol Technologies"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+
                             </div>
 
                         </div>
@@ -230,7 +226,7 @@ export default async function CareerPage() {
                     <div id="job-openings" className="mt-16 scroll-mt-24">
 
                         <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                            <T k="careersPage.jobOpenings" />
+                            JOB OPENINGS
                         </h2>
 
                         {careers.length === 0 ? (
@@ -238,7 +234,7 @@ export default async function CareerPage() {
                             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8">
 
                                 <p className="text-lg text-gray-600">
-                                    <T k="careersPage.noOpenings" />
+                                    We currently do not have any job openings.
                                 </p>
 
                             </div>
@@ -264,7 +260,7 @@ export default async function CareerPage() {
                                             {career.Department && (
                                                 <span>
                                                     <strong>
-                                                        <T k="careersPage.department" />
+                                                        Department:
                                                     </strong>{" "}
                                                     {career.Department}
                                                 </span>
@@ -273,7 +269,7 @@ export default async function CareerPage() {
                                             {career.Location && (
                                                 <span>
                                                     <strong>
-                                                        <T k="careersPage.location" />
+                                                        Location:
                                                     </strong>{" "}
                                                     {career.Location}
                                                 </span>
@@ -282,7 +278,7 @@ export default async function CareerPage() {
                                             {career.EmploymentType && (
                                                 <span>
                                                     <strong>
-                                                        <T k="careersPage.employmentType" />
+                                                        Employment Type:
                                                     </strong>{" "}
                                                     {career.EmploymentType}
                                                 </span>
@@ -292,7 +288,7 @@ export default async function CareerPage() {
 
 
                                         {career.Description && (
-                                            <p className="mt-5 line-clamp-3 leading-7 text-gray-700">
+                                            <p className="mt-5 line-clamp-3 text-justify leading-7 text-gray-700">
                                                 {career.Description}
                                             </p>
                                         )}
@@ -301,7 +297,7 @@ export default async function CareerPage() {
                                         {career.closingDate && (
                                             <p className="mt-4 text-sm text-gray-500">
                                                 <strong>
-                                                    <T k="careersPage.closingDate" />
+                                                    Closing Date:
                                                 </strong>{" "}
                                                 {new Date(
                                                     career.closingDate
@@ -319,7 +315,7 @@ export default async function CareerPage() {
                                                 href={`/careers/${career.slug}`}
                                                 className="inline-flex rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
                                             >
-                                                <T k="careersPage.viewPosition" />
+                                                View Position
                                             </Link>
 
                                         </div>

@@ -25,6 +25,16 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product.product"
+    },
+    "parentCategory": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-category.product-category"
+    },
+    "childCategories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-category.product-category"
     }
   }
 }

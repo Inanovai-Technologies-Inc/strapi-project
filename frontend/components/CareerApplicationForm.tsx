@@ -2,8 +2,6 @@
 
 import React, { FormEvent, useState } from "react";
 
-import { useI18n } from "@/components/I18nProvider";
-
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -16,7 +14,6 @@ export default function CareerApplicationForm({
     careerId,
     careerTitle,
 }: CareerApplicationFormProps) {
-    const { t } = useI18n();
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -43,25 +40,25 @@ export default function CareerApplicationForm({
 
             if (!fullName.trim()) {
                 throw new Error(
-                    t("careerApply.validationFullName")
+                    "Please enter your full name."
                 );
             }
 
             if (!email.trim()) {
                 throw new Error(
-                    t("careerApply.validationEmail")
+                    "Please enter your email."
                 );
             }
 
             if (!phone.trim()) {
                 throw new Error(
-                    t("careerApply.validationPhone")
+                    "Please enter your phone number."
                 );
             }
 
             if (!resume) {
                 throw new Error(
-                    t("careerApply.validationResume")
+                    "Please upload your resume."
                 );
             }
 
@@ -212,7 +209,7 @@ export default function CareerApplicationForm({
 
             if (!applicationResponse.ok) {
                 let errorMessage =
-                    t("careerApply.errorGeneric");
+                    "Failed to submit application.";
 
                 try {
                     const applicationResult =
@@ -254,7 +251,7 @@ export default function CareerApplicationForm({
             );
 
             setSuccess(
-                t("careerApply.success")
+                "Your application has been submitted successfully."
             );
 
             // Clear form
@@ -284,7 +281,7 @@ export default function CareerApplicationForm({
             setError(
                 error instanceof Error
                     ? error.message
-                    : t("careerApply.errorUnknown")
+                    : "Something went wrong while submitting your application."
             );
         } finally {
             setLoading(false);
@@ -302,7 +299,7 @@ export default function CareerApplicationForm({
 
             <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-900">
-                    {t("careerApply.position")}
+                    Position
                 </label>
 
                 <input
@@ -322,7 +319,7 @@ export default function CareerApplicationForm({
                     htmlFor="fullName"
                     className="mb-2 block text-sm font-semibold text-gray-900"
                 >
-                    {t("careerApply.fullName")} *
+                    Full Name *
                 </label>
 
                 <input
@@ -334,7 +331,7 @@ export default function CareerApplicationForm({
                             e.target.value
                         )
                     }
-                    placeholder={t("careerApply.placeholderFullName")}
+                    placeholder="Enter your full name"
                     required
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
                 />
@@ -349,7 +346,7 @@ export default function CareerApplicationForm({
                     htmlFor="email"
                     className="mb-2 block text-sm font-semibold text-gray-900"
                 >
-                    {t("careerApply.email")} *
+                    Email *
                 </label>
 
                 <input
@@ -361,7 +358,7 @@ export default function CareerApplicationForm({
                             e.target.value
                         )
                     }
-                    placeholder={t("careerApply.placeholderEmail")}
+                    placeholder="Enter your email"
                     required
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
                 />
@@ -376,7 +373,7 @@ export default function CareerApplicationForm({
                     htmlFor="phone"
                     className="mb-2 block text-sm font-semibold text-gray-900"
                 >
-                    {t("careerApply.phone")} *
+                    Phone *
                 </label>
 
                 <input
@@ -388,7 +385,7 @@ export default function CareerApplicationForm({
                             e.target.value
                         )
                     }
-                    placeholder={t("careerApply.placeholderPhone")}
+                    placeholder="Enter your phone number"
                     required
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
                 />
@@ -403,7 +400,7 @@ export default function CareerApplicationForm({
                     htmlFor="resume"
                     className="mb-2 block text-sm font-semibold text-gray-900"
                 >
-                    {t("careerApply.resume")} *
+                    Resume *
                 </label>
 
                 <input
@@ -422,7 +419,7 @@ export default function CareerApplicationForm({
                 />
 
                 <p className="mt-2 text-xs text-gray-500">
-                    {t("careerApply.acceptedFormats")}
+                    Accepted formats: PDF, DOC, DOCX
                 </p>
             </div>
 
@@ -435,7 +432,7 @@ export default function CareerApplicationForm({
                     htmlFor="coverLetter"
                     className="mb-2 block text-sm font-semibold text-gray-900"
                 >
-                    {t("careerApply.coverLetter")}
+                    Cover Letter
                 </label>
 
                 <textarea
@@ -447,7 +444,7 @@ export default function CareerApplicationForm({
                         )
                     }
                     rows={6}
-                    placeholder={t("careerApply.placeholderCoverLetter")}
+                    placeholder="Tell us why you are interested in this position..."
                     className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
                 />
             </div>
@@ -482,8 +479,8 @@ export default function CareerApplicationForm({
                 className="w-full rounded-lg bg-black px-6 py-3 font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {loading
-                    ? t("careerApply.submitting")
-                    : t("careerApply.submit")}
+                    ? "Submitting..."
+                    : "Submit Application"}
             </button>
         </form>
     );

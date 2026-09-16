@@ -16,7 +16,6 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-import { useI18n } from "@/components/I18nProvider";
 
 /* =========================================================
    FIX LEAFLET DEFAULT MARKER ICONS
@@ -105,7 +104,6 @@ function MapController({ offices }: OfficeMapProps) {
 export default function OfficeMapClient({
     offices,
 }: OfficeMapProps) {
-    const { t } = useI18n();
     const [selectedOffice, setSelectedOffice] =
         useState<Office | null>(offices[0] || null);
 
@@ -119,7 +117,7 @@ export default function OfficeMapClient({
         return (
             <div className="flex h-[500px] items-center justify-center rounded-2xl bg-gray-100">
                 <p className="text-gray-500">
-                    {t("officeMap.noLocations")}
+                    No office locations available.
                 </p>
             </div>
         );
@@ -198,7 +196,7 @@ export default function OfficeMapClient({
                             selectedOffice.services.length > 0 && (
                                 <div className="mt-6">
                                     <p className="mb-3 font-semibold text-gray-900">
-                                        {t("officeMap.services")}
+                                        Services
                                     </p>
 
                                     <div className="flex flex-wrap gap-2">
@@ -219,21 +217,21 @@ export default function OfficeMapClient({
                         <div className="mt-6 space-y-2 text-sm text-gray-700">
                             {selectedOffice.phone && (
                                 <p>
-                                    <strong>{t("officeMap.phone")}</strong>{" "}
+                                    <strong>Phone:</strong>{" "}
                                     {selectedOffice.phone}
                                 </p>
                             )}
 
                             {selectedOffice.fax && (
                                 <p>
-                                    <strong>{t("officeMap.fax")}</strong>{" "}
+                                    <strong>Fax:</strong>{" "}
                                     {selectedOffice.fax}
                                 </p>
                             )}
 
                             {selectedOffice.email && (
                                 <p>
-                                    <strong>{t("officeMap.email")}</strong>{" "}
+                                    <strong>Email:</strong>{" "}
                                     {selectedOffice.email}
                                 </p>
                             )}

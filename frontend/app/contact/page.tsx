@@ -3,7 +3,6 @@
 import React, { FormEvent, useState } from "react";
 import Link from "next/link";
 
-import { useI18n } from "@/components/I18nProvider";
 import AmbientBackground from "@/components/AmbientBackground";
 
 const STRAPI_URL =
@@ -13,7 +12,6 @@ interface ContactFormData {
     name: string;
     companyName: string;
     companyWebsite: string;
-    linkedinProfileUrl: string;
     emailAddress: string;
     phoneNumber: string;
     yourLocation: string;
@@ -27,7 +25,6 @@ const initialFormData: ContactFormData = {
     name: "",
     companyName: "",
     companyWebsite: "",
-    linkedinProfileUrl: "",
     emailAddress: "",
     phoneNumber: "",
     yourLocation: "",
@@ -57,7 +54,6 @@ function PhoneIcon() {
 }
 
 export default function ContactPage() {
-    const { t } = useI18n();
     const [formData, setFormData] =
         useState<ContactFormData>(initialFormData);
 
@@ -126,24 +122,24 @@ export default function ContactPage() {
             // =====================================================
 
             if (!formData.name.trim()) {
-                throw new Error(t("contact.validation.name"));
+                throw new Error("Please enter your name.");
             }
 
             if (!formData.emailAddress.trim()) {
                 throw new Error(
-                    t("contact.validation.email")
+                    "Please enter your email address."
                 );
             }
 
             if (!formData.yourLocation) {
                 throw new Error(
-                    t("contact.validation.location")
+                    "Please select your location."
                 );
             }
 
             if (!formData.subject) {
                 throw new Error(
-                    t("contact.validation.subject")
+                    "Please select a subject."
                 );
             }
 
@@ -160,9 +156,6 @@ export default function ContactPage() {
 
                     companyWebsite:
                         formData.companyWebsite.trim(),
-
-                    linkedinProfileUrl:
-                        formData.linkedinProfileUrl.trim(),
 
                     emailAddress:
                         formData.emailAddress.trim(),
@@ -232,7 +225,7 @@ export default function ContactPage() {
 
             if (!response.ok) {
                 let errorMessage =
-                    t("contact.validation.generic");
+                    "Failed to submit contact form.";
 
                 try {
                     const errorData =
@@ -309,7 +302,7 @@ export default function ContactPage() {
             );
 
             setSuccess(
-                t("contact.success")
+                "Thank you for contacting us. We will get back to you soon."
             );
 
             setFormData(
@@ -325,7 +318,7 @@ export default function ContactPage() {
             setError(
                 err instanceof Error
                     ? err.message
-                    : t("contact.validation.unknown")
+                    : "Something went wrong while submitting the form."
             );
         } finally {
             setLoading(false);
@@ -348,11 +341,11 @@ export default function ContactPage() {
                 <div className="mx-auto max-w-7xl px-6 text-center">
 
                     <h1 className="text-4xl font-bold text-[#0b1f3a]">
-                        {t("contact.title")}
+                        Contact Us
                     </h1>
 
                     <p className="mx-auto mt-4 text-gray-500 lg:whitespace-nowrap">
-                        {t("contact.description")}
+                        Have a question or need technical assistance? Share your requirements, and our team will get back to you shortly.
                     </p>
 
                 </div>
@@ -382,7 +375,7 @@ export default function ContactPage() {
                                     htmlFor="name"
                                     className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    {t("contact.form.name")} *
+                                    Name *
                                 </label>
 
                                 <input
@@ -392,7 +385,7 @@ export default function ContactPage() {
                                     required
                                     value={formData.name}
                                     onChange={handleChange}
-                                    placeholder={t("contact.placeholders.name")}
+                                    placeholder="Your Name"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
@@ -402,7 +395,7 @@ export default function ContactPage() {
                                     htmlFor="companyName"
                                     className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    {t("contact.form.companyName")}
+                                    Company Name
                                 </label>
 
                                 <input
@@ -413,7 +406,7 @@ export default function ContactPage() {
                                         formData.companyName
                                     }
                                     onChange={handleChange}
-                                    placeholder={t("contact.placeholders.companyName")}
+                                    placeholder="Company Name"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
@@ -421,17 +414,17 @@ export default function ContactPage() {
                         </div>
 
                         {/* =================================================
-                            WEBSITE + LINKEDIN
+                            WEBSITE
                         ================================================= */}
 
-                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-1">
 
                             <div>
                                 <label
                                     htmlFor="companyWebsite"
                                     className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    {t("contact.form.companyWebsite")}
+                                    Company Website
                                 </label>
 
                                 <input
@@ -442,28 +435,7 @@ export default function ContactPage() {
                                         formData.companyWebsite
                                     }
                                     onChange={handleChange}
-                                    placeholder={t("contact.placeholders.companyWebsite")}
-                                    className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="linkedinProfileUrl"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
-                                    {t("contact.form.linkedinUrl")}
-                                </label>
-
-                                <input
-                                    id="linkedinProfileUrl"
-                                    name="linkedinProfileUrl"
-                                    type="text"
-                                    value={
-                                        formData.linkedinProfileUrl
-                                    }
-                                    onChange={handleChange}
-                                    placeholder={t("contact.placeholders.linkedinUrl")}
+                                    placeholder="Company Website"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
@@ -481,7 +453,7 @@ export default function ContactPage() {
                                     htmlFor="emailAddress"
                                     className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    {t("contact.form.email")} *
+                                    Email Address *
                                 </label>
 
                                 <input
@@ -493,7 +465,7 @@ export default function ContactPage() {
                                         formData.emailAddress
                                     }
                                     onChange={handleChange}
-                                    placeholder={t("contact.placeholders.email")}
+                                    placeholder="Email Address"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
@@ -503,7 +475,7 @@ export default function ContactPage() {
                                     htmlFor="phoneNumber"
                                     className="mb-2 block text-sm font-medium text-gray-700"
                                 >
-                                    {t("contact.form.phone")}
+                                    Phone Number
                                 </label>
 
                                 <input
@@ -514,7 +486,7 @@ export default function ContactPage() {
                                         formData.phoneNumber
                                     }
                                     onChange={handleChange}
-                                    placeholder={t("contact.placeholders.phone")}
+                                    placeholder="Phone Number"
                                     className="w-full border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                                 />
                             </div>
@@ -531,7 +503,7 @@ export default function ContactPage() {
                                 htmlFor="yourLocation"
                                 className="mb-2 block text-sm font-medium text-gray-700"
                             >
-                                {t("contact.form.location")} *
+                                Your Location *
                             </label>
 
                             <select
@@ -545,35 +517,35 @@ export default function ContactPage() {
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
                                 <option value="">
-                                    {t("contact.select.location")}
+                                    Select Your Location
                                 </option>
 
                                 <option value="Asia">
-                                    {t("contact.locations.asia")}
+                                    Asia
                                 </option>
 
                                 <option value="Australasia">
-                                    {t("contact.locations.australasia")}
+                                    Australasia
                                 </option>
 
                                 <option value="Europe">
-                                    {t("contact.locations.europe")}
+                                    Europe
                                 </option>
 
                                 <option value="India">
-                                    {t("contact.locations.india")}
+                                    India
                                 </option>
 
                                 <option value="Middle East and Africa">
-                                    {t("contact.locations.mea")}
+                                    Middle East and Africa
                                 </option>
 
                                 <option value="North America">
-                                    {t("contact.locations.northAmerica")}
+                                    North America
                                 </option>
 
                                 <option value="South America">
-                                    {t("contact.locations.southAmerica")}
+                                    South America
                                 </option>
 
                             </select>
@@ -590,7 +562,7 @@ export default function ContactPage() {
                                 htmlFor="subject"
                                 className="mb-2 block text-sm font-medium text-gray-700"
                             >
-                                {t("contact.form.subject")} *
+                                Subject *
                             </label>
 
                             <select
@@ -604,19 +576,19 @@ export default function ContactPage() {
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
                                 <option value="">
-                                    {t("contact.select.subject")}
+                                    Select Subject
                                 </option>
 
                                 <option value="General Request">
-                                    {t("contact.subjects.general")}
+                                    General Request
                                 </option>
 
                                 <option value="Technical Request">
-                                    {t("contact.subjects.technical")}
+                                    Technical Request
                                 </option>
 
                                 <option value="Other">
-                                    {t("contact.subjects.other")}
+                                    Other
                                 </option>
 
                             </select>
@@ -633,7 +605,7 @@ export default function ContactPage() {
                                 htmlFor="howDidYouHearAboutUs"
                                 className="mb-2 block text-sm font-medium text-gray-700"
                             >
-                                {t("contact.form.howHeard")}
+                                How did you hear about us?
                             </label>
 
                             <select
@@ -646,27 +618,27 @@ export default function ContactPage() {
                                 className="w-full appearance-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             >
                                 <option value="">
-                                    {t("contact.select.option")}
+                                    Select an option
                                 </option>
 
                                 <option value="Friend, Colleague">
-                                    {t("contact.howHeardOptions.friend")}
+                                    Friend, Colleague
                                 </option>
 
                                 <option value="Search Engine (Bing etc.)">
-                                    {t("contact.howHeardOptions.searchEngine")}
+                                    Search Engine (Bing etc.)
                                 </option>
 
                                 <option value="Print">
-                                    {t("contact.howHeardOptions.print")}
+                                    Print
                                 </option>
 
                                 <option value="Exhibition">
-                                    {t("contact.howHeardOptions.exhibition")}
+                                    Exhibition
                                 </option>
 
                                 <option value="Other Channel">
-                                    {t("contact.howHeardOptions.otherChannel")}
+                                    Other Channel
                                 </option>
 
                             </select>
@@ -683,7 +655,7 @@ export default function ContactPage() {
                                 htmlFor="yourMessage"
                                 className="mb-2 block text-sm font-medium text-gray-700"
                             >
-                                {t("contact.form.message")}
+                                Your Message
                             </label>
 
                             <textarea
@@ -694,7 +666,7 @@ export default function ContactPage() {
                                     formData.yourMessage
                                 }
                                 onChange={handleChange}
-                                placeholder={t("contact.placeholders.message")}
+                                placeholder="Your Message"
                                 className="w-full resize-none border border-gray-200 bg-gray-50 px-4 py-4 text-gray-800 outline-none transition focus:border-blue-600 focus:bg-white"
                             />
 
@@ -705,7 +677,7 @@ export default function ContactPage() {
                         ================================================= */}
 
                         <p className="font-semibold text-gray-900">
-                            {t("contact.disclaimer")}
+                            We welcome genuine inquiries related to business, customer support, and partnerships. Spam, unsolicited promotions, and marketing messages will not be reviewed or responded to.
                         </p>
 
                         {/* =================================================
@@ -788,8 +760,8 @@ export default function ContactPage() {
                                 className="rounded-lg bg-blue-600 px-10 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                                 {loading
-                                    ? t("contact.form.submitting")
-                                    : t("contact.form.submit")}
+                                    ? "Submitting..."
+                                    : "Submit Form"}
                             </button>
 
                         </div>

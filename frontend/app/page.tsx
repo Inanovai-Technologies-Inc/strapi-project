@@ -7,7 +7,6 @@ import SectionNavigation from "@/components/SectionNavigation";
 import Reveal from "@/components/Reveal";
 import HomeMotion, { DiffsMotion, FlowingLines } from "@/components/HomeMotion";
 import AmbientBackground from "@/components/AmbientBackground";
-import { T } from "@/components/T";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -144,10 +143,12 @@ export default async function Home() {
                 id="home"
                 className="
                     relative
+                    h-[100vh]
                     min-h-[600px]
                     overflow-hidden
                     bg-[#04121f]
-                    lg:min-h-0
+                    lg:h-screen
+                    lg:min-h-screen
                 "
             >
 
@@ -164,8 +165,9 @@ export default async function Home() {
                     preload="auto"
                     className="
                         block
-                        h-auto
+                        h-full
                         w-full
+                        object-cover
                     "
                 >
                     <source
@@ -297,25 +299,25 @@ export default async function Home() {
                         <h1
                             className="
                                 max-w-[680px]
-                                text-[3.1rem]
+                                text-[2.15rem]
                                 font-semibold
                                 leading-[1.02]
                                 tracking-[-0.045em]
                                 text-white
                                 drop-shadow-[0_3px_18px_rgba(0,0,0,0.45)]
 
-                                sm:text-[3.75rem]
-                                md:text-[4.25rem]
-                                lg:text-[4.75rem]
-                                xl:text-[5rem]
+                                sm:text-[2.6rem]
+                                md:text-[3rem]
+                                lg:text-[3.3rem]
+                                xl:text-[3.6rem]
                             "
                         >
-                            <T k="home.hero.titleLine1" />
+                            Engineering Excellence
 
                             <br />
 
                             <span className="text-orange-500">
-                                <T k="home.hero.titleLine2" />
+                                in Fire Protection
                             </span>
 
                             <br />
@@ -345,7 +347,7 @@ export default async function Home() {
                                 lg:text-[17px]
                             "
                         >
-                            <T k="home.hero.description" />
+                            Over 30 years of proven expertise in delivering advanced fire suppression and life safety solutions, protecting people, property, and business continuity across diverse industries.
                         </p>
 
 
@@ -390,7 +392,7 @@ export default async function Home() {
                                     hover:shadow-xl
                                 "
                             >
-                                <T k="home.hero.learnMore" />
+                                Learn More
 
                                 <span
                                     className="
@@ -433,7 +435,7 @@ export default async function Home() {
                                     hover:bg-white/20
                                 "
                             >
-                                <T k="home.hero.ourProducts" />
+                                Our Products
 
                                 <span
                                     className="
@@ -480,7 +482,7 @@ export default async function Home() {
                             text-white/60
                         "
                     >
-                        <T k="home.hero.scroll" />
+                        Scroll
                     </span>
 
                     <span
@@ -569,7 +571,7 @@ export default async function Home() {
                                     lg:text-5xl
                                 "
                             >
-                                <T k="home.about.title" />
+                                Welcome to Marsol Technologies
                             </h2>
 
                             <div className="mt-4 h-1 w-16 rounded-full bg-orange-500" />
@@ -586,7 +588,7 @@ export default async function Home() {
                                     sm:leading-8
                                 "
                             >
-                                <T k="home.about.description" />
+                                Marsol Technologies, Inc. is a global leader in firefighting and safety solutions, delivering innovative fire protection systems that safeguard people, assets, and critical operations. With operations across the USA, UAE, and India, we combine engineering excellence, quality, and reliability to serve customers worldwide. Our ISO 9001, ISO 14001, and ISO 45001 certifications reflect our unwavering commitment to safety, quality, and environmental responsibility.
                             </p>
 
                             <Link
@@ -612,7 +614,7 @@ export default async function Home() {
                                     hover:bg-orange-500
                                 "
                             >
-                                <T k="home.about.learnMore" />
+                                Learn More
 
                                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                                     →
@@ -766,7 +768,7 @@ export default async function Home() {
                                     text-orange-500
                                 "
                             >
-                                <T k="home.diffs.eyebrow" />
+                                Innovation
                             </p>
 
                             <h2
@@ -797,7 +799,7 @@ export default async function Home() {
                                     sm:leading-8
                                 "
                             >
-                                <T k="home.diffs.description" />
+                                Marsol's Deck Integrated Firefighting System (DiFFS) provides rapid, reliable fire protection for helipads and helidecks. Designed for automatic or manual operation, the system delivers effective foam-water suppression across the entire deck surface. Tested, certified, and engineered to meet leading international standards, DiFFS ensures superior safety and dependable performance in critical operations.
                             </p>
 
                             <Link
@@ -828,7 +830,7 @@ export default async function Home() {
                                     lg:mt-auto
                                 "
                             >
-                                <T k="home.diffs.learnMore" />
+                                Learn More
 
                                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                                     →
@@ -887,7 +889,7 @@ export default async function Home() {
                                     text-orange-400
                                 "
                             >
-                                <T k="home.industries.eyebrow" />
+                                Industries
                             </p>
 
                             <h2
@@ -901,7 +903,7 @@ export default async function Home() {
                                     lg:text-5xl
                                 "
                             >
-                                <T k="home.industries.title" />
+                                Market Segments We Serve
                             </h2>
 
                             <p
@@ -915,7 +917,7 @@ export default async function Home() {
                                     sm:text-base
                                 "
                             >
-                                <T k="home.industries.description" />
+                                Advanced fire protection and safety solutions designed for demanding environments.
                             </p>
                         </div>
                     </Reveal>
@@ -1064,7 +1066,7 @@ export default async function Home() {
                                     text-orange-500
                                 "
                             >
-                                <T k="home.products.eyebrow" />
+                                Our Products
                             </p>
 
                             <h2
@@ -1078,7 +1080,7 @@ export default async function Home() {
                                     lg:text-5xl
                                 "
                             >
-                                <T k="home.products.title" />
+                                Product Portfolio
                             </h2>
 
                             <p
@@ -1092,7 +1094,7 @@ export default async function Home() {
                                     sm:text-base
                                 "
                             >
-                                <T k="home.products.description" />
+                                Here is a sneak peek of our top-notch products that are widely used across the industry.
                             </p>
                         </div>
                     </Reveal>
@@ -1113,7 +1115,7 @@ export default async function Home() {
                             "
                         >
                             <p className="text-gray-500">
-                                <T k="home.products.noProducts" />
+                                No products available.
                             </p>
                         </div>
                     ) : (
@@ -1191,7 +1193,7 @@ export default async function Home() {
                                                         />
                                                     ) : (
                                                         <div className="text-sm text-gray-400">
-                                                            <T k="home.products.imageUnavailable" />
+                                                            Product image unavailable
                                                         </div>
                                                     )}
 
@@ -1221,7 +1223,7 @@ export default async function Home() {
                                                             text-orange-500
                                                         "
                                                     >
-                                                        <T k="home.products.category" />
+                                                        Fire Protection
                                                     </p>
 
                                                     <h3
@@ -1250,9 +1252,8 @@ export default async function Home() {
                                                             text-gray-600
                                                         "
                                                     >
-                                                        {product.description || (
-                                                            <T k="home.products.defaultDescription" />
-                                                        )}
+                                                        {product.description ||
+                                                            "Engineered fire protection equipment designed for reliable performance and demanding safety applications."}
                                                     </p>
 
                                                     <Link
@@ -1272,7 +1273,7 @@ export default async function Home() {
                                                             hover:text-orange-600
                                                         "
                                                     >
-                                                        <T k="home.products.viewProduct" />
+                                                        View Product
 
                                                         <span
                                                             className="
@@ -1318,7 +1319,7 @@ export default async function Home() {
                                     hover:bg-orange-500
                                 "
                             >
-                                <T k="home.products.viewAll" />
+                                View All Products
 
                                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                                     →
@@ -1378,7 +1379,7 @@ export default async function Home() {
                                     ▶
                                 </span>
 
-                                <T k="home.products.playVideo" />
+                                Play Product Video
                             </a>
                         </div>
                     </Reveal>
@@ -1418,7 +1419,7 @@ export default async function Home() {
                                     text-orange-500
                                 "
                             >
-                                <T k="home.certifications.eyebrow" />
+                                Quality & Compliance
                             </p>
 
                             <h2
@@ -1432,7 +1433,7 @@ export default async function Home() {
                                     lg:text-5xl
                                 "
                             >
-                                <T k="home.certifications.title" />
+                                Certifications
                             </h2>
                         </div>
                     </Reveal>
@@ -1513,7 +1514,7 @@ export default async function Home() {
                                     lg:text-5xl
                                 "
                             >
-                                <T k="home.globalPresence.title" />
+                                Global Presence
                             </h2>
 
                             <p
@@ -1527,7 +1528,7 @@ export default async function Home() {
                                     sm:text-base
                                 "
                             >
-                                <T k="home.globalPresence.description" />
+                                Our operations across the USA, UAE and India provide customers with local sales, engineering and support.
                             </p>
                         </div>
                     </Reveal>
@@ -1546,7 +1547,7 @@ export default async function Home() {
                                 "
                             >
                                 <p className="text-gray-500">
-                                    <T k="home.globalPresence.noOffices" />
+                                    No office locations available.
                                 </p>
                             </div>
                         ) : (
@@ -1615,7 +1616,7 @@ export default async function Home() {
                                         text-orange-500
                                     "
                                 >
-                                    <T k="home.news.eyebrow" />
+                                    Updates
                                 </p>
 
                                 <h2
@@ -1629,7 +1630,7 @@ export default async function Home() {
                                         lg:text-5xl
                                     "
                                 >
-                                    <T k="home.news.title" />
+                                    Latest News
                                 </h2>
                             </div>
 
@@ -1649,7 +1650,7 @@ export default async function Home() {
                                     hover:text-orange-600
                                 "
                             >
-                                <T k="home.news.moreNews" />
+                                More News
 
                                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                                     →
@@ -1699,7 +1700,7 @@ export default async function Home() {
                                             text-orange-500
                                         "
                                     >
-                                        <T k="home.news.badge" />
+                                        News & Events
                                     </p>
 
                                     <h3
@@ -1749,7 +1750,7 @@ export default async function Home() {
                                             hover:text-orange-500
                                         "
                                     >
-                                        <T k="home.news.readMore" />
+                                        Read More
 
                                         <span className="transition-transform duration-300 group-hover/link:translate-x-1">
                                             →

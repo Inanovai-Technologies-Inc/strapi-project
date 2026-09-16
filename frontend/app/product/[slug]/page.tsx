@@ -2,7 +2,6 @@ import Link from "next/link";
 import ProductContext from "@/components/ProductContext";
 import FeatureTabs from "@/components/FeatureTabs";
 import { renderBlocks } from "@/components/richText";
-import { T } from "@/components/T";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL ||
@@ -162,18 +161,18 @@ function ProductLoadError() {
         <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
             <div className="max-w-lg text-center">
                 <h1 className="text-3xl font-bold text-gray-900">
-                    <T k="productDetail.errorTitle" />
+                    Products are temporarily unavailable
                 </h1>
 
                 <p className="mt-3 text-gray-500">
-                    <T k="productDetail.errorDescription" />
+                    We could not connect to the product catalogue. Please try again shortly.
                 </p>
 
                 <Link
                     href="/product"
                     className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
                 >
-                    <T k="productDetail.backToProducts" />
+                    Back to Products
                 </Link>
             </div>
         </main>
@@ -460,7 +459,7 @@ export default async function ProductDetailPage({
                         href="/product"
                         className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                     >
-                        ← <T k="productDetail.backToProducts" />
+                        ← Back to Products
                     </Link>
 
                     <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -486,7 +485,7 @@ export default async function ProductDetailPage({
                                     />
                                 ) : (
                                     <p className="text-gray-400">
-                                        <T k="productDetail.noImage" />
+                                        No image available
                                     </p>
                                 )}
 
@@ -505,7 +504,7 @@ export default async function ProductDetailPage({
                                 <div className="bg-white px-6 py-6">
 
                                     <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
-                                        <T k="productDetail.certifications" />
+                                        Certifications
                                     </p>
 
                                     <div className="mt-5 flex flex-wrap items-center justify-center gap-5">
@@ -547,7 +546,7 @@ export default async function ProductDetailPage({
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.eyebrow" />
+                                Product
                             </p>
 
                             <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
@@ -560,7 +559,7 @@ export default async function ProductDetailPage({
                                 <div className="mt-8">
 
                                     <h2 className="text-xl font-bold text-gray-900">
-                                        <T k="productDetail.descriptionHeading" />
+                                        Description
                                     </h2>
 
                                     <p className="mt-4 whitespace-pre-line text-justify text-base leading-8 text-gray-600">
@@ -581,7 +580,7 @@ export default async function ProductDetailPage({
                                     className="inline-flex items-center gap-3 rounded-lg bg-orange-500 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-600 hover:shadow-lg"
                                 >
                                     <span>
-                                        <T k="productDetail.requestMoreInfo" />
+                                        Request More Info
                                     </span>
 
                                     <span className="text-lg">
@@ -613,17 +612,17 @@ export default async function ProductDetailPage({
                         <div className="mb-14">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.foamSkidEyebrow" />
+                                Foam Tank Skid
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                <T k="productDetail.foamSkidTitle" />
+                                Foam Skid Series
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-5 max-w-3xl text-justify text-base leading-8 text-gray-500">
-                                <T k="productDetail.foamSkidDescription" />
+                                Marsol has developed different foam skid series to meet various project and installation requirements.
                             </p>
 
                         </div>
@@ -696,7 +695,7 @@ export default async function ProductDetailPage({
                                                         ) : (
                                                             <div className="text-center">
                                                                 <p className="text-sm text-gray-400">
-                                                                    <T k="productDetail.noSeriesImage" />
+                                                                    No series image available
                                                                 </p>
                                                             </div>
                                                         )}
@@ -710,7 +709,7 @@ export default async function ProductDetailPage({
                                                         <div className="bg-white px-4 py-4">
 
                                                             <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-                                                                <T k="productDetail.certifications" />
+                                                                Certifications
                                                             </p>
 
                                                             <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
@@ -752,7 +751,7 @@ export default async function ProductDetailPage({
                                                 <div className="flex flex-col justify-center px-2 py-8 lg:px-8 lg:py-12">
 
                                                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                                        <T k="productDetail.foamSkidSeriesEyebrow" />
+                                                        Foam Skid Series
                                                     </p>
 
                                                     <h3 className="mt-3 text-2xl font-bold uppercase leading-tight text-[#0b1f3a] sm:text-3xl">
@@ -780,7 +779,7 @@ export default async function ProductDetailPage({
                                                         </p>
                                                     ) : (
                                                         <p className="mt-7 text-base text-gray-400">
-                                                            <T k="productDetail.noSeriesDescription" />
+                                                            No description available.
                                                         </p>
                                                     )}
 
@@ -811,11 +810,11 @@ export default async function ProductDetailPage({
                         <div className="mx-auto max-w-7xl">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.featuresEyebrow" />
+                                Product Details
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                                <T k="productDetail.featuresTitle" />
+                                Features
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -838,11 +837,11 @@ export default async function ProductDetailPage({
                         <div className="mx-auto max-w-7xl">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.applicationsEyebrow" />
+                                Industries
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                                <T k="productDetail.applicationsTitle" />
+                                Applications
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -871,11 +870,11 @@ export default async function ProductDetailPage({
                         <div className="mb-8">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.specsEyebrow" />
+                                Product Information
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                                <T k="productDetail.specsTitle" />
+                                Technical Specifications
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
@@ -887,11 +886,11 @@ export default async function ProductDetailPage({
                             <div className="grid grid-cols-1 border-b border-gray-200 bg-gray-900 text-white sm:grid-cols-[220px_1fr]">
 
                                 <div className="px-5 py-3 text-sm font-bold uppercase tracking-wider">
-                                    <T k="productDetail.specsSpecification" />
+                                    Specification
                                 </div>
 
                                 <div className="px-5 py-3 text-sm font-bold uppercase tracking-wider">
-                                    <T k="productDetail.specsValue" />
+                                    Value
                                 </div>
 
                             </div>
@@ -941,17 +940,17 @@ export default async function ProductDetailPage({
                         <div className="mb-10">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.relatedEyebrow" />
+                                Explore More
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                <T k="productDetail.relatedTitle" />
+                                Related Products
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-4 max-w-2xl text-justify text-base leading-7 text-gray-500">
-                                <T k="productDetail.relatedDescriptionPrefix" />
+                                Explore products related to
                                 <span className="font-semibold text-gray-700">
                                     {product.Name}
                                 </span>
@@ -1006,7 +1005,7 @@ export default async function ProductDetailPage({
                                                     />
                                                 ) : (
                                                     <div className="text-sm text-gray-400">
-                                                        <T k="productDetail.relatedImageUnavailable" />
+                                                        Product image unavailable
                                                     </div>
                                                 )}
 
@@ -1019,7 +1018,7 @@ export default async function ProductDetailPage({
                                             <div className="px-2 pb-4 pt-4">
 
                                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
-                                                    <T k="productDetail.relatedBadge" />
+                                                    Related Product
                                                 </p>
 
                                                 <h3 className="mt-3 min-h-[56px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
@@ -1029,9 +1028,8 @@ export default async function ProductDetailPage({
                                                 </h3>
 
                                                 <p className="mt-4 line-clamp-3 text-justify text-sm leading-6 text-gray-500">
-                                                    {related.description || (
-                                                        <T k="productDetail.relatedDefaultDescription" />
-                                                    )}
+                                                    {related.description ||
+                                                        "Explore this related fire protection solution."}
                                                 </p>
 
                                                 {related.slug && (
@@ -1040,7 +1038,7 @@ export default async function ProductDetailPage({
                                                         className="mt-6 flex items-center justify-between border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 hover:border-orange-500 hover:bg-orange-500 hover:text-white"
                                                     >
                                                         <span>
-                                                            <T k="productDetail.relatedViewProduct" />
+                                                            View Product
                                                         </span>
 
                                                         <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
@@ -1075,19 +1073,17 @@ export default async function ProductDetailPage({
                         <div className="text-center">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productDetail.videoEyebrow" />
+                                Product Demonstration
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                {product.VideoTitle || (
-                                    <T k="productDetail.videoDefaultTitle" />
-                                )}
+                                {product.VideoTitle || "Product Video"}
                             </h2>
 
                             <div className="mx-auto mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-gray-500">
-                                <T k="productDetail.videoDescription" />
+                                Watch the product demonstration to learn more about its features, operation and capabilities.
                             </p>
 
                         </div>

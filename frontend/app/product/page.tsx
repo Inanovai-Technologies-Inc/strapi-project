@@ -1,10 +1,9 @@
 
 import { Suspense } from "react";
 import Link from "next/link";
-import { T } from "@/components/T";
 import AmbientBackground from "@/components/AmbientBackground";
 import ProductCatalogueView, {
-    type CatalogueGroup,
+    type CatalogueCategoryNode,
     type CatalogueProduct,
 } from "@/components/ProductCatalogueView";
 
@@ -79,14 +78,37 @@ function normalizeList(relation: any): any[] {
    DATA FETCHING (existing Strapi REST integration)
 ========================================================= */
 
-async function fetchCategories() {
-    const url =
-        `${STRAPI_URL}/api/product-categories` +
-        `?populate%5Bproducts%5D%5Bpopulate%5D%5BImage%5D=true` +
-        `&sort=createdAt:asc` +
-        `&pagination%5BpageSize%5D=100`;
+/* =========================================================
+   PRODUCT CATEGORY TREE
 
-    const response = await fetch(url, { cache: "no-store" });
+   Strapi's product-categories are self-related two ways:
+   `parentCategory` (a child points up to its parent) and
+   `childCategories` (a parent lists its children). Content
+   editors aren't guaranteed to keep both sides in sync, so the
+   tree below is built from the UNION of both directions —
+   whichever side actually got filled in still produces the
+   correct hierarchy.
+
+   Only categories with no `parentCategory` are treated as
+   top-level ("Categories" sidebar entries); everything else is
+   nested under its parent, to any depth.
+========================================================= */
+
+async function fetchProductCategoryTree(): Promise<
+    CatalogueCategoryNode[]
+> {
+    const params = new URLSearchParams();
+
+    params.set("sort", "createdAt:asc");
+    params.set("pagination[pageSize]", "200");
+    params.set("populate[products][populate][Image]", "true");
+    params.set("populate[parentCategory]", "true");
+    params.set("populate[childCategories]", "true");
+
+    const response = await fetch(
+        `${STRAPI_URL}/api/product-categories?${params.toString()}`,
+        { cache: "no-store" }
+    );
 
     if (!response.ok) {
         throw new Error(
@@ -95,29 +117,157 @@ async function fetchCategories() {
     }
 
     const result = await response.json();
+    const rawEntries: any[] = result.data || [];
 
-    return (result.data || [])
-        .map((entry: any) => {
-            const category = normalizeEntry(entry);
+    type FlatCategory = {
+        key: string;
+        name: string;
+        slug: string;
+        description: string;
+        directProducts: any[];
+        parentKeys: string[];
+        childKeysFromField: string[];
+    };
 
-            if (!category) {
-                return null;
-            }
+    function entryKey(entry: any): string {
+        const normalized = normalizeEntry(entry);
 
-            return {
-                id: category.id,
-                documentId: category.documentId,
-                name: category.Name || category.name || "",
-                slug: category.slug || "",
-                description:
-                    category.Description || category.description || "",
-                products: normalizeList(category.products),
-            };
-        })
-        .filter(
-            (category: any) =>
-                category && category.products.length > 0
+        return String(
+            normalized?.documentId ||
+                normalized?.id ||
+                normalized?.slug ||
+                ""
         );
+    }
+
+    const flatByKey = new Map<string, FlatCategory>();
+
+    rawEntries.forEach((entry) => {
+        const category = normalizeEntry(entry);
+
+        if (!category) {
+            return;
+        }
+
+        const key = entryKey(entry);
+
+        if (!key) {
+            return;
+        }
+
+        flatByKey.set(key, {
+            key,
+            name: category.Name || category.name || "",
+            slug: category.slug || "",
+            description:
+                category.Description || category.description || "",
+            directProducts: normalizeList(category.products),
+            parentKeys: normalizeList(category.parentCategory).map(
+                (parent: any) => entryKey(parent)
+            ),
+            childKeysFromField: normalizeList(
+                category.childCategories
+            ).map((child: any) => entryKey(child)),
+        });
+    });
+
+    // Union of "child via parentCategory pointer" and "child via
+    // childCategories field" — see comment above.
+    const childKeysByParent = new Map<string, Set<string>>();
+
+    function linkChild(parentKey: string, childKey: string) {
+        if (!parentKey || !childKey || !flatByKey.has(childKey)) {
+            return;
+        }
+
+        if (!childKeysByParent.has(parentKey)) {
+            childKeysByParent.set(parentKey, new Set());
+        }
+
+        childKeysByParent.get(parentKey)!.add(childKey);
+    }
+
+    flatByKey.forEach((category) => {
+        category.parentKeys.forEach((parentKey) =>
+            linkChild(parentKey, category.key)
+        );
+
+        category.childKeysFromField.forEach((childKey) =>
+            linkChild(category.key, childKey)
+        );
+    });
+
+    function buildNode(
+        key: string,
+        visited: Set<string>
+    ): CatalogueCategoryNode | null {
+        const category = flatByKey.get(key);
+
+        // `visited` guards against a mistaken cyclical parent/child
+        // assignment in Strapi ever causing infinite recursion here.
+        if (!category || visited.has(key)) {
+            return null;
+        }
+
+        const nextVisited = new Set(visited).add(key);
+        const childKeys = Array.from(
+            childKeysByParent.get(key) || []
+        );
+
+        return {
+            key: category.key,
+            name: category.name,
+            slug: category.slug,
+            description: category.description,
+            directProducts:
+                category.directProducts.map(toCatalogueProduct),
+            children: childKeys
+                .map((childKey) => buildNode(childKey, nextVisited))
+                .filter(Boolean) as CatalogueCategoryNode[],
+        };
+    }
+
+    // A category is "top-level" only if it isn't anyone's child in the
+    // union graph above — not merely if its own `parentCategory` field
+    // is empty, since a parent's `childCategories` list can name a child
+    // whose own back-reference was never filled in.
+    const keysWithAParent = new Set<string>();
+
+    childKeysByParent.forEach((childKeys) => {
+        childKeys.forEach((childKey) => keysWithAParent.add(childKey));
+    });
+
+    const topLevelKeys = Array.from(flatByKey.keys()).filter(
+        (key) => !keysWithAParent.has(key)
+    );
+
+    return topLevelKeys
+        .map((key) => buildNode(key, new Set()))
+        .filter(Boolean) as CatalogueCategoryNode[];
+}
+
+/* =========================================================
+   CATEGORISED PRODUCT KEYS
+
+   Walks the whole tree (every level) so uncategorised products
+   are only the ones truly linked to no category anywhere.
+========================================================= */
+
+function collectCategorizedProductKeys(
+    nodes: CatalogueCategoryNode[]
+): Set<string> {
+    const keys = new Set<string>();
+
+    function walk(node: CatalogueCategoryNode) {
+        node.directProducts.forEach((product: CatalogueProduct) =>
+            keys.add(product.key)
+        );
+        node.children.forEach(walk);
+    }
+
+    nodes.forEach(walk);
+
+    return keys;
 }
 
 async function fetchUncategorizedProducts(
@@ -222,20 +372,12 @@ function CatalogueSkeleton() {
 ========================================================= */
 
 async function ProductCatalogue() {
-    const categories = await fetchCategories();
+    const categories = await fetchProductCategoryTree();
 
-    const categorizedIds = new Set<string>();
-
-    categories.forEach((category: any) => {
-        category.products.forEach((product: any) => {
-            categorizedIds.add(
-                String(product.documentId ?? product.id)
-            );
-        });
-    });
+    const categorizedKeys = collectCategorizedProductKeys(categories);
 
     const uncategorizedProducts = await fetchUncategorizedProducts(
-        categorizedIds
+        categorizedKeys
     );
 
     const hasContent =
@@ -246,38 +388,26 @@ async function ProductCatalogue() {
         return (
             <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
                 <p className="text-gray-500">
-                    <T k="productsPage.noCategories" />
+                    No products are available at the moment. Please check back soon.
                 </p>
             </div>
         );
     }
 
-    const groups: CatalogueGroup[] = categories.map(
-        (category: any) => ({
-            key: String(
-                category.documentId ||
-                    category.id ||
-                    category.slug
-            ),
-            name: category.name,
-            slug: category.slug || "",
-            description: category.description || "",
-            products: category.products.map(toCatalogueProduct),
-        })
-    );
+    const rootCategories: CatalogueCategoryNode[] = [...categories];
 
     if (uncategorizedProducts.length > 0) {
-        groups.push({
+        rootCategories.push({
             key: "__other__",
-            name: "",
+            name: "Other Products",
             slug: "",
             description: "",
-            isOther: true,
-            products: uncategorizedProducts.map(toCatalogueProduct),
+            directProducts: uncategorizedProducts.map(toCatalogueProduct),
+            children: [],
         });
     }
 
-    return <ProductCatalogueView groups={groups} />;
+    return <ProductCatalogueView categories={rootCategories} />;
 }
 
 /* =========================================================
@@ -303,17 +433,17 @@ export default function ProductPage() {
                         <div className="max-w-3xl">
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productsPage.catalogueEyebrow" />
+                                Fire-Fighting Products
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                                <T k="productsPage.catalogueTitle" />
+                                Products
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-5 text-justify text-base leading-7 text-gray-500">
-                                <T k="productsPage.rangeDescription" />
+                                Discover our range of fire protection systems and engineered equipment developed to meet demanding industry requirements.
                             </p>
 
                         </div>
@@ -322,7 +452,7 @@ export default function ProductPage() {
                             href="/product/compare"
                             className="inline-flex shrink-0 items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
                         >
-                            <T k="productsPage.compareProducts" />
+                            Compare Products
 
                             <span className="ml-2">
                                 →
@@ -352,17 +482,17 @@ export default function ProductPage() {
                         <div>
 
                             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                <T k="productsPage.whyEyebrow" />
+                                Why Choose Us
                             </p>
 
                             <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                                <T k="productsPage.whyTitle" />
+                                Reliable Fire Protection Engineering
                             </h2>
 
                             <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                             <p className="mt-6 text-justify text-base leading-8 text-gray-600">
-                                <T k="productsPage.whyDescription" />
+                                Our fire protection solutions are engineered to meet demanding operational requirements while delivering dependable performance and long-term reliability.
                             </p>
 
                         </div>
@@ -372,11 +502,11 @@ export default function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    <T k="productsPage.whyCard1Title" />
+                                    Engineered Solutions
                                 </h3>
 
                                 <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
-                                    <T k="productsPage.whyCard1Body" />
+                                    Systems designed around specific project and application requirements.
                                 </p>
 
                             </div>
@@ -384,11 +514,11 @@ export default function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    <T k="productsPage.whyCard2Title" />
+                                    Proven Performance
                                 </h3>
 
                                 <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
-                                    <T k="productsPage.whyCard2Body" />
+                                    Reliable equipment designed for demanding fire protection applications.
                                 </p>
 
                             </div>
@@ -396,11 +526,11 @@ export default function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    <T k="productsPage.whyCard3Title" />
+                                    Industry Standards
                                 </h3>
 
                                 <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
-                                    <T k="productsPage.whyCard3Body" />
+                                    Solutions developed to meet applicable industry standards and requirements.
                                 </p>
 
                             </div>
@@ -408,11 +538,11 @@ export default function ProductPage() {
                             <div className="rounded-2xl border border-gray-200 bg-[#f7f7f5] p-6">
 
                                 <h3 className="text-lg font-bold text-[#0b1f3a]">
-                                    <T k="productsPage.whyCard4Title" />
+                                    Technical Support
                                 </h3>
 
                                 <p className="mt-3 text-justify text-sm leading-6 text-gray-500">
-                                    <T k="productsPage.whyCard4Body" />
+                                    Technical expertise and support throughout the project lifecycle.
                                 </p>
 
                             </div>

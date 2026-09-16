@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { useI18n } from "@/components/I18nProvider";
-
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -57,14 +55,16 @@ interface StrapiResponse {
 ========================================================= */
 
 export default function Footer() {
-    const { t } = useI18n();
     const [settings, setSettings] = useState<SiteSettings | null>(null);
 
     useEffect(() => {
         async function fetchSiteSettings() {
             try {
                 const response = await fetch(
-                    `${STRAPI_URL}/api/site-setting?populate=*`
+                    `${STRAPI_URL}/api/site-setting?populate=*`,
+                    {
+                        cache: "no-store",
+                    }
                 );
 
                 if (!response.ok) {
@@ -95,13 +95,9 @@ export default function Footer() {
        FALLBACK CONTENT
     ===================================================== */
 
-    const description =
-        settings?.CompanyDescription ||
-        t("footer.companyDescription");
-
     const copyright =
         settings?.CopyrightText ||
-        t("footer.copyright");
+        "© 2026 Marsol Technologies. All rights reserved.";
 
     const offices = settings?.Offices || [];
 
@@ -141,10 +137,6 @@ export default function Footer() {
                             />
                         </Link>
 
-                        <p className="mt-6 max-w-sm text-sm leading-7 text-gray-600">
-                            {description}
-                        </p>
-
                     </div>
 
                     {/* =================================================
@@ -154,7 +146,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            {t("footer.company")}
+                            Company
                         </h3>
 
                         <ul className="mt-5 space-y-3">
@@ -164,7 +156,7 @@ export default function Footer() {
                                     href="/about"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.aboutUs")}
+                                    About Us
                                 </Link>
                             </li>
 
@@ -173,7 +165,7 @@ export default function Footer() {
                                     href="/product"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.products")}
+                                    Products
                                 </Link>
                             </li>
 
@@ -182,7 +174,7 @@ export default function Footer() {
                                     href="/environmental-services"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.environmentalServices")}
+                                    Environmental Services
                                 </Link>
                             </li>
 
@@ -191,7 +183,7 @@ export default function Footer() {
                                     href="/news"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.newsEvents")}
+                                    News & Events
                                 </Link>
                             </li>
 
@@ -200,7 +192,7 @@ export default function Footer() {
                                     href="/careers"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.careers")}
+                                    Careers
                                 </Link>
                             </li>
 
@@ -209,7 +201,7 @@ export default function Footer() {
                                     href="/contact"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.contact")}
+                                    Contact
                                 </Link>
                             </li>
 
@@ -224,7 +216,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            {t("footer.offices")}
+                            Offices
                         </h3>
 
                         <div className="mt-5 space-y-6">
@@ -235,7 +227,7 @@ export default function Footer() {
 
                                     <div key={office.id}>
 
-                                        <p className="text-sm font-semibold text-gray-900">
+                                        <p className="text-sm text-gray-900">
 
                                             {office.City}
 
@@ -262,36 +254,36 @@ export default function Footer() {
                                 <>
                                     <div>
 
-                                        <p className="text-sm font-semibold text-gray-900">
+                                        <p className="text-sm text-gray-900">
                                             Houston, USA
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            {t("footer.headOffice")}
+                                            Head Office
                                         </p>
 
                                     </div>
 
                                     <div>
 
-                                        <p className="text-sm font-semibold text-gray-900">
+                                        <p className="text-sm text-gray-900">
                                             Sharjah, UAE
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            {t("footer.regionalOffice")}
+                                            Manufacturing & Regional Office
                                         </p>
 
                                     </div>
 
                                     <div>
 
-                                        <p className="text-sm font-semibold text-gray-900">
+                                        <p className="text-sm text-gray-900">
                                             Mysore, India
                                         </p>
 
                                         <p className="mt-1 text-sm text-gray-600">
-                                            {t("footer.manufacturingEngineering")}
+                                            Engineering & Regional Office
                                         </p>
 
                                     </div>
@@ -310,7 +302,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            {t("footer.ourPolicies")}
+                            Our Policies
                         </h3>
 
                         <ul className="mt-5 space-y-3">
@@ -320,7 +312,7 @@ export default function Footer() {
                                     href="/privacy-policy"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.privacyPolicy")}
+                                    Privacy Policy
                                 </Link>
                             </li>
 
@@ -329,34 +321,34 @@ export default function Footer() {
                                     href="/terms-conditions"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.termsConditions")}
+                                    Terms & Conditions
                                 </Link>
                             </li>
 
                             <li>
                                 <Link
                                     href="/hse-policy"
-                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                    className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.hsePolicy")}
+                                    HSE Policy
                                 </Link>
                             </li>
 
                             <li>
                                 <Link
                                     href="/quality-policy"
-                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                    className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.qualityPolicy")}
+                                    Quality Policy
                                 </Link>
                             </li>
 
                             <li>
                                 <Link
                                     href="/adc-policy"
-                                    className="text-sm font-semibold text-gray-900 transition hover:text-gray-600"
+                                    className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    {t("footer.adcPolicy")}
+                                    ADC Policy
                                 </Link>
                             </li>
 
@@ -371,7 +363,7 @@ export default function Footer() {
                     <div>
 
                         <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-                            {t("footer.follow")}
+                            Follow
                         </h3>
 
                         <div className="mt-5 flex flex-col gap-3">

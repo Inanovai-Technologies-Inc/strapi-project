@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { T } from "@/components/T";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -88,12 +87,12 @@ export default async function CareerDetailsPage({
                         href="/careers"
                         className="inline-flex items-center text-sm font-medium text-gray-600 transition hover:text-gray-900"
                     >
-                        ← <T k="careerDetail.back" />
+                        ← Back to Careers
                     </Link>
 
                     {/* Job Title */}
                     <h1 className="mt-8 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-                        {career.Title || <T k="careerDetail.defaultTitle" />}
+                        {career.Title || "Job Opening"}
                     </h1>
 
                     {/* Job Information */}
@@ -101,13 +100,13 @@ export default async function CareerDetailsPage({
 
                         {career.Department && (
                             <span className="rounded-full bg-white px-4 py-2 text-sm text-gray-700 shadow-sm">
-                                <T k="careerDetail.department" /> {career.Department}
+                                Department: {career.Department}
                             </span>
                         )}
 
                         {career.Location && (
                             <span className="rounded-full bg-white px-4 py-2 text-sm text-gray-700 shadow-sm">
-                                <T k="careerDetail.location" /> {career.Location}
+                                Location: {career.Location}
                             </span>
                         )}
 
@@ -142,10 +141,10 @@ export default async function CareerDetailsPage({
                                 <section>
 
                                     <h2 className="text-2xl font-bold text-gray-900">
-                                        <T k="careerDetail.jobDescription" />
+                                        Job Description
                                     </h2>
 
-                                    <p className="mt-5 whitespace-pre-line text-lg leading-8 text-gray-700">
+                                    <p className="mt-5 whitespace-pre-line text-justify text-lg leading-8 text-gray-700">
                                         {career.Description}
                                     </p>
 
@@ -158,10 +157,10 @@ export default async function CareerDetailsPage({
                                 <section className="mt-12">
 
                                     <h2 className="text-2xl font-bold text-gray-900">
-                                        <T k="careerDetail.requirements" />
+                                        Requirements
                                     </h2>
 
-                                    <p className="mt-5 whitespace-pre-line text-lg leading-8 text-gray-700">
+                                    <p className="mt-5 whitespace-pre-line text-justify text-lg leading-8 text-gray-700">
                                         {career.Requirements}
                                     </p>
 
@@ -179,11 +178,11 @@ export default async function CareerDetailsPage({
                             <div className="sticky top-24 rounded-2xl border border-gray-200 bg-gray-50 p-6">
 
                                 <h2 className="text-xl font-bold text-gray-900">
-                                    <T k="careerDetail.interestedTitle" />
+                                    Interested in this position?
                                 </h2>
 
-                                <p className="mt-3 text-sm leading-6 text-gray-600">
-                                    <T k="careerDetail.interestedDescription" />
+                                <p className="mt-3 text-justify text-sm leading-6 text-gray-600">
+                                    If you are interested in joining our team, submit your application for this position.
                                 </p>
 
 
@@ -192,7 +191,7 @@ export default async function CareerDetailsPage({
                                     <div className="mt-6">
 
                                         <p className="text-sm text-gray-500">
-                                            <T k="careerDetail.applicationCloses" />
+                                            Application closes
                                         </p>
 
                                         <p className="mt-1 font-semibold text-gray-900">
@@ -210,7 +209,7 @@ export default async function CareerDetailsPage({
                                     href={`/careers/${career.slug}/apply`}
                                     className="mt-6 block w-full rounded-lg bg-black px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-gray-800"
                                 >
-                                    <T k="careerDetail.applyCta" />
+                                    Apply for this Position
                                 </Link>
 
                             </div>

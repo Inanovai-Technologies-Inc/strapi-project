@@ -2,12 +2,10 @@
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
-import { useI18n } from "@/components/I18nProvider";
 import { useSyncExternalStore } from "react";
 
 export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();
-    const { t } = useI18n();
 
     const mounted = useSyncExternalStore(
         () => () => {},
@@ -18,7 +16,7 @@ export default function ThemeToggle() {
     if (!mounted) {
         return (
             <button
-                aria-label={t("theme.toggle")}
+                aria-label="Toggle theme"
                 className="
                     flex
                     h-10
@@ -44,8 +42,8 @@ export default function ThemeToggle() {
             type="button"
             aria-label={
                 isDark
-                    ? t("theme.switchToLight")
-                    : t("theme.switchToDark")
+                    ? "Switch to light theme"
+                    : "Switch to dark theme"
             }
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className="
@@ -111,7 +109,7 @@ export default function ThemeToggle() {
             />
 
             <span className="sr-only">
-                {t("theme.toggleLabel")}
+                Toggle light and dark theme
             </span>
         </button>
     );

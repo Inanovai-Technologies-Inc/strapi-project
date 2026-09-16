@@ -803,12 +803,6 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    linkedinProfileUrl: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1043,6 +1037,10 @@ export interface ApiProductCategoryProductCategory
     draftAndPublish: true;
   };
   attributes: {
+    childCategories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-category.product-category'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1054,6 +1052,10 @@ export interface ApiProductCategoryProductCategory
     > &
       Schema.Attribute.Private;
     Name: Schema.Attribute.String;
+    parentCategory: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-category.product-category'
+    >;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'Name'>;

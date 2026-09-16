@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import { useI18n } from "@/components/I18nProvider";
 import { renderBlocks } from "@/components/richText";
 
 /* =========================================================
@@ -88,15 +87,9 @@ export default function FeatureTabs({
 }: {
     blocks: any[];
 }) {
-    const { t } = useI18n();
-
     const sections = React.useMemo(
-        () =>
-            splitIntoSections(
-                blocks,
-                t("productDetail.featuresTitle")
-            ),
-        [blocks, t]
+        () => splitIntoSections(blocks, "Features"),
+        [blocks]
     );
 
     const [active, setActive] = React.useState(0);
@@ -141,7 +134,7 @@ export default function FeatureTabs({
 
             <div
                 role="tablist"
-                aria-label={t("productDetail.featuresTitle")}
+                aria-label="Features"
                 onKeyDown={onKeyDown}
                 className="
                     -mx-6
