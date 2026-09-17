@@ -348,13 +348,20 @@ function CatalogueSkeleton() {
                 <div className="mt-3 h-8 w-64 animate-pulse rounded bg-gray-200" />
                 <div className="mt-4 h-1 w-12 bg-orange-200" />
 
-                <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="mt-9 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
                     {Array.from({ length: 6 }).map((_, index) => (
-                        <div key={index}>
-                            <div className="aspect-[4/3] animate-pulse rounded-xl bg-gray-200" />
-                            <div className="mt-5 h-4 w-2/3 animate-pulse rounded bg-gray-200" />
-                            <div className="mt-3 h-3 w-full animate-pulse rounded bg-gray-200" />
-                            <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-gray-200" />
+                        <div
+                            key={index}
+                            className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
+                        >
+                            <div className="h-56 w-full animate-pulse bg-gray-200" />
+                            <div className="p-6">
+                                <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+                                <div className="mt-3 h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+                                <div className="mt-3 h-3 w-full animate-pulse rounded bg-gray-200" />
+                                <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-gray-200" />
+                                <div className="mt-6 h-3 w-28 animate-pulse rounded bg-gray-200" />
+                            </div>
                         </div>
                     ))}
                 </div>

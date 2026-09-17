@@ -90,8 +90,31 @@ function findPathBySlug(
     return null;
 }
 
+// A category with children has no product view of its own — it's
+// only an expand toggle for its children — so the default
+// selection descends into the first child (and so on, to any
+// depth) until it lands on a category that actually has products.
+function firstSelectablePath(
+    nodes: CatalogueCategoryNode[]
+): string[] {
+    const first = nodes[0];
+
+    if (!first) {
+        return [];
+    }
+
+    if (first.children.length === 0) {
+        return [first.key];
+    }
+
+    return [first.key, ...firstSelectablePath(first.children)];
+}
+
 /* =========================================================
-   PRODUCT ITEM — unchanged clean, image-focused presentation
+   PRODUCT ITEM — styled to match the Service listing cards:
+   bordered panel, fixed-height image, hover lift + shadow,
+   uppercase eyebrow/title, justified description, CTA row —
+   with the same light/dark theme support used across the site.
 ========================================================= */
 
 function ProductItem({
@@ -110,77 +133,94 @@ function ProductItem({
         : "/product";
 
     return (
-        <article className="group flex flex-col">
+        <Link
+            href={href}
+            aria-label={product.name}
+            className="
+                group
+                flex
+                h-full
+                flex-col
+                overflow-hidden
+                rounded-2xl
+                border
+                border-gray-200
+                bg-white
+                shadow-sm
+                transition-all
+                duration-500
 
-            {/* IMAGE — the whole image links to the product detail page */}
+                hover:-translate-y-2
+                hover:shadow-2xl
 
-            <Link
-                href={href}
-                aria-label={product.name}
-                className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-[#f2f3f4] transition-colors duration-300 group-hover:bg-[#edeef0]"
-            >
-                <span className="absolute left-0 top-0 h-0.5 w-12 bg-orange-500 transition-all duration-300 group-hover:w-20" />
+                dark:border-white/10
+                dark:bg-[#0b1622]
+                dark:shadow-black/40
+            "
+        >
+
+            {/* IMAGE */}
+
+            <div className="relative h-56 w-full overflow-hidden bg-gray-100 dark:bg-white/[0.04]">
+                <span className="absolute left-0 top-0 z-10 h-0.5 w-12 bg-orange-500 transition-all duration-300 group-hover:w-20" />
 
                 {product.imageUrl ? (
                     <img
                         src={product.imageUrl}
                         alt={product.imageAlt}
                         loading="lazy"
-                        className="h-full w-full object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                 ) : (
-                    <span className="px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400">
+                    <div className="flex h-full w-full items-center justify-center px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
                         {imageUnavailableLabel}
-                    </span>
+                    </div>
                 )}
-            </Link>
+            </div>
 
-            {/* TEXT */}
+            {/* CONTENT */}
 
-            <h3 className="mt-5 text-base font-bold uppercase leading-6 tracking-wide text-[#0b1f3a]">
-                <Link
-                    href={href}
-                    className="transition-colors duration-300 group-hover:text-orange-600"
-                >
+            <div className="flex flex-1 flex-col p-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-orange-500">
+                    Product
+                </p>
+
+                <h3 className="mt-3 text-lg font-bold uppercase leading-tight text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-600 dark:text-white">
                     {product.name}
-                </Link>
-            </h3>
+                </h3>
 
-            <p
-                className={`mt-2 line-clamp-3 text-justify text-sm leading-6 ${
-                    product.description
-                        ? "text-gray-500"
-                        : "text-gray-400"
-                }`}
-            >
-                {product.description || fallbackDescription}
-            </p>
+                <p
+                    className={`mt-3 line-clamp-3 text-justify text-sm leading-6 ${
+                        product.description
+                            ? "text-gray-500 dark:text-gray-400"
+                            : "text-gray-400 dark:text-gray-500"
+                    }`}
+                >
+                    {product.description || fallbackDescription}
+                </p>
 
-            <Link
-                href={href}
-                className="mt-4 inline-flex items-center gap-2 self-start text-sm font-semibold text-[#0b1f3a] transition-colors duration-300 hover:text-orange-600"
-            >
-                {viewLabel}
-                <span className="text-base transition-transform duration-300 group-hover:translate-x-1">
-                    →
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-500 dark:text-white">
+                    {viewLabel}
+                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1.5">
+                        →
+                    </span>
                 </span>
-            </Link>
-
-        </article>
+            </div>
+        </Link>
     );
 }
 
 /* =========================================================
    PRODUCT CATALOGUE VIEW
 
-   Sidebar lists only top-level categories. Selecting one shows
-   every product in its whole subtree (its own direct products
-   plus every descendant category's products). If the selected
-   category has children, they're offered as a drill-down strip
-   so the user can narrow to a specific child (and its children,
-   to any depth) — switching categories is pure client state, no
-   navigation or reload, only the URL's `category` slug updates
-   to reflect the current selection.
+   Sidebar lists only top-level categories. A category with no
+   children is selected directly and shows its products. One that
+   has children never shows products itself — clicking it expands
+   its subcategories inline, indented beneath it in the same card,
+   and only those subcategory rows select anything.
+   Switching categories is pure client state, no navigation or
+   reload; only the URL's `category` slug updates to reflect the
+   current selection.
 ========================================================= */
 
 export default function ProductCatalogueView({
@@ -198,8 +238,13 @@ export default function ProductCatalogueView({
             ? findPathBySlug(categories, slugParam)
             : null;
 
-        return fromSlug ?? (categories[0] ? [categories[0].key] : []);
+        return fromSlug ?? firstSelectablePath(categories);
     });
+
+    // Which parent category currently has its subcategories expanded
+    // inline. Toggled by clicking/tapping the parent row — purely a
+    // display toggle, never selects a product view.
+    const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
     const activeNode = useMemo(
         () =>
@@ -225,27 +270,28 @@ export default function ProductCatalogueView({
         );
     }
 
-    function selectTopLevel(key: string) {
-        setPath([key]);
-        updateUrl([key]);
+    function goTo(nextPath: string[]) {
+        setPath(nextPath);
+        updateUrl(nextPath);
     }
 
-    // Selects a category at the same depth as whatever's currently
-    // active — extending the path by one the first time a child is
-    // chosen, or swapping the last segment when switching between
-    // siblings (so the pill row never collapses to just the one
-    // selected item; the whole sibling group stays visible).
-    function selectSibling(siblingKey: string) {
-        const basePath = path.length > 1 ? path.slice(0, -1) : path;
-        const next = [...basePath, siblingKey];
-        setPath(next);
-        updateUrl(next);
+    // Selects a top-level category that has no children of its own
+    // — categories with children are expand-only and are never
+    // selected directly (see the sidebar and mobile row below).
+    // Moving to another category also closes any open expansion.
+    function selectTopLevel(key: string) {
+        setExpandedKey(null);
+        goTo([key]);
     }
 
     function selectAncestor(depth: number) {
-        const next = path.slice(0, depth);
-        setPath(next);
-        updateUrl(next);
+        goTo(path.slice(0, depth));
+    }
+
+    // Selects a subcategory directly — its parent is never selected
+    // on its own, so the path is set to the pair in one step.
+    function selectSubcategory(topLevelKey: string, childKey: string) {
+        goTo([topLevelKey, childKey]);
     }
 
     const topLevelWithCounts = useMemo(
@@ -255,37 +301,6 @@ export default function ProductCatalogueView({
                 count: collectAllProducts(category).length,
             })),
         [categories]
-    );
-
-    // The pill row always shows the whole sibling group at the
-    // current depth — the active node's own children while viewing
-    // a parent's aggregate, or its siblings (the parent's children)
-    // once drilled into one of them — so switching between siblings
-    // never makes the other options disappear.
-    const siblingCategories = useMemo(() => {
-        if (!activeNode) {
-            return [];
-        }
-
-        if (path.length <= 1) {
-            return activeNode.children;
-        }
-
-        const parentNode = findNodeByPath(
-            categories,
-            path.slice(0, -1)
-        );
-
-        return parentNode?.children ?? [];
-    }, [categories, path, activeNode]);
-
-    const siblingsWithCounts = useMemo(
-        () =>
-            siblingCategories.map((sibling) => ({
-                sibling,
-                count: collectAllProducts(sibling).length,
-            })),
-        [siblingCategories]
     );
 
     const displayedProducts = useMemo(
@@ -318,35 +333,97 @@ export default function ProductCatalogueView({
                     <div className="flex w-max gap-2">
                         {topLevelWithCounts.map(({ category, count }) => {
                             const isActive = path[0] === category.key;
+                            const hasChildren =
+                                category.children.length > 0;
+                            const isExpanded =
+                                expandedKey === category.key;
 
                             return (
                                 <button
                                     key={category.key}
                                     type="button"
                                     onClick={() =>
-                                        selectTopLevel(category.key)
+                                        hasChildren
+                                            ? setExpandedKey(
+                                                  isExpanded
+                                                      ? null
+                                                      : category.key
+                                              )
+                                            : selectTopLevel(category.key)
                                     }
-                                    aria-pressed={isActive}
+                                    aria-haspopup={hasChildren || undefined}
+                                    aria-expanded={
+                                        hasChildren ? isExpanded : undefined
+                                    }
+                                    aria-pressed={
+                                        hasChildren ? undefined : isActive
+                                    }
                                     className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition-colors duration-200 ${
-                                        isActive
-                                            ? "border-[#0b1f3a] bg-[#0b1f3a] text-white"
-                                            : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-[#0b1f3a]"
+                                        !hasChildren && isActive
+                                            ? "border-[#0b1f3a] bg-[#0b1f3a] text-white dark:border-white dark:bg-white dark:text-[#0b1f3a]"
+                                            : hasChildren && isExpanded
+                                            ? "border-orange-400 bg-white text-[#0b1f3a] dark:border-orange-400 dark:bg-white/5 dark:text-white"
+                                            : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-[#0b1f3a] dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-white/20 dark:hover:text-white"
                                     }`}
                                 >
                                     {category.name}
                                     <span
                                         className={`ml-2 text-xs ${
-                                            isActive
-                                                ? "text-white/70"
-                                                : "text-gray-400"
+                                            !hasChildren && isActive
+                                                ? "text-white/70 dark:text-[#0b1f3a]/70"
+                                                : "text-gray-400 dark:text-gray-500"
                                         }`}
                                     >
                                         {count}
                                     </span>
+                                    {hasChildren && (
+                                        <span
+                                            aria-hidden="true"
+                                            className="ml-1.5 text-gray-400 dark:text-gray-500"
+                                        >
+                                            {isExpanded ? "︿" : "›"}
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })}
                     </div>
+
+                    {/* Tapped-open subcategories — the mobile equivalent
+                        of the sidebar's inline expansion. Selecting one
+                        shows its products and collapses this row again. */}
+
+                    {expandedKey && (
+                        <div className="mt-2 flex w-max gap-2">
+                            {(
+                                categories.find(
+                                    (category) =>
+                                        category.key === expandedKey
+                                )?.children ?? []
+                            ).map((child) => (
+                                <button
+                                    key={child.key}
+                                    type="button"
+                                    onClick={() => {
+                                        selectSubcategory(
+                                            expandedKey,
+                                            child.key
+                                        );
+                                        setExpandedKey(null);
+                                    }}
+                                    className="whitespace-nowrap rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:border-orange-400 hover:text-orange-600 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-orange-400 dark:hover:text-orange-400"
+                                >
+                                    {child.name}
+                                    <span className="ml-2 text-xs text-gray-400 dark:text-gray-500">
+                                        {
+                                            collectAllProducts(child)
+                                                .length
+                                        }
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -354,8 +431,8 @@ export default function ProductCatalogueView({
                 DESKTOP — sticky category panel
             ===================================================== */}
 
-            <aside className="hidden lg:block">
-                <div className="sticky top-24 rounded-2xl border border-gray-200 bg-white p-4">
+            <aside className="relative z-20 hidden lg:block">
+                <div className="sticky top-24 rounded-2xl border border-gray-200 bg-white p-4 dark:border-white/10 dark:bg-[#0b1622]">
                     <p className="px-3 pb-3 pt-3 text-xs font-semibold uppercase tracking-[0.24em] text-orange-500">
                         Categories
                     </p>
@@ -363,41 +440,155 @@ export default function ProductCatalogueView({
                     <nav className="flex flex-col gap-0.5">
                         {topLevelWithCounts.map(({ category, count }) => {
                             const isActive = path[0] === category.key;
+                            const childrenWithCounts = category.children.map(
+                                (child) => ({
+                                    child,
+                                    count: collectAllProducts(child).length,
+                                })
+                            );
+
+                            const hasChildren =
+                                childrenWithCounts.length > 0;
+
+                            const isExpanded =
+                                expandedKey === category.key;
 
                             return (
-                                <button
+                                <div
                                     key={category.key}
-                                    type="button"
-                                    onClick={() =>
-                                        selectTopLevel(category.key)
-                                    }
-                                    aria-pressed={isActive}
-                                    className={`group/item relative flex items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-base font-semibold transition-colors duration-200 ${
-                                        isActive
-                                            ? "bg-[#0b1f3a] text-white"
-                                            : "text-gray-600 hover:bg-gray-50 hover:text-[#0b1f3a]"
-                                    }`}
+                                    className="relative"
                                 >
-                                    <span
-                                        className={`absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r bg-orange-500 transition-opacity duration-200 ${
-                                            isActive
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                        }`}
-                                    />
-                                    <span className="leading-5">
-                                        {category.name}
-                                    </span>
-                                    <span
-                                        className={`shrink-0 text-xs ${
-                                            isActive
-                                                ? "text-white/60"
-                                                : "text-gray-400"
-                                        }`}
-                                    >
-                                        {count}
-                                    </span>
-                                </button>
+                                    {hasChildren ? (
+                                        // Expand trigger only — a category
+                                        // with subcategories has no product
+                                        // view of its own, so clicking it
+                                        // just opens/closes its children
+                                        // in the row below rather than
+                                        // navigating anywhere.
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setExpandedKey(
+                                                    isExpanded
+                                                        ? null
+                                                        : category.key
+                                                )
+                                            }
+                                            aria-expanded={isExpanded}
+                                            className="relative flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-base font-semibold text-gray-600 transition-colors duration-200 hover:bg-gray-50 hover:text-[#0b1f3a] dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                                        >
+                                            <span
+                                                className={`absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r bg-orange-500 transition-opacity duration-200 ${
+                                                    isActive
+                                                        ? "opacity-100"
+                                                        : "opacity-0"
+                                                }`}
+                                            />
+                                            <span className="leading-5">
+                                                {category.name}
+                                            </span>
+                                            <span className="flex shrink-0 items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
+                                                {count}
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={`inline-block transition-transform duration-200 ${
+                                                        isExpanded
+                                                            ? "rotate-90"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    ›
+                                                </span>
+                                            </span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                selectTopLevel(category.key)
+                                            }
+                                            aria-pressed={isActive}
+                                            className={`group/item relative flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-base font-semibold transition-colors duration-200 ${
+                                                isActive
+                                                    ? "bg-[#0b1f3a] text-white dark:bg-white dark:text-[#0b1f3a]"
+                                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#0b1f3a] dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                                            }`}
+                                        >
+                                            <span
+                                                className={`absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r bg-orange-500 transition-opacity duration-200 ${
+                                                    isActive
+                                                        ? "opacity-100"
+                                                        : "opacity-0"
+                                                }`}
+                                            />
+                                            <span className="leading-5">
+                                                {category.name}
+                                            </span>
+                                            <span
+                                                className={`shrink-0 text-xs ${
+                                                    isActive
+                                                        ? "text-white/60 dark:text-[#0b1f3a]/60"
+                                                        : "text-gray-400 dark:text-gray-500"
+                                                }`}
+                                            >
+                                                {count}
+                                            </span>
+                                        </button>
+                                    )}
+
+                                    {/* SUBCATEGORIES — expanded inline in
+                                        the same Categories card, indented
+                                        under their parent. Toggled by
+                                        clicking the parent row; only these
+                                        rows navigate. */}
+
+                                    {hasChildren && isExpanded && (
+                                        <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-gray-200 pl-3 dark:border-white/10">
+                                            {childrenWithCounts.map(
+                                                ({ child, count: childCount }) => {
+                                                    const isChildActive =
+                                                        path[
+                                                            path.length - 1
+                                                        ] === child.key;
+
+                                                    return (
+                                                        <button
+                                                            key={child.key}
+                                                            type="button"
+                                                            onClick={() =>
+                                                                selectSubcategory(
+                                                                    category.key,
+                                                                    child.key
+                                                                )
+                                                            }
+                                                            aria-pressed={
+                                                                isChildActive
+                                                            }
+                                                            className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150 ${
+                                                                isChildActive
+                                                                    ? "bg-[#0b1f3a] text-white dark:bg-white dark:text-[#0b1f3a]"
+                                                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#0b1f3a] dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                                                            }`}
+                                                        >
+                                                            <span>
+                                                                {child.name}
+                                                            </span>
+                                                            <span
+                                                                className={`shrink-0 text-xs ${
+                                                                    isChildActive
+                                                                        ? "text-white/60 dark:text-[#0b1f3a]/60"
+                                                                        : "text-gray-400 dark:text-gray-500"
+                                                                }`}
+                                                            >
+                                                                {childCount}
+                                                            </span>
+                                                        </button>
+                                                    );
+                                                }
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             );
                         })}
                     </nav>
@@ -408,12 +599,12 @@ export default function ProductCatalogueView({
                 RIGHT — products for the selected category
             ===================================================== */}
 
-            <div className="mt-10 lg:mt-0">
+            <div className="relative z-0 mt-10 lg:mt-0">
 
                 {/* BREADCRUMB — only once drilled past the top level */}
 
                 {path.length > 1 && (
-                    <nav className="mb-4 flex flex-wrap items-center gap-1.5 text-sm text-gray-500">
+                    <nav className="mb-4 flex flex-wrap items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
                         {path.map((key, index) => {
                             const node = findNodeByPath(
                                 categories,
@@ -432,13 +623,13 @@ export default function ProductCatalogueView({
                                     className="flex items-center gap-1.5"
                                 >
                                     {index > 0 && (
-                                        <span className="text-gray-300">
+                                        <span className="text-gray-300 dark:text-gray-600">
                                             /
                                         </span>
                                     )}
 
                                     {isLast ? (
-                                        <span className="font-semibold text-[#0b1f3a]">
+                                        <span className="font-semibold text-[#0b1f3a] dark:text-white">
                                             {node.name}
                                         </span>
                                     ) : (
@@ -447,7 +638,7 @@ export default function ProductCatalogueView({
                                             onClick={() =>
                                                 selectAncestor(index + 1)
                                             }
-                                            className="transition-colors hover:text-orange-600"
+                                            className="transition-colors hover:text-orange-600 dark:hover:text-orange-400"
                                         >
                                             {node.name}
                                         </button>
@@ -463,65 +654,27 @@ export default function ProductCatalogueView({
                         Product Category
                     </p>
 
-                    <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a] sm:text-3xl">
+                    <h2 className="mt-3 text-2xl font-bold text-[#0b1f3a] sm:text-3xl dark:text-white">
                         {activeNode.name}
                     </h2>
 
                     <div className="mt-4 h-1 w-12 bg-orange-500" />
 
                     {activeNode.description ? (
-                        <p className="mt-5 text-justify text-base leading-7 text-gray-500">
+                        <p className="mt-5 text-justify text-base leading-7 text-gray-500 dark:text-gray-400">
                             {activeNode.description}
                         </p>
                     ) : null}
                 </div>
 
-                {/* SIBLING CATEGORIES — the whole group at the current
-                    depth, only when there is one */}
-
-                {siblingsWithCounts.length > 0 && (
-                    <div className="mb-10 flex flex-wrap gap-2">
-                        {siblingsWithCounts.map(({ sibling, count }) => {
-                            const isActive =
-                                path.length > 1 &&
-                                path[path.length - 1] === sibling.key;
-
-                            return (
-                            <button
-                                key={sibling.key}
-                                type="button"
-                                onClick={() => selectSibling(sibling.key)}
-                                aria-pressed={isActive}
-                                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors duration-200 ${
-                                    isActive
-                                        ? "border-[#0b1f3a] bg-[#0b1f3a] text-white"
-                                        : "border-gray-200 bg-white text-gray-600 hover:border-orange-400 hover:text-orange-600"
-                                }`}
-                            >
-                                {sibling.name}
-                                <span
-                                    className={`text-xs ${
-                                        isActive
-                                            ? "text-white/70"
-                                            : "text-gray-400"
-                                    }`}
-                                >
-                                    {count}
-                                </span>
-                            </button>
-                            );
-                        })}
-                    </div>
-                )}
-
                 {displayedProducts.length === 0 ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-                        <p className="text-gray-500">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-white/10 dark:bg-[#0b1622]">
+                        <p className="text-gray-500 dark:text-gray-400">
                             No products available.
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-x-10 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
                         {displayedProducts.map((product) => (
                             <ProductItem
                                 key={product.key}
