@@ -227,7 +227,7 @@ export default function Footer() {
 
                                     <div key={office.id}>
 
-                                        <p className="text-sm text-gray-900">
+                                        <p className="text-sm font-semibold text-gray-900">
 
                                             {office.City}
 
@@ -254,7 +254,7 @@ export default function Footer() {
                                 <>
                                     <div>
 
-                                        <p className="text-sm text-gray-900">
+                                        <p className="text-sm font-semibold text-gray-900">
                                             Houston, USA
                                         </p>
 
@@ -266,7 +266,7 @@ export default function Footer() {
 
                                     <div>
 
-                                        <p className="text-sm text-gray-900">
+                                        <p className="text-sm font-semibold text-gray-900">
                                             Sharjah, UAE
                                         </p>
 
@@ -278,7 +278,7 @@ export default function Footer() {
 
                                     <div>
 
-                                        <p className="text-sm text-gray-900">
+                                        <p className="text-sm font-semibold text-gray-900">
                                             Mysore, India
                                         </p>
 

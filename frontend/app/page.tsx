@@ -143,12 +143,12 @@ export default async function Home() {
                 id="home"
                 className="
                     relative
-                    h-[100vh]
+                    h-[calc(100vh-69px)]
                     min-h-[600px]
                     overflow-hidden
                     bg-[#04121f]
-                    lg:h-screen
-                    lg:min-h-screen
+                    lg:h-[calc(100vh-69px)]
+                    lg:min-h-[600px]
                 "
             >
 

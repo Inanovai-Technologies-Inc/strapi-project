@@ -72,7 +72,7 @@ export default async function CareerPage() {
                         Career
                     </h1>
 
-                    <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+                    <p className="mx-auto mt-4 text-lg text-gray-600 lg:whitespace-nowrap">
                         Join Marsol Technologies and be part of a team working towards solutions that help save lives.
                     </p>
 
@@ -130,31 +130,44 @@ export default async function CareerPage() {
                                 <span>&gt;</span>
                             </Link>
 
-                            <div className="mt-12">
+                            <div className="mt-12 grid gap-10 md:grid-cols-2 md:items-center">
 
-                                <h3 className="mb-3 text-lg font-bold text-gray-900">
-                                    Why Work With Us
-                                </h3>
+                                <div>
 
-                                <p className="mb-6 text-justify text-lg leading-8 text-gray-700">
-                                    At Marsol Technologies, you&apos;re joining
-                                    more than a company, you&apos;re becoming
-                                    part of a mission to protect lives,
-                                    safeguard critical assets, and create safer
-                                    environments through innovative engineering
-                                    solutions. Every role plays an important
-                                    part in making a meaningful impact.
-                                </p>
+                                    <h3 className="mb-3 text-lg font-bold text-gray-900">
+                                        Why Work With Us
+                                    </h3>
 
-                                <p className="text-justify text-lg leading-8 text-gray-700">
-                                    We foster a culture built on collaboration,
-                                    mutual respect, and a shared commitment to
-                                    excellence. Whether you&apos;re advancing
-                                    your expertise, contributing new ideas, or
-                                    taking on exciting challenges, you&apos;ll
-                                    find opportunities to grow and thrive with
-                                    us.
-                                </p>
+                                    <p className="mb-6 text-justify text-lg leading-8 text-gray-700">
+                                        At Marsol Technologies, you&apos;re joining
+                                        more than a company, you&apos;re becoming
+                                        part of a mission to protect lives,
+                                        safeguard critical assets, and create safer
+                                        environments through innovative engineering
+                                        solutions. Every role plays an important
+                                        part in making a meaningful impact.
+                                    </p>
+
+                                    <p className="text-justify text-lg leading-8 text-gray-700">
+                                        We foster a culture built on collaboration,
+                                        mutual respect, and a shared commitment to
+                                        excellence. Whether you&apos;re advancing
+                                        your expertise, contributing new ideas, or
+                                        taking on exciting challenges, you&apos;ll
+                                        find opportunities to grow and thrive with
+                                        us.
+                                    </p>
+
+                                </div>
+
+                                <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg sm:h-96">
+                                    <Image
+                                        src="/images/why-work-with-us.webp"
+                                        alt="Marsol Technologies open-plan office"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
 
                             </div>
 
