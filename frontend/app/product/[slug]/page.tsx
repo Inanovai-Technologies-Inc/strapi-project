@@ -607,28 +607,6 @@ export default async function ProductDetailPage({
 
                     <div className="mx-auto max-w-7xl">
 
-                        {/* SECTION HEADER */}
-
-                        <div className="mb-14">
-
-                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Foam Tank Skid
-                            </p>
-
-                            <h2 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
-                                Foam Skid Series
-                            </h2>
-
-                            <div className="mt-4 h-1 w-12 bg-orange-500" />
-
-                            <p className="mt-5 max-w-3xl text-justify text-base leading-8 text-gray-500">
-                                Marsol has developed different foam skid series to meet various project and installation requirements.
-                            </p>
-
-                        </div>
-
-                        {/* SERIES */}
-
                         <div className="space-y-24">
 
                             {foamSkidSeries.map(
@@ -673,11 +651,6 @@ export default async function ProductDetailPage({
                                                 }`}
                                             >
 
-                                                {/* =================================================
-                                                    SERIES IMAGE
-                                                    COMPLETELY BORDERLESS
-                                                ================================================= */}
-
                                                 <div className="bg-white">
 
                                                     <div className="flex min-h-[380px] items-center justify-center bg-white p-6 lg:p-10">
@@ -701,8 +674,6 @@ export default async function ProductDetailPage({
                                                         )}
 
                                                     </div>
-
-                                                    {/* SERIES CERTIFICATIONS */}
 
                                                     {seriesCertificationLogoUrls.length >
                                                         0 && (
@@ -744,17 +715,9 @@ export default async function ProductDetailPage({
 
                                                 </div>
 
-                                                {/* =================================================
-                                                    SERIES DESCRIPTION
-                                                ================================================= */}
-
                                                 <div className="flex flex-col justify-center px-2 py-8 lg:px-8 lg:py-12">
 
-                                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
-                                                        Foam Skid Series
-                                                    </p>
-
-                                                    <h3 className="mt-3 text-2xl font-bold uppercase leading-tight text-[#0b1f3a] sm:text-3xl">
+                                                    <h3 className="mt-0 text-2xl font-bold uppercase leading-tight text-[#0b1f3a] sm:text-3xl">
                                                         {
                                                             seriesName
                                                         }
