@@ -1,6 +1,5 @@
 
 import { Suspense } from "react";
-import Link from "next/link";
 import AmbientBackground from "@/components/AmbientBackground";
 import ProductCatalogueView, {
     type CatalogueCategoryNode,
@@ -101,6 +100,7 @@ async function fetchProductCategoryTree(): Promise<
 
     params.set("sort", "createdAt:asc");
     params.set("pagination[pageSize]", "200");
+    params.set("populate[Image]", "true");
     params.set("populate[products][populate][Image]", "true");
     params.set("populate[parentCategory]", "true");
     params.set("populate[childCategories]", "true");
@@ -124,6 +124,8 @@ async function fetchProductCategoryTree(): Promise<
         name: string;
         slug: string;
         description: string;
+        imageUrl: string | null;
+        imageAlt: string;
         directProducts: any[];
         parentKeys: string[];
         childKeysFromField: string[];
@@ -155,12 +157,17 @@ async function fetchProductCategoryTree(): Promise<
             return;
         }
 
+        const categoryName = category.Name || category.name || "";
+
         flatByKey.set(key, {
             key,
-            name: category.Name || category.name || "",
+            name: categoryName,
             slug: category.slug || "",
             description:
                 category.Description || category.description || "",
+            imageUrl: getImageUrl(category.Image),
+            imageAlt:
+                category.Image?.alternativeText || categoryName,
             directProducts: normalizeList(category.products),
             parentKeys: normalizeList(category.parentCategory).map(
                 (parent: any) => entryKey(parent)
@@ -219,6 +226,8 @@ async function fetchProductCategoryTree(): Promise<
             name: category.name,
             slug: category.slug,
             description: category.description,
+            imageUrl: category.imageUrl,
+            imageAlt: category.imageAlt,
             directProducts:
                 category.directProducts.map(toCatalogueProduct),
             children: childKeys
@@ -268,6 +277,28 @@ function collectCategorizedProductKeys(
     nodes.forEach(walk);
 
     return keys;
+}
+
+/* =========================================================
+   ALPHABETICAL ORDER
+
+   Strapi returns categories in creation order; the sidebar
+   shows them A–Z instead, at every level of the tree.
+========================================================= */
+
+function sortCategoriesByName(
+    nodes: CatalogueCategoryNode[]
+): CatalogueCategoryNode[] {
+    return [...nodes]
+        .sort((a, b) =>
+            a.name.localeCompare(b.name, "en", {
+                sensitivity: "base",
+            })
+        )
+        .map((node) => ({
+            ...node,
+            children: sortCategoriesByName(node.children),
+        }));
 }
 
 async function fetchUncategorizedProducts(
@@ -409,12 +440,18 @@ async function ProductCatalogue() {
             name: "Other Products",
             slug: "",
             description: "",
+            imageUrl: null,
+            imageAlt: "Other Products",
             directProducts: uncategorizedProducts.map(toCatalogueProduct),
             children: [],
         });
     }
 
-    return <ProductCatalogueView categories={rootCategories} />;
+    return (
+        <ProductCatalogueView
+            categories={sortCategoriesByName(rootCategories)}
+        />
+    );
 }
 
 /* =========================================================
@@ -435,36 +472,21 @@ export default function ProductPage() {
 
                     {/* SECTION HEADING */}
 
-                    <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="mb-14">
 
-                        <div className="max-w-3xl">
+                        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                            Fire-Fighting Products
+                        </p>
 
-                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Fire-Fighting Products
-                            </p>
+                        <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
+                            Products
+                        </h2>
 
-                            <h2 className="mt-3 text-3xl font-bold text-[#0b1f3a] sm:text-4xl">
-                                Products
-                            </h2>
+                        <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                            <div className="mt-4 h-1 w-12 bg-orange-500" />
-
-                            <p className="mt-5 text-justify text-base leading-7 text-gray-500">
-                                Discover our range of fire protection systems and engineered equipment developed to meet demanding industry requirements.
-                            </p>
-
-                        </div>
-
-                        <Link
-                            href="/product/compare"
-                            className="inline-flex shrink-0 items-center justify-center rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-                        >
-                            Compare Products
-
-                            <span className="ml-2">
-                                →
-                            </span>
-                        </Link>
+                        <p className="mt-5 text-base leading-7 text-gray-500 lg:whitespace-nowrap">
+                            Discover our range of fire protection systems and engineered equipment developed to meet demanding industry requirements.
+                        </p>
 
                     </div>
 
