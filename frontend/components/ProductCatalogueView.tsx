@@ -22,6 +22,8 @@ export type CatalogueCategoryNode = {
     name: string;
     slug: string;
     description: string;
+    imageUrl: string | null;
+    imageAlt: string;
     /** Products linked directly to this category (not its children). */
     directProducts: CatalogueProduct[];
     children: CatalogueCategoryNode[];
@@ -88,26 +90,6 @@ function findPathBySlug(
     }
 
     return null;
-}
-
-// A category with children has no product view of its own — it's
-// only an expand toggle for its children — so the default
-// selection descends into the first child (and so on, to any
-// depth) until it lands on a category that actually has products.
-function firstSelectablePath(
-    nodes: CatalogueCategoryNode[]
-): string[] {
-    const first = nodes[0];
-
-    if (!first) {
-        return [];
-    }
-
-    if (first.children.length === 0) {
-        return [first.key];
-    }
-
-    return [first.key, ...firstSelectablePath(first.children)];
 }
 
 /* =========================================================
@@ -211,6 +193,100 @@ function ProductItem({
 }
 
 /* =========================================================
+   CATEGORY ITEM — same card as a product, but for a
+   subcategory. Selecting it drills into that subcategory
+   rather than navigating to a detail page, so it's a button.
+========================================================= */
+
+function CategoryItem({
+    category,
+    onSelect,
+}: {
+    category: CatalogueCategoryNode;
+    onSelect: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onSelect}
+            aria-label={category.name}
+            className="
+                group
+                flex
+                h-full
+                flex-col
+                overflow-hidden
+                rounded-2xl
+                border
+                border-gray-200
+                bg-white
+                text-left
+                shadow-sm
+                transition-all
+                duration-500
+
+                hover:-translate-y-2
+                hover:shadow-2xl
+
+                dark:border-white/10
+                dark:bg-[#0b1622]
+                dark:shadow-black/40
+            "
+        >
+
+            {/* IMAGE */}
+
+            <div className="relative h-56 w-full overflow-hidden bg-gray-100 dark:bg-white/[0.04]">
+                <span className="absolute left-0 top-0 z-10 h-0.5 w-12 bg-orange-500 transition-all duration-300 group-hover:w-20" />
+
+                {category.imageUrl ? (
+                    <img
+                        src={category.imageUrl}
+                        alt={category.imageAlt}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
+                        Image unavailable
+                    </div>
+                )}
+            </div>
+
+            {/* CONTENT */}
+
+            <div className="flex flex-1 flex-col p-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-orange-500">
+                    Category
+                </p>
+
+                <h3 className="mt-3 text-lg font-bold uppercase leading-tight text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-600 dark:text-white">
+                    {category.name}
+                </h3>
+
+                <p
+                    className={`mt-3 line-clamp-3 text-justify text-sm leading-6 ${
+                        category.description
+                            ? "text-gray-500 dark:text-gray-400"
+                            : "text-gray-400 dark:text-gray-500"
+                    }`}
+                >
+                    {category.description ||
+                        "Explore the products available in this category."}
+                </p>
+
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-500 dark:text-white">
+                    View Products
+                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1.5">
+                        →
+                    </span>
+                </span>
+            </div>
+        </button>
+    );
+}
+
+/* =========================================================
    PRODUCT CATALOGUE VIEW
 
    Sidebar lists only top-level categories. A category with no
@@ -238,7 +314,9 @@ export default function ProductCatalogueView({
             ? findPathBySlug(categories, slugParam)
             : null;
 
-        return fromSlug ?? firstSelectablePath(categories);
+        return (
+            fromSlug ?? (categories[0] ? [categories[0].key] : [])
+        );
     });
 
     // Which parent category currently has its subcategories expanded
@@ -275,12 +353,17 @@ export default function ProductCatalogueView({
         updateUrl(nextPath);
     }
 
-    // Selects a top-level category that has no children of its own
-    // — categories with children are expand-only and are never
-    // selected directly (see the sidebar and mobile row below).
+    // Selects a top-level category that has no children of its own.
     // Moving to another category also closes any open expansion.
     function selectTopLevel(key: string) {
         setExpandedKey(null);
+        goTo([key]);
+    }
+
+    // A category with children shows its subcategories as cards
+    // instead of products, and toggles its list open in the sidebar.
+    function selectParentCategory(key: string, isExpanded: boolean) {
+        setExpandedKey(isExpanded ? null : key);
         goTo([key]);
     }
 
@@ -288,9 +371,10 @@ export default function ProductCatalogueView({
         goTo(path.slice(0, depth));
     }
 
-    // Selects a subcategory directly — its parent is never selected
-    // on its own, so the path is set to the pair in one step.
+    // Selects a subcategory — reached either from the sidebar list
+    // or from its card, so the path is set to the pair in one step.
     function selectSubcategory(topLevelKey: string, childKey: string) {
+        setExpandedKey(topLevelKey);
         goTo([topLevelKey, childKey]);
     }
 
@@ -344,10 +428,9 @@ export default function ProductCatalogueView({
                                     type="button"
                                     onClick={() =>
                                         hasChildren
-                                            ? setExpandedKey(
+                                            ? selectParentCategory(
+                                                  category.key,
                                                   isExpanded
-                                                      ? null
-                                                      : category.key
                                               )
                                             : selectTopLevel(category.key)
                                     }
@@ -462,16 +545,15 @@ export default function ProductCatalogueView({
                                         // Expand trigger only — a category
                                         // with subcategories has no product
                                         // view of its own, so clicking it
-                                        // just opens/closes its children
-                                        // in the row below rather than
-                                        // navigating anywhere.
+                                        // opens/closes its children here
+                                        // and shows them as cards in the
+                                        // content area.
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setExpandedKey(
+                                                selectParentCategory(
+                                                    category.key,
                                                     isExpanded
-                                                        ? null
-                                                        : category.key
                                                 )
                                             }
                                             aria-expanded={isExpanded}
@@ -667,7 +749,47 @@ export default function ProductCatalogueView({
                     ) : null}
                 </div>
 
-                {displayedProducts.length === 0 ? (
+                {activeNode.children.length > 0 ? (
+                    // A category with subcategories shows those as cards
+                    // — its products are reached by picking one of them.
+                    // Any products pinned directly to it still follow.
+                    <>
+                        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+                            {activeNode.children.map((child) => (
+                                <CategoryItem
+                                    key={child.key}
+                                    category={child}
+                                    onSelect={() =>
+                                        selectSubcategory(
+                                            activeNode.key,
+                                            child.key
+                                        )
+                                    }
+                                />
+                            ))}
+                        </div>
+
+                        {activeNode.directProducts.length > 0 && (
+                            <div className="mt-7 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+                                {activeNode.directProducts.map(
+                                    (product) => (
+                                        <ProductItem
+                                            key={product.key}
+                                            product={product}
+                                            viewLabel={viewLabel}
+                                            fallbackDescription={
+                                                fallbackDescription
+                                            }
+                                            imageUnavailableLabel={
+                                                imageUnavailableLabel
+                                            }
+                                        />
+                                    )
+                                )}
+                            </div>
+                        )}
+                    </>
+                ) : displayedProducts.length === 0 ? (
                     <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-white/10 dark:bg-[#0b1622]">
                         <p className="text-gray-500 dark:text-gray-400">
                             No products available.

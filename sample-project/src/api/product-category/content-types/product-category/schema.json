@@ -35,6 +35,16 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product-category.product-category"
+    },
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }
