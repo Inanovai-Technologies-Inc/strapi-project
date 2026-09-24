@@ -1,7 +1,39 @@
 import Link from "next/link";
+import { renderBulletedText } from "@/components/richText";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+/* =========================================================
+   INLINE LINKS & HIGHLIGHTS
+
+   Exact phrases that, wherever they occur in a news article's
+   body, should render as a link to the product they refer to or
+   as an emphasised highlight. Keyed by literal text rather than
+   per-article, so any article mentioning the same product name
+   or URL picks these up automatically.
+========================================================= */
+
+const NEWS_TEXT_LINKS = [
+    {
+        match: "Terrasafe TS-3E",
+        href: "/product/terrasafe-ts-3-e",
+    },
+    {
+        match: "https://www.marsoltech.com/ionex-ea-extinguisher/",
+        href: "/product/ionex-ea-extinguisher",
+    },
+];
+
+const NEWS_TEXT_HIGHLIGHTS = [
+    {
+        match: "up to 600 Wh",
+    },
+];
+
+const NEWS_TEXT_OPTIONS = {
+    links: NEWS_TEXT_LINKS
+};
 
 interface NewsPageProps {
     params: Promise<{
@@ -47,7 +79,7 @@ export default async function NewsDetailPage({
                     </p>
 
                     <Link
-                        href="/news-events"
+                        href="/news"
                         className="mt-6 inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-500"
                     >
                         Back to News
@@ -71,7 +103,7 @@ export default async function NewsDetailPage({
                 <div className="mx-auto max-w-5xl">
 
                     <Link
-                        href="/news-events"
+                        href="/news"
                         className="inline-flex items-center text-sm font-medium text-gray-500 transition hover:text-orange-500"
                     >
                         ← Back to News
@@ -125,9 +157,9 @@ export default async function NewsDetailPage({
 
                         <div className="mt-4 h-1 w-12 bg-orange-500" />
 
-                        <p className="mt-7 whitespace-pre-line text-base leading-8 text-gray-600">
-                            {news.Description}
-                        </p>
+                        <div className="mt-7 text-base leading-8 text-gray-600">
+                            {renderBulletedText(news.Description, NEWS_TEXT_OPTIONS)}
+                        </div>
 
                     </div>
 
@@ -157,9 +189,9 @@ export default async function NewsDetailPage({
 
                         <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm sm:p-10">
 
-                            <p className="whitespace-pre-line text-base leading-8 text-gray-600">
-                                {news.MoreInformation}
-                            </p>
+                            <div className="text-base leading-8 text-gray-600">
+                                {renderBulletedText(news.MoreInformation, NEWS_TEXT_OPTIONS)}
+                            </div>
 
                         </div>
 

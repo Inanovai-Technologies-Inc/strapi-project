@@ -171,10 +171,10 @@ export default function Footer() {
 
                             <li>
                                 <Link
-                                    href="/environmental-services"
+                                    href="/services"
                                     className="text-sm text-gray-600 transition hover:text-gray-900"
                                 >
-                                    Environmental Services
+                                    Services
                                 </Link>
                             </li>
 

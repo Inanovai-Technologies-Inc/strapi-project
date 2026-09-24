@@ -89,7 +89,7 @@ export default function TermsConditionsPage() {
 
                         <p>By using this site, you confirm that:</p>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left">
+                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>You are legally allowed to access and use our content.</li>
                             <li>Any information you provide is accurate and truthful.</li>
                             <li>You will not misuse the site for illegal or unauthorized purposes.</li>

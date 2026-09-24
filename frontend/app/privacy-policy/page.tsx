@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
                             voluntarily provide when:
                         </p>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left">
+                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>You submit an inquiry form.</li>
                             <li>You download a document or product material.</li>
                             <li>You interact with our website via cookies.</li>
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
                             automatically, such as:
                         </p>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left">
+                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>IP addresses</li>
                             <li>Browser type</li>
                             <li>Device characteristics</li>
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
                             Why do we use them?
                         </h3>
 
-                        <ul className="list-disc space-y-2 pl-6 text-left">
+                        <ul className="list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>Understand visitor behavior and improve our site.</li>
                             <li>Analyze marketing campaign effectiveness.</li>
                             <li>Customise your user experience.</li>
@@ -147,7 +147,7 @@ export default function PrivacyPolicyPage() {
                             following legal grounds:
                         </p>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left">
+                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>
                                 <strong>Consent:</strong> You&apos;ve given
                                 permission for us to use your data.
@@ -179,7 +179,7 @@ export default function PrivacyPolicyPage() {
                             we may process your information to:
                         </p>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left">
+                        <ul className="mt-4 list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>Respond to your inquiries or support needs.</li>
                             <li>Send updates about our services, terms, or policies.</li>
                             <li>Deliver content or advertising tailored to your interests.</li>
@@ -210,7 +210,7 @@ export default function PrivacyPolicyPage() {
                             Your Data Protection Rights
                         </h2>
 
-                        <ul className="list-disc space-y-2 pl-6 text-left">
+                        <ul className="list-disc space-y-2 pl-6 text-left marker:font-bold">
                             <li>Access the personal data we hold about you.</li>
                             <li>Request corrections to inaccurate information.</li>
                             <li>Request deletion of your personal data (under certain conditions).</li>
