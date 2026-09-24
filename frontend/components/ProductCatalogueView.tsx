@@ -151,7 +151,7 @@ function ProductItem({
                         src={product.imageUrl}
                         alt={product.imageAlt}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">

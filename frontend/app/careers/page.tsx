@@ -183,48 +183,35 @@ export default async function CareerPage() {
                                 LIFE AT MARSOL TECHNOLOGIES
                             </h2>
 
-                            <div className="grid gap-10 md:grid-cols-2 md:items-center">
+                            <div className="space-y-5 text-justify text-lg leading-8 text-gray-700">
 
-                                <div className="space-y-5 text-justify text-lg leading-8 text-gray-700">
+                                <p>
+                                    At Marsol Technologies, life is about
+                                    collaboration, continuous learning, and
+                                    working together to build a safer
+                                    future. We believe in fostering a
+                                    supportive environment where every team
+                                    member is valued, encouraged, and
+                                    empowered to succeed.
+                                </p>
 
-                                    <p>
-                                        At Marsol Technologies, life is about
-                                        collaboration, continuous learning, and
-                                        working together to build a safer
-                                        future. We believe in fostering a
-                                        supportive environment where every team
-                                        member is valued, encouraged, and
-                                        empowered to succeed.
-                                    </p>
+                                <p>
+                                    From casual coffee conversations and
+                                    team celebrations to tackling complex
+                                    engineering challenges, there&apos;s
+                                    always an opportunity to connect,
+                                    innovate, and grow. We embrace new
+                                    ideas, recognize achievements, and
+                                    inspire one another to deliver our
+                                    best.
+                                </p>
 
-                                    <p>
-                                        From casual coffee conversations and
-                                        team celebrations to tackling complex
-                                        engineering challenges, there&apos;s
-                                        always an opportunity to connect,
-                                        innovate, and grow. We embrace new
-                                        ideas, recognize achievements, and
-                                        inspire one another to deliver our
-                                        best.
-                                    </p>
-
-                                    <p>
-                                        It&apos;s a place where you can be
-                                        yourself, develop your skills, make a
-                                        meaningful impact, and take pride in
-                                        the work you do every day.
-                                    </p>
-
-                                </div>
-
-                                <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg sm:h-96">
-                                    <Image
-                                        src="/images/career-image.jfif"
-                                        alt="Life at Marsol Technologies"
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
+                                <p>
+                                    It&apos;s a place where you can be
+                                    yourself, develop your skills, make a
+                                    meaningful impact, and take pride in
+                                    the work you do every day.
+                                </p>
 
                             </div>
 

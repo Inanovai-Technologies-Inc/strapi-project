@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductContext from "@/components/ProductContext";
 import FeatureTabs from "@/components/FeatureTabs";
-import { renderBlocks } from "@/components/richText";
+import { renderBlocks, renderBulletedText } from "@/components/richText";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL ||
@@ -472,7 +472,7 @@ export default async function ProductDetailPage({
 
                         <div className="bg-white">
 
-                            <div className="flex min-h-[450px] items-center justify-center bg-white p-6 lg:p-10">
+                            <div className="flex min-h-[450px] items-center justify-center overflow-hidden rounded-2xl bg-white p-6 lg:p-10">
 
                                 {imageUrl ? (
                                     <img
@@ -481,7 +481,7 @@ export default async function ProductDetailPage({
                                             product.Image,
                                             product.Name
                                         )}
-                                        className="max-h-[450px] w-full object-contain"
+                                        className="max-h-[450px] w-full rounded-2xl object-contain"
                                     />
                                 ) : (
                                     <p className="text-gray-400">
@@ -502,10 +502,6 @@ export default async function ProductDetailPage({
                             {certificationLogoUrls.length >
                                 0 && (
                                 <div className="bg-white px-6 py-6">
-
-                                    <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
-                                        Certifications
-                                    </p>
 
                                     <div className="mt-5 flex flex-wrap items-center justify-center gap-5">
 
@@ -562,11 +558,11 @@ export default async function ProductDetailPage({
                                         Description
                                     </h2>
 
-                                    <p className="mt-4 whitespace-pre-line text-justify text-base leading-8 text-gray-600">
-                                        {
+                                    <div className="mt-4 text-justify text-base leading-8 text-gray-600">
+                                        {renderBulletedText(
                                             product.description
-                                        }
-                                    </p>
+                                        )}
+                                    </div>
 
                                 </div>
                             )}
@@ -653,7 +649,7 @@ export default async function ProductDetailPage({
 
                                                 <div className="bg-white">
 
-                                                    <div className="flex min-h-[380px] items-center justify-center bg-white p-6 lg:p-10">
+                                                    <div className="flex min-h-[380px] items-center justify-center overflow-hidden rounded-2xl bg-white p-6 lg:p-10">
 
                                                         {seriesImageUrl ? (
                                                             <img
@@ -663,7 +659,7 @@ export default async function ProductDetailPage({
                                                                 alt={
                                                                     seriesName
                                                                 }
-                                                                className="max-h-[390px] w-full object-contain transition duration-500 hover:scale-[1.02]"
+                                                                className="max-h-[390px] w-full rounded-2xl object-contain transition duration-500 hover:scale-[1.02]"
                                                             />
                                                         ) : (
                                                             <div className="text-center">
@@ -678,10 +674,6 @@ export default async function ProductDetailPage({
                                                     {seriesCertificationLogoUrls.length >
                                                         0 && (
                                                         <div className="bg-white px-4 py-4">
-
-                                                            <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-                                                                Certifications
-                                                            </p>
 
                                                             <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
 
@@ -735,11 +727,11 @@ export default async function ProductDetailPage({
                                                             )}
                                                         </div>
                                                     ) : series.SeriesDescription ? (
-                                                        <p className="mt-7 whitespace-pre-line text-justify text-base leading-8 text-gray-600">
-                                                            {
+                                                        <div className="mt-7 text-justify text-base leading-8 text-gray-600">
+                                                            {renderBulletedText(
                                                                 series.SeriesDescription
-                                                            }
-                                                        </p>
+                                                            )}
+                                                        </div>
                                                     ) : (
                                                         <p className="mt-7 text-base text-gray-400">
                                                             No description available.
@@ -953,7 +945,7 @@ export default async function ProductDetailPage({
                                                 NO ORANGE TOP BAR
                                             ================================================= */}
 
-                                            <div className="flex h-64 items-center justify-center bg-white p-8">
+                                            <div className="flex h-64 items-center justify-center overflow-hidden rounded-2xl bg-white p-8">
 
                                                 {relatedImageUrl ? (
                                                     <img
@@ -964,7 +956,7 @@ export default async function ProductDetailPage({
                                                             related.Image,
                                                             related.Name
                                                         )}
-                                                        className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
+                                                        className="h-full w-full rounded-2xl object-contain transition duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
                                                     <div className="text-sm text-gray-400">

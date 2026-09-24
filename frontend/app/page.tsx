@@ -66,8 +66,31 @@ export default async function Home() {
        FETCH PRODUCTS FROM STRAPI
     ===================================================== */
 
+    /* =====================================================
+       HOMEPAGE PRODUCT PICKS
+
+       Always show these three products, in this order,
+       fetched directly by slug so they show up regardless
+       of Strapi's default pagination page size.
+    ===================================================== */
+
+    const homepageProductSlugs = [
+        "diff-system",
+        "deluge-skid",
+        "inert-gas-system",
+    ];
+
+    const homepageProductsQuery = homepageProductSlugs
+        .map(
+            (slug, index) =>
+                `filters[slug][$in][${index}]=${encodeURIComponent(
+                    slug
+                )}`
+        )
+        .join("&");
+
     const response = await fetch(
-        `${STRAPI_URL}/api/products?populate=*`,
+        `${STRAPI_URL}/api/products?populate=*&pagination[pageSize]=${homepageProductSlugs.length}&${homepageProductsQuery}`,
         {
             cache: "no-store",
         }
@@ -78,7 +101,15 @@ export default async function Home() {
     }
 
     const result = await response.json();
-    const products = result.data || [];
+    const fetchedHomepageProducts = result.data || [];
+
+    const homepageProducts = homepageProductSlugs
+        .map((slug) =>
+            fetchedHomepageProducts.find(
+                (product: any) => product.slug === slug
+            )
+        )
+        .filter(Boolean);
 
     /* =====================================================
        FETCH NEWS FROM STRAPI
@@ -1101,7 +1132,7 @@ export default async function Home() {
 
                     {/* Product cards */}
 
-                    {products.length === 0 ? (
+                    {homepageProducts.length === 0 ? (
                         <div
                             className="
                                 mt-14
@@ -1128,9 +1159,8 @@ export default async function Home() {
                                 lg:grid-cols-3
                             "
                         >
-                            {products
-                                .slice(0, 3)
-                                .map((product: any, index: number) => {
+                            {homepageProducts.map(
+                                (product: any, index: number) => {
                                     const imageUrl =
                                         product.Image?.url
                                             ? `${STRAPI_URL}${product.Image.url}`

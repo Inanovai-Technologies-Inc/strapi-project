@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { renderBulletedText } from "@/components/richText";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -144,9 +145,9 @@ export default async function CareerDetailsPage({
                                         Job Description
                                     </h2>
 
-                                    <p className="mt-5 whitespace-pre-line text-justify text-lg leading-8 text-gray-700">
-                                        {career.Description}
-                                    </p>
+                                    <div className="mt-5 text-justify text-lg leading-8 text-gray-700">
+                                        {renderBulletedText(career.Description)}
+                                    </div>
 
                                 </section>
                             )}
@@ -160,9 +161,9 @@ export default async function CareerDetailsPage({
                                         Requirements
                                     </h2>
 
-                                    <p className="mt-5 whitespace-pre-line text-justify text-lg leading-8 text-gray-700">
-                                        {career.Requirements}
-                                    </p>
+                                    <div className="mt-5 text-justify text-lg leading-8 text-gray-700">
+                                        {renderBulletedText(career.Requirements)}
+                                    </div>
 
                                 </section>
                             )}

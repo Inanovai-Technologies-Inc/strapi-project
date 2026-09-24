@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { renderBlocks } from "@/components/richText";
+import { renderBlocks, renderBulletedText } from "@/components/richText";
 import ServiceExpandable from "@/components/ServiceExpandable";
 import ServiceHeroCollapse from "@/components/ServiceHeroCollapse";
 import {
@@ -39,9 +39,9 @@ function RichText({ value }: { value: any }) {
 
     if (typeof value === "string" && value.trim()) {
         return (
-            <p className="whitespace-pre-line text-justify text-base leading-8 text-gray-600">
-                {value}
-            </p>
+            <div className="text-justify text-base leading-8 text-gray-600">
+                {renderBulletedText(value)}
+            </div>
         );
     }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { getWebsiteKnowledge } from "@/lib/websiteKnowledge";
 
 /* =========================================================
    TYPES
@@ -20,6 +21,9 @@ type PageContext = {
 
     [key: string]: any;
 };
+
+const OUT_OF_SCOPE_RESPONSE =
+    "Sorry, I don’t have information about that.";
 
 /* =========================================================
    RICH TEXT → PLAIN TEXT
@@ -292,6 +296,178 @@ function buildPageContext(
     );
 }
 
+function buildProductsKnowledge(
+    products: any[]
+): string {
+    if (!Array.isArray(products) || products.length === 0) {
+        return "No Strapi product content is currently available.";
+    }
+
+    const productSections = products.map(
+        (entry: any, index: number) => {
+            const product =
+                entry?.attributes || entry || {};
+
+            const description =
+                richTextToText(product.description);
+            const features =
+                richTextToText(product.Features);
+            const applications =
+                richTextToText(product.Applications);
+            const specifications =
+                formatTechnicalSpecifications(
+                    product.TechnicalSpecification
+                );
+
+            return [
+                `PRODUCT ${index + 1}`,
+                `NAME: ${product.Name || "Not provided"}`,
+                description
+                    ? `DESCRIPTION: ${description}`
+                    : "",
+                features
+                    ? `FEATURES: ${features}`
+                    : "",
+                applications
+                    ? `APPLICATIONS: ${applications}`
+                    : "",
+                specifications
+                    ? `TECHNICAL SPECIFICATIONS:\n${specifications}`
+                    : "",
+            ]
+                .filter(Boolean)
+                .join("\n");
+        }
+    );
+
+    return [
+        `PRODUCT COUNT: ${products.length}`,
+        ...productSections,
+    ].join("\n\n");
+}
+
+/* =========================================================
+   SERVICE EXPANDABLE ITEMS
+========================================================= */
+
+function formatExpandableItems(
+    items: any
+): string {
+
+    if (!Array.isArray(items)) {
+        return "";
+    }
+
+    return items
+        .filter((item: any) => item?.title)
+        .map((item: any) => {
+
+            const content = richTextToText(
+                item.content
+            );
+
+            return `  - ${item.title}${
+                content ? `: ${content}` : ""
+            }`;
+        })
+        .join("\n");
+}
+
+/* =========================================================
+   SERVICE SECTIONS
+========================================================= */
+
+function formatServiceSections(
+    sections: any
+): string {
+
+    if (!Array.isArray(sections)) {
+        return "";
+    }
+
+    return sections
+        .filter(
+            (section: any) =>
+                section?.heading || section?.content
+        )
+        .map((section: any) => {
+
+            const content = richTextToText(
+                section.content
+            );
+
+            return `  - ${
+                section.heading || "Section"
+            }${content ? `: ${content}` : ""}`;
+        })
+        .join("\n");
+}
+
+function buildServicesKnowledge(
+    services: any[]
+): string {
+    if (!Array.isArray(services) || services.length === 0) {
+        return "No Strapi service content is currently available.";
+    }
+
+    const serviceSections = services.map(
+        (entry: any, index: number) => {
+            const service =
+                entry?.attributes || entry || {};
+
+            const introductionContent =
+                richTextToText(
+                    service.introductionContent
+                );
+            const sections =
+                formatServiceSections(
+                    service.sections
+                );
+            const expandableItems =
+                formatExpandableItems(
+                    service.ExpandableItem
+                );
+
+            return [
+                `SERVICE ${index + 1}`,
+                `NAME: ${service.title || "Not provided"}`,
+                service.introductionTitle
+                    ? `INTRODUCTION TITLE: ${service.introductionTitle}`
+                    : "",
+                introductionContent
+                    ? `INTRODUCTION: ${introductionContent}`
+                    : "",
+                sections
+                    ? `SECTIONS:\n${sections}`
+                    : "",
+                service.ExpandableItemtitle
+                    ? `DETAILS TITLE: ${service.ExpandableItemtitle}`
+                    : "",
+                expandableItems
+                    ? `DETAILS:\n${expandableItems}`
+                    : "",
+            ]
+                .filter(Boolean)
+                .join("\n");
+        }
+    );
+
+    return [
+        `SERVICE COUNT: ${services.length}`,
+        ...serviceSections,
+    ].join("\n\n");
+}
+
+function buildWebsiteKnowledge(
+    products: any[],
+    services: any[]
+): string {
+    return [
+        buildProductsKnowledge(products),
+        buildServicesKnowledge(services),
+    ].join("\n\n");
+}
+
 /* =========================================================
    POST
 ========================================================= */
@@ -364,6 +540,25 @@ export async function POST(
                 pageContext
             );
 
+        let formattedWebsiteKnowledge =
+            "No Strapi website content is currently available.";
+
+        try {
+            const { products, services } =
+                await getWebsiteKnowledge();
+
+            formattedWebsiteKnowledge =
+                buildWebsiteKnowledge(
+                    products,
+                    services
+                );
+        } catch (error) {
+            console.warn(
+                "Unable to load Strapi chatbot knowledge:",
+                error
+            );
+        }
+
         console.log(
             "CHATBOT PAGE CONTEXT:",
             formattedContext
@@ -398,6 +593,12 @@ CURRENT PAGE CONTEXT
 =========================================================
 
 ${formattedContext}
+
+=========================================================
+STRAPI WEBSITE CONTENT
+=========================================================
+
+${formattedWebsiteKnowledge}
 
 =========================================================
 HOW TO INTERPRET THE USER'S QUESTION
@@ -457,11 +658,28 @@ provide a useful summary containing, where available:
 Do not mention sections that contain no useful information.
 
 =========================================================
-ACCURACY RULES
+GROUNDING AND ACCURACY RULES
 =========================================================
 
 - Use the CURRENT PAGE CONTEXT as the primary source
   for Marsol-specific information.
+
+- Do NOT restrict your answer to the current page. The
+    STRAPI WEBSITE CONTENT above contains every Marsol
+    product and service across the whole website, even
+    ones not shown on the page the user is currently on.
+    Use it for questions like "how many services do we
+    have?", "list all the services", "list all the
+    products", or "explain the [X] system" whenever [X]
+    is not the current page.
+
+- Answer ONLY with information explicitly available in
+    the CURRENT PAGE CONTEXT or STRAPI WEBSITE CONTENT.
+
+- Do NOT answer general knowledge questions, including
+    questions about programming, science, history, or
+    general fire-safety knowledge, unless the answer is
+    explicitly covered by the available Marsol content.
 
 - Do NOT invent Marsol product names.
 
@@ -483,19 +701,20 @@ ACCURACY RULES
   supported by the page context.
 
 - If a specific Marsol detail is not available,
-  clearly say that the information is not provided
-  on the current page.
+    respond exactly with:
+    "${OUT_OF_SCOPE_RESPONSE}"
 
 - If the page contains a description but Features
   or Applications are missing, you may use relevant
   information from the description to explain the
   product.
 
-- Clearly distinguish between information provided
-  by Marsol's page and general industry knowledge.
+- If the user's question is unrelated to Marsol's
+    available content, respond exactly with:
+    "${OUT_OF_SCOPE_RESPONSE}"
 
-- You may answer general fire-safety questions using
-  your general knowledge.
+- Do not provide additional explanation before or after
+    that response.
 
 =========================================================
 STYLE

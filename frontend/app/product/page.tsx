@@ -301,6 +301,14 @@ function sortCategoriesByName(
         }));
 }
 
+// Only these products belong in the "Other Products" bucket —
+// not every uncategorized product in Strapi.
+const OTHER_PRODUCTS_SLUGS = [
+    "ev-parking-nozzle",
+    "ev-ff-nozzle-kit",
+    "fire-pumps",
+];
+
 async function fetchUncategorizedProducts(
     categorizedIds: Set<string>
 ) {
@@ -325,7 +333,8 @@ async function fetchUncategorizedProducts(
                 product &&
                 !categorizedIds.has(
                     String(product.documentId ?? product.id)
-                )
+                ) &&
+                OTHER_PRODUCTS_SLUGS.includes(product.slug)
         );
 }
 

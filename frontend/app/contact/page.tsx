@@ -805,7 +805,7 @@ export default function ContactPage() {
 
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-                            Middle East Hub
+                            Middle East
                         </p>
 
                         <h3 className="mt-2 text-xl font-bold text-gray-900">
@@ -828,7 +828,7 @@ export default function ContactPage() {
 
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-                            Asia Pacific Center
+                            Asia Pacific
                         </p>
 
                         <h3 className="mt-2 text-xl font-bold text-gray-900">

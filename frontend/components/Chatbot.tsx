@@ -38,7 +38,7 @@ const markdownComponents: Components = {
         <p className="mb-2 whitespace-pre-wrap last:mb-0" {...props} />
     ),
     ul: ({ node, ...props }) => (
-        <ul className="mb-2 list-disc space-y-1 pl-5 last:mb-0" {...props} />
+        <ul className="mb-2 list-disc space-y-1 pl-5 marker:font-bold last:mb-0" {...props} />
     ),
     ol: ({ node, ...props }) => (
         <ol className="mb-2 list-decimal space-y-1 pl-5 last:mb-0" {...props} />
