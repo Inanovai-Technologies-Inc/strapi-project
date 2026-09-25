@@ -5,6 +5,7 @@ import ProductCatalogueView, {
     type CatalogueCategoryNode,
     type CatalogueProduct,
 } from "@/components/ProductCatalogueView";
+import { isPhotographicImage } from "@/lib/imageTransparency";
 
 const STRAPI_URL =
     process.env.STRAPI_URL ||
@@ -204,10 +205,10 @@ async function fetchProductCategoryTree(): Promise<
         );
     });
 
-    function buildNode(
+    async function buildNode(
         key: string,
         visited: Set<string>
-    ): CatalogueCategoryNode | null {
+    ): Promise<CatalogueCategoryNode | null> {
         const category = flatByKey.get(key);
 
         // `visited` guards against a mistaken cyclical parent/child
@@ -221,6 +222,17 @@ async function fetchProductCategoryTree(): Promise<
             childKeysByParent.get(key) || []
         );
 
+        const [directProducts, children] = await Promise.all([
+            Promise.all(
+                category.directProducts.map(toCatalogueProduct)
+            ),
+            Promise.all(
+                childKeys.map((childKey) =>
+                    buildNode(childKey, nextVisited)
+                )
+            ),
+        ]);
+
         return {
             key: category.key,
             name: category.name,
@@ -228,11 +240,10 @@ async function fetchProductCategoryTree(): Promise<
             description: category.description,
             imageUrl: category.imageUrl,
             imageAlt: category.imageAlt,
-            directProducts:
-                category.directProducts.map(toCatalogueProduct),
-            children: childKeys
-                .map((childKey) => buildNode(childKey, nextVisited))
-                .filter(Boolean) as CatalogueCategoryNode[],
+            directProducts,
+            children: children.filter(
+                Boolean
+            ) as CatalogueCategoryNode[],
         };
     }
 
@@ -250,9 +261,13 @@ async function fetchProductCategoryTree(): Promise<
         (key) => !keysWithAParent.has(key)
     );
 
-    return topLevelKeys
-        .map((key) => buildNode(key, new Set()))
-        .filter(Boolean) as CatalogueCategoryNode[];
+    const topLevelNodes = await Promise.all(
+        topLevelKeys.map((key) => buildNode(key, new Set()))
+    );
+
+    return topLevelNodes.filter(
+        Boolean
+    ) as CatalogueCategoryNode[];
 }
 
 /* =========================================================
@@ -346,8 +361,11 @@ async function fetchUncategorizedProducts(
    plain JSON (image URLs resolved here on the server).
 ========================================================= */
 
-function toCatalogueProduct(product: any): CatalogueProduct {
+async function toCatalogueProduct(
+    product: any
+): Promise<CatalogueProduct> {
     const name = product?.Name || product?.name || "";
+    const imageUrl = getImageUrl(product?.Image);
 
     return {
         key: String(
@@ -360,8 +378,9 @@ function toCatalogueProduct(product: any): CatalogueProduct {
         slug: product?.slug || "",
         description:
             product?.description || product?.Description || "",
-        imageUrl: getImageUrl(product?.Image),
+        imageUrl,
         imageAlt: product?.Image?.alternativeText || name,
+        imageIsPhoto: await isPhotographicImage(imageUrl),
     };
 }
 
@@ -451,7 +470,9 @@ async function ProductCatalogue() {
             description: "",
             imageUrl: null,
             imageAlt: "Other Products",
-            directProducts: uncategorizedProducts.map(toCatalogueProduct),
+            directProducts: await Promise.all(
+                uncategorizedProducts.map(toCatalogueProduct)
+            ),
             children: [],
         });
     }

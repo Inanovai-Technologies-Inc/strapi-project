@@ -1,7 +1,9 @@
 import Link from "next/link";
 import ProductContext from "@/components/ProductContext";
 import FeatureTabs from "@/components/FeatureTabs";
+import ProductTechnicalDocuments from "@/components/ProductTechnicalDocuments";
 import { renderBlocks, renderBulletedText } from "@/components/richText";
+import { isPhotographicImage } from "@/lib/imageTransparency";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL ||
@@ -188,6 +190,7 @@ async function fetchProduct(slug: string) {
         `${STRAPI_URL}/api/products` +
         `?filters[slug][$eq]=${encodeURIComponent(slug)}` +
         `&populate[Image]=true` +
+        `&populate[SecondaryImage]=true` +
         `&populate[certificationLogos]=true` +
         `&populate[relatedProducts][populate][Image]=true` +
         `&populate[FoamSkidSeries][populate][SeriesImage]=true` +
@@ -350,6 +353,28 @@ export default async function ProductDetailPage({
         getImageUrl(product.Image);
 
     /* =====================================================
+       SECONDARY IMAGE
+
+       Optional — when Strapi has a SecondaryImage set, it
+       replaces the Image field in the detail page's hero
+       spot. The /product listing page's cards always use
+       the Image field regardless, so they are unaffected.
+    ===================================================== */
+
+    const secondaryImageUrl =
+        getImageUrl(product.SecondaryImage);
+
+    const heroImageUrl = secondaryImageUrl || imageUrl;
+
+    const heroImageAlt = secondaryImageUrl
+        ? getMediaAlt(product.SecondaryImage, product.Name)
+        : getMediaAlt(product.Image, product.Name);
+
+    const heroImageIsPhoto = await isPhotographicImage(
+        heroImageUrl
+    );
+
+    /* =====================================================
        MAIN PRODUCT CERTIFICATION LOGOS
     ===================================================== */
 
@@ -435,6 +460,27 @@ export default async function ProductDetailPage({
         );
 
     /* =====================================================
+       RELATED PRODUCT IMAGE TYPE
+
+       Resolved up front (in parallel) since the JSX below
+       maps synchronously and can't await per item.
+    ===================================================== */
+
+    const relatedProductsWithImageInfo = await Promise.all(
+        relatedProductsWithImages.map(async (related: any) => {
+            const relatedImageUrl = getImageUrl(related.Image);
+
+            return {
+                related,
+                relatedImageUrl,
+                relatedImageIsPhoto: await isPhotographicImage(
+                    relatedImageUrl
+                ),
+            };
+        })
+    );
+
+    /* =====================================================
        RENDER
     ===================================================== */
 
@@ -462,7 +508,7 @@ export default async function ProductDetailPage({
                         ← Back to Products
                     </Link>
 
-                    <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:items-center">
+                    <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:items-start">
 
                         {/* =================================================
                             LEFT - PRODUCT IMAGE
@@ -472,24 +518,37 @@ export default async function ProductDetailPage({
 
                         <div className="bg-white">
 
-                            <div className="flex min-h-[450px] items-center justify-center overflow-hidden rounded-2xl bg-white p-6 lg:p-10">
+                            {/* Normal photos (JPEG, e.g. DIFF System) fill
+                                this area edge-to-edge like the Services
+                                page. Transparent-render products (PNG,
+                                e.g. ROTO Spray Deluge Nozzles) keep the
+                                original boxed/contain treatment. */}
 
-                                {imageUrl ? (
+                            {heroImageUrl && heroImageIsPhoto ? (
+                                <div className="h-[450px] w-full overflow-hidden rounded-2xl">
                                     <img
-                                        src={imageUrl}
-                                        alt={getMediaAlt(
-                                            product.Image,
-                                            product.Name
-                                        )}
-                                        className="max-h-[450px] w-full rounded-2xl object-contain"
+                                        src={heroImageUrl}
+                                        alt={heroImageAlt}
+                                        className="h-full w-full rounded-2xl object-cover"
                                     />
-                                ) : (
-                                    <p className="text-gray-400">
-                                        No image available
-                                    </p>
-                                )}
+                                </div>
+                            ) : (
+                                <div className="flex min-h-[450px] items-center justify-center overflow-hidden rounded-2xl bg-white p-6 lg:p-10">
 
-                            </div>
+                                    {heroImageUrl ? (
+                                        <img
+                                            src={heroImageUrl}
+                                            alt={heroImageAlt}
+                                            className="max-h-[450px] w-full rounded-2xl object-contain"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-400">
+                                            No image available
+                                        </p>
+                                    )}
+
+                                </div>
+                            )}
 
                             {/* =================================================
                                 MAIN CERTIFICATIONS
@@ -497,10 +556,15 @@ export default async function ProductDetailPage({
                                 NO BORDER
                                 NO CARD
                                 NO SHADOW
+
+                                Inert Gas System only: its certification
+                                logos render on the right, below the
+                                description, instead of here — see the
+                                block below the Description section.
                             ================================================= */}
 
-                            {certificationLogoUrls.length >
-                                0 && (
+                            {certificationLogoUrls.length > 0 &&
+                                product.slug !== "inert-gas-system" && (
                                 <div className="bg-white px-6 py-6">
 
                                     <div className="mt-5 flex flex-wrap items-center justify-center gap-5">
@@ -566,6 +630,43 @@ export default async function ProductDetailPage({
 
                                 </div>
                             )}
+
+                            {/* =================================================
+                                CERTIFICATIONS — INERT GAS SYSTEM ONLY
+
+                                Placed on the right, below the description,
+                                instead of the usual spot below the product
+                                image on the left. Every other product keeps
+                                its certification logos where they were.
+                            ================================================= */}
+
+                            {product.slug === "inert-gas-system" &&
+                                certificationLogoUrls.length > 0 && (
+                                    <div className="mt-8">
+
+                                        <div className="flex flex-wrap items-center gap-5">
+
+                                            {certificationLogoUrls.map(
+                                                (logoUrl, index) => (
+                                                    <div
+                                                        key={`${logoUrl}-${index}`}
+                                                        className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                    >
+                                                        <img
+                                                            src={logoUrl}
+                                                            alt={`Certification logo ${
+                                                                index + 1
+                                                            }`}
+                                                            className="max-h-full max-w-full object-contain"
+                                                        />
+                                                    </div>
+                                                )
+                                            )}
+
+                                        </div>
+
+                                    </div>
+                                )}
 
                             {/* REQUEST MORE INFO */}
 
@@ -640,7 +741,7 @@ export default async function ProductDetailPage({
                                         >
 
                                             <div
-                                                className={`grid items-center gap-12 lg:grid-cols-2 ${
+                                                className={`grid items-start gap-12 lg:grid-cols-2 ${
                                                     isReversed
                                                         ? "lg:[&>div:first-child]:order-2"
                                                         : ""
@@ -884,6 +985,12 @@ export default async function ProductDetailPage({
             )}
 
             {/* =========================================================
+                TECHNICAL DOCUMENTS
+            ========================================================= */}
+
+            <ProductTechnicalDocuments />
+
+            {/* =========================================================
                 RELATED PRODUCTS
             ========================================================= */}
 
@@ -916,15 +1023,12 @@ export default async function ProductDetailPage({
 
                         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
 
-                            {relatedProductsWithImages.map(
-                                (
-                                    related: any
-                                ) => {
-
-                                    const relatedImageUrl =
-                                        getImageUrl(
-                                            related.Image
-                                        );
+                            {relatedProductsWithImageInfo.map(
+                                ({
+                                    related,
+                                    relatedImageUrl,
+                                    relatedImageIsPhoto,
+                                }) => {
 
                                     return (
                                         <article
@@ -932,7 +1036,7 @@ export default async function ProductDetailPage({
                                                 related.documentId ||
                                                 related.id
                                             }
-                                            className="group bg-white"
+                                            className="group flex items-center gap-6 bg-white"
                                         >
 
                                             {/* =================================================
@@ -945,7 +1049,14 @@ export default async function ProductDetailPage({
                                                 NO ORANGE TOP BAR
                                             ================================================= */}
 
-                                            <div className="flex h-64 items-center justify-center overflow-hidden rounded-2xl bg-white p-8">
+                                            <div
+                                                className={`flex h-64 w-64 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${
+                                                    relatedImageUrl &&
+                                                    relatedImageIsPhoto
+                                                        ? "bg-gray-100"
+                                                        : "bg-white p-8"
+                                                }`}
+                                            >
 
                                                 {relatedImageUrl ? (
                                                     <img
@@ -956,7 +1067,11 @@ export default async function ProductDetailPage({
                                                             related.Image,
                                                             related.Name
                                                         )}
-                                                        className="h-full w-full rounded-2xl object-contain transition duration-500 group-hover:scale-105"
+                                                        className={`h-full w-full rounded-2xl transition duration-500 group-hover:scale-105 ${
+                                                            relatedImageIsPhoto
+                                                                ? "object-cover"
+                                                                : "object-contain"
+                                                        }`}
                                                     />
                                                 ) : (
                                                     <div className="text-sm text-gray-400">
@@ -970,7 +1085,7 @@ export default async function ProductDetailPage({
                                                 RELATED PRODUCT CONTENT
                                             ================================================= */}
 
-                                            <div className="px-2 pb-4 pt-4">
+                                            <div className="min-w-0 flex-1 px-2">
 
                                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
                                                     Related Product
