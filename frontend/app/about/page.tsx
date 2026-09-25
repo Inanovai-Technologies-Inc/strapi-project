@@ -100,7 +100,7 @@ export default function About() {
             {/* Banner */}
             <section className="relative h-[220px] w-full overflow-hidden sm:h-[320px] lg:h-[420px]">
                 <Image
-                    src="/images/about-us-banner.png"
+                    src="/images/about-us.png"
                     alt="Marsol Technologies global operations across aviation, maritime, offshore and industrial sites"
                     fill
                     priority
@@ -232,7 +232,7 @@ export default function About() {
 
                         <div className="flex justify-center lg:justify-end">
                             <Image
-                                src="/images/ims1.jpg"
+                                src="/images/ims1.webp"
                                 alt="Integrated Management System — ISO 9001, ISO 14001 and ISO 45001 accreditations"
                                 width={587}
                                 height={529}

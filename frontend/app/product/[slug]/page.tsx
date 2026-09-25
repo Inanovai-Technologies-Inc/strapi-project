@@ -117,6 +117,39 @@ function getMediaAlt(
 }
 
 /* =========================================================
+   SERIES NAME SPLIT
+
+   Strapi's SeriesName field sometimes combines the display
+   title with a trailing list of model codes, e.g.
+   "Inergex Inert Gas System IG01 | IG55 | IG100 | IG541".
+   Splits that trailing "CODE | CODE | ..." run onto its own
+   line so it can render as a subtitle under the title.
+========================================================= */
+
+function splitSeriesName(
+    name: string
+): { title: string; codes: string | null } {
+    if (!name) {
+        return { title: name, codes: null };
+    }
+
+    const match = name.match(
+        /^(.*?)\s+((?:[A-Za-z0-9]+\s*\|\s*)+[A-Za-z0-9]+)\s*$/
+    );
+
+    if (!match) {
+        return { title: name, codes: null };
+    }
+
+    return {
+        title: match[1].trim(),
+        codes: match[2]
+            .replace(/\s*\|\s*/g, " | ")
+            .trim(),
+    };
+}
+
+/* =========================================================
    YOUTUBE
 ========================================================= */
 
@@ -495,7 +528,7 @@ export default async function ProductDetailPage({
                 HERO / MAIN PRODUCT
             ================================================= */}
 
-            <section className="bg-white px-6 py-14 lg:px-8 lg:py-20">
+            <section className="bg-white px-6 py-10 lg:px-8 lg:py-12">
 
                 <div className="mx-auto max-w-7xl">
 
@@ -508,11 +541,15 @@ export default async function ProductDetailPage({
                         ← Back to Products
                     </Link>
 
-                    <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:items-start">
+                    <p className="mt-8 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
+                        Product
+                    </p>
+
+                    <div className="mt-4 grid gap-16 lg:grid-cols-2 lg:items-start">
 
                         {/* =================================================
                             LEFT - PRODUCT IMAGE
-                            
+
                             COMPLETELY BORDERLESS
                         ================================================= */}
 
@@ -576,7 +613,7 @@ export default async function ProductDetailPage({
                                             ) => (
                                                 <div
                                                     key={`${logoUrl}-${index}`}
-                                                    className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                    className="flex h-40 w-56 items-center justify-center bg-white p-3"
                                                 >
                                                     <img
                                                         src={
@@ -605,11 +642,7 @@ export default async function ProductDetailPage({
 
                         <div>
 
-                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Product
-                            </p>
-
-                            <h1 className="mt-4 text-4xl font-bold uppercase leading-tight text-gray-900 sm:text-5xl">
+                            <h1 className="-mt-2 text-4xl font-bold uppercase leading-none text-gray-900 sm:text-5xl">
                                 {product.Name}
                             </h1>
 
@@ -650,7 +683,7 @@ export default async function ProductDetailPage({
                                                 (logoUrl, index) => (
                                                     <div
                                                         key={`${logoUrl}-${index}`}
-                                                        className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                        className="flex h-40 w-56 items-center justify-center bg-white p-3"
                                                     >
                                                         <img
                                                             src={logoUrl}
@@ -700,11 +733,11 @@ export default async function ProductDetailPage({
             ========================================================= */}
 
             {foamSkidSeries.length > 0 && (
-                <section className="bg-white px-6 py-20 lg:px-8">
+                <section className="bg-white px-6 py-10 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
 
-                        <div className="space-y-24">
+                        <div className="space-y-14">
 
                             {foamSkidSeries.map(
                                 (
@@ -717,6 +750,13 @@ export default async function ProductDetailPage({
                                         `Series ${
                                             index + 1
                                         }`;
+
+                                    const {
+                                        title: seriesTitle,
+                                        codes: seriesCodes,
+                                    } = splitSeriesName(
+                                        seriesName
+                                    );
 
                                     const seriesImageUrl =
                                         getImageUrl(
@@ -785,7 +825,7 @@ export default async function ProductDetailPage({
                                                                     ) => (
                                                                         <div
                                                                             key={`${logoUrl}-${logoIndex}`}
-                                                                            className="flex h-20 w-28 items-center justify-center bg-white p-3"
+                                                                            className="flex h-40 w-56 items-center justify-center bg-white p-3"
                                                                         >
                                                                             <img
                                                                                 src={
@@ -812,9 +852,17 @@ export default async function ProductDetailPage({
 
                                                     <h3 className="mt-0 text-2xl font-bold uppercase leading-tight text-[#0b1f3a] sm:text-3xl">
                                                         {
-                                                            seriesName
+                                                            seriesTitle
                                                         }
                                                     </h3>
+
+                                                    {seriesCodes && (
+                                                        <p className="mt-1 text-2xl font-bold leading-tight text-black sm:text-3xl">
+                                                            {
+                                                                seriesCodes
+                                                            }
+                                                        </p>
+                                                    )}
 
                                                     <div className="mt-5 h-1 w-12 bg-orange-500" />
 
@@ -861,7 +909,7 @@ export default async function ProductDetailPage({
 
             {Array.isArray(product.Features) &&
                 product.Features.length > 0 && (
-                    <section className="px-6 py-16 lg:px-8">
+                    <section className="px-6 py-10 lg:px-8">
 
                         <div className="mx-auto max-w-7xl">
 
@@ -888,7 +936,7 @@ export default async function ProductDetailPage({
 
             {Array.isArray(product.Applications) &&
                 product.Applications.length > 0 && (
-                    <section className="bg-gray-50 px-6 py-16 lg:px-8">
+                    <section className="bg-gray-50 px-6 py-10 lg:px-8">
 
                         <div className="mx-auto max-w-7xl">
 
@@ -919,7 +967,7 @@ export default async function ProductDetailPage({
             ========================================================= */}
 
             {technicalSpecifications.length > 0 && (
-                <section className="px-6 py-16 lg:px-8">
+                <section className="px-6 py-10 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
 
@@ -995,7 +1043,7 @@ export default async function ProductDetailPage({
             ========================================================= */}
 
             {relatedProductsWithImages.length > 0 && (
-                <section className="bg-gray-50 px-6 py-20 lg:px-8">
+                <section className="bg-gray-50 px-6 py-10 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
 
@@ -1021,7 +1069,7 @@ export default async function ProductDetailPage({
 
                         </div>
 
-                        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
 
                             {relatedProductsWithImageInfo.map(
                                 ({
@@ -1030,33 +1078,28 @@ export default async function ProductDetailPage({
                                     relatedImageIsPhoto,
                                 }) => {
 
+                                    const href = related.slug
+                                        ? `/product/${related.slug}`
+                                        : "/product";
+
                                     return (
-                                        <article
+                                        <Link
                                             key={
                                                 related.documentId ||
                                                 related.id
                                             }
-                                            className="group flex items-center gap-6 bg-white"
+                                            href={href}
+                                            aria-label={related.Name}
+                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                                         >
 
                                             {/* =================================================
                                                 RELATED PRODUCT IMAGE
-
-                                                NO BORDER
-                                                NO SHADOW
-                                                NO CARD
-                                                NO GRAY BACKGROUND
-                                                NO ORANGE TOP BAR
                                             ================================================= */}
 
-                                            <div
-                                                className={`flex h-64 w-64 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${
-                                                    relatedImageUrl &&
-                                                    relatedImageIsPhoto
-                                                        ? "bg-gray-100"
-                                                        : "bg-white p-8"
-                                                }`}
-                                            >
+                                            <div className="relative h-56 w-full overflow-hidden bg-gray-100">
+
+                                                <span className="absolute left-0 top-0 z-10 h-0.5 w-12 bg-orange-500 transition-all duration-300 group-hover:w-20" />
 
                                                 {relatedImageUrl ? (
                                                     <img
@@ -1067,14 +1110,15 @@ export default async function ProductDetailPage({
                                                             related.Image,
                                                             related.Name
                                                         )}
-                                                        className={`h-full w-full rounded-2xl transition duration-500 group-hover:scale-105 ${
+                                                        loading="lazy"
+                                                        className={`h-full w-full transition-transform duration-700 ease-out group-hover:scale-105 ${
                                                             relatedImageIsPhoto
                                                                 ? "object-cover"
                                                                 : "object-contain"
                                                         }`}
                                                     />
                                                 ) : (
-                                                    <div className="text-sm text-gray-400">
+                                                    <div className="flex h-full w-full items-center justify-center px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400">
                                                         Product image unavailable
                                                     </div>
                                                 )}
@@ -1085,41 +1129,33 @@ export default async function ProductDetailPage({
                                                 RELATED PRODUCT CONTENT
                                             ================================================= */}
 
-                                            <div className="min-w-0 flex-1 px-2">
+                                            <div className="flex flex-1 flex-col p-6">
 
-                                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-500">
+                                                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-orange-500">
                                                     Related Product
                                                 </p>
 
-                                                <h3 className="mt-3 min-h-[56px] text-lg font-bold uppercase leading-7 text-[#0b1f3a]">
+                                                <h3 className="mt-3 text-lg font-bold uppercase leading-tight text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-600">
                                                     {
                                                         related.Name
                                                     }
                                                 </h3>
 
-                                                <p className="mt-4 line-clamp-3 text-justify text-sm leading-6 text-gray-500">
+                                                <p className="mt-3 line-clamp-3 text-justify text-sm leading-6 text-gray-500">
                                                     {related.description ||
                                                         "Explore this related fire protection solution."}
                                                 </p>
 
-                                                {related.slug && (
-                                                    <Link
-                                                        href={`/product/${related.slug}`}
-                                                        className="mt-6 flex items-center justify-between border border-gray-200 px-5 py-3 text-sm font-semibold text-[#0b1f3a] transition-all duration-300 hover:border-orange-500 hover:bg-orange-500 hover:text-white"
-                                                    >
-                                                        <span>
-                                                            View Product
-                                                        </span>
-
-                                                        <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
-                                                            →
-                                                        </span>
-                                                    </Link>
-                                                )}
+                                                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[#0b1f3a] transition-colors duration-300 group-hover:text-orange-500">
+                                                    View Product
+                                                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1.5">
+                                                        →
+                                                    </span>
+                                                </span>
 
                                             </div>
 
-                                        </article>
+                                        </Link>
                                     );
                                 }
                             )}
@@ -1136,7 +1172,7 @@ export default async function ProductDetailPage({
             ========================================================= */}
 
             {videoEmbedUrl && (
-                <section className="bg-gray-50 px-6 py-20 lg:px-8">
+                <section className="bg-gray-50 px-6 py-10 lg:px-8">
 
                     <div className="mx-auto max-w-7xl">
 

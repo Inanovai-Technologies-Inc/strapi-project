@@ -103,7 +103,7 @@ export default async function ProductTechnicalDocuments() {
     }
 
     return (
-        <section className="px-6 py-16 lg:px-8">
+        <section className="px-6 py-10 lg:px-8">
 
             <div className="mx-auto max-w-7xl">
 

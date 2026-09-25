@@ -58,7 +58,26 @@ export function isPhotographicImage(
 
             const metadata = await sharp(buffer).metadata();
 
-            return !metadata.hasAlpha;
+            if (!metadata.hasAlpha) {
+                return true;
+            }
+
+            // Some "photo" PNGs (e.g. Compressed Air Foam System)
+            // carry an alpha channel in the file format without
+            // meaningfully using it — a handful of near-opaque edge
+            // pixels, not an actual removed background. Only treat
+            // the image as transparent-render when a real portion of
+            // it is non-opaque, rather than on the format flag alone.
+            const stats = await sharp(buffer).stats();
+            const alphaChannel =
+                stats.channels[stats.channels.length - 1];
+
+            const ALPHA_OPAQUE_MEAN_THRESHOLD = 250;
+
+            return (
+                alphaChannel.mean >=
+                ALPHA_OPAQUE_MEAN_THRESHOLD
+            );
         } catch (error) {
             console.error(
                 "Failed to inspect image for transparency:",
