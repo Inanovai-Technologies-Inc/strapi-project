@@ -7,6 +7,7 @@ import SectionNavigation from "@/components/SectionNavigation";
 import Reveal from "@/components/Reveal";
 import HomeMotion, { DiffsMotion, FlowingLines } from "@/components/HomeMotion";
 import AmbientBackground from "@/components/AmbientBackground";
+import { isPhotographicImage } from "@/lib/imageTransparency";
 
 const STRAPI_URL =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -110,6 +111,29 @@ export default async function Home() {
             )
         )
         .filter(Boolean);
+
+    /* =====================================================
+       HOMEPAGE PRODUCT IMAGE TYPE
+
+       Resolved up front (in parallel) since the JSX below
+       maps synchronously and can't await per item. Normal
+       photos render full-bleed like the Services cards;
+       transparent-render images keep the boxed/contain look.
+    ===================================================== */
+
+    const homepageProductsWithImageInfo = await Promise.all(
+        homepageProducts.map(async (product: any) => {
+            const imageUrl = product.Image?.url
+                ? `${STRAPI_URL}${product.Image.url}`
+                : null;
+
+            return {
+                product,
+                imageUrl,
+                imageIsPhoto: await isPhotographicImage(imageUrl),
+            };
+        })
+    );
 
     /* =====================================================
        FETCH NEWS FROM STRAPI
@@ -233,21 +257,6 @@ export default async function Home() {
                         from-[#020914]/72
                         via-[#071525]/42
                         via-55%
-                        to-transparent
-                    "
-                />
-
-
-                {/* BOTTOM GRADIENT */}
-
-                <div
-                    className="
-                        absolute
-                        inset-x-0
-                        bottom-0
-                        h-56
-                        bg-gradient-to-t
-                        from-black/35
                         to-transparent
                     "
                 />
@@ -1159,13 +1168,11 @@ export default async function Home() {
                                 lg:grid-cols-3
                             "
                         >
-                            {homepageProducts.map(
-                                (product: any, index: number) => {
-                                    const imageUrl =
-                                        product.Image?.url
-                                            ? `${STRAPI_URL}${product.Image.url}`
-                                            : null;
-
+                            {homepageProductsWithImageInfo.map(
+                                (
+                                    { product, imageUrl, imageIsPhoto },
+                                    index: number
+                                ) => {
                                     return (
                                         <Reveal
                                             key={product.documentId}
@@ -1187,21 +1194,19 @@ export default async function Home() {
                                                     hover:shadow-2xl
                                                 "
                                             >
-                                                {/* Product image */}
+                                                {/* Product image
+
+                                                    Normal photos (e.g. DIFF System, Deluge
+                                                    Skid) fill this area edge-to-edge like the
+                                                    Services cards. Transparent-render images
+                                                    keep the boxed/contain treatment. */}
 
                                                 <div
-                                                    className="
-                                                        relative
-                                                        flex
-                                                        h-64
-                                                        items-center
-                                                        justify-center
-                                                        overflow-hidden
-                                                        bg-gradient-to-br
-                                                        from-gray-50
-                                                        to-gray-100
-                                                        p-8
-                                                    "
+                                                    className={`relative flex h-64 items-center justify-center overflow-hidden ${
+                                                        imageIsPhoto
+                                                            ? ""
+                                                            : "bg-gradient-to-br from-gray-50 to-gray-100 p-8"
+                                                    }`}
                                                 >
                                                     {imageUrl ? (
                                                         <img
@@ -1211,15 +1216,11 @@ export default async function Home() {
                                                                     ?.alternativeText ||
                                                                 product.Name
                                                             }
-                                                            className="
-                                                                h-full
-                                                                w-full
-                                                                object-contain
-                                                                transition-transform
-                                                                duration-700
-                                                                ease-out
-                                                                group-hover:scale-110
-                                                            "
+                                                            className={`h-full w-full transition-transform duration-700 ease-out group-hover:scale-110 ${
+                                                                imageIsPhoto
+                                                                    ? "object-cover"
+                                                                    : "object-contain"
+                                                            }`}
                                                         />
                                                     ) : (
                                                         <div className="text-sm text-gray-400">

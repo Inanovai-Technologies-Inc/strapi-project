@@ -15,6 +15,10 @@ export type CatalogueProduct = {
     description: string;
     imageUrl: string | null;
     imageAlt: string;
+    /** JPEG product photos (e.g. DIFF System) render full-bleed like the
+     *  Services cards; transparent-render PNGs (e.g. ROTO Spray Deluge
+     *  Nozzles) keep the existing boxed/contain treatment. */
+    imageIsPhoto: boolean;
 };
 
 export type CatalogueCategoryNode = {
@@ -141,7 +145,12 @@ function ProductItem({
             "
         >
 
-            {/* IMAGE */}
+            {/* IMAGE
+
+                Transparent-render products (PNG) keep the boxed
+                object-contain treatment. Normal photo products (JPEG,
+                e.g. DIFF System) fill the area edge-to-edge with
+                object-cover, matching the Services listing cards. */}
 
             <div className="relative h-56 w-full overflow-hidden bg-gray-100 dark:bg-white/[0.04]">
                 <span className="absolute left-0 top-0 z-10 h-0.5 w-12 bg-orange-500 transition-all duration-300 group-hover:w-20" />
@@ -151,7 +160,11 @@ function ProductItem({
                         src={product.imageUrl}
                         alt={product.imageAlt}
                         loading="lazy"
-                        className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+                        className={`h-full w-full transition-transform duration-700 ease-out group-hover:scale-105 ${
+                            product.imageIsPhoto
+                                ? "object-cover"
+                                : "object-contain"
+                        }`}
                     />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center px-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
